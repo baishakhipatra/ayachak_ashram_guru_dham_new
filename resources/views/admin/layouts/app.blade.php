@@ -5,11 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
-    <link href="{{asset('backend_assets/css/bootstrap.min.css')}}" rel="stylesheet">
+    {{-- <link href="{{$base_url}}admin/css/bootstrap.min.css" rel="stylesheet"> --}}
+    <link rel="stylesheet" href="{{asset('admin/css/bootstrap.min.css')}}">
     <link href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('backend_assets/plugins/croppie/croppie.css')}}">
-    {{-- <link href="{{asset('backend_assets/css/style.css" rel="stylesheet')}}"> --}}
-    <link rel="stylesheet" href="{{asset('backend_assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('admin/plugins/croppie/croppie.css')}}">
+    <link href="{{asset('admin/css/style.css')}}" rel="stylesheet">
     <link rel="shortcut icon" href="{{asset('frontend/images/favicon.png')}}" type="image/x-icon">
     <title>Luxcozi | Admin @yield('page')</title>
 </head>
@@ -186,7 +186,7 @@
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{asset('backend_assets/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('admin/js/bootstrap.bundle.min.js')}}"></script>
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
@@ -195,41 +195,41 @@
     -->
     <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{asset('backend_assets/plugins/croppie/croppie.js')}}"></script>
-    <script type="text/javascript" src="{{asset('backend_assets/js/custom.js')}}"></script>
+    <script src="{{asset('admin/plugins/croppie/croppie.js')}}"></script>
+    <script type="text/javascript" src="{{asset('admin/js/custom.js')}}"></script>
 
     <script>
-        $(document).ready(function() {
-            // Update href attributes of all <a> tags
-            $('a').each(function() {
-                var href = $(this).attr('href');
-                if (href && href.startsWith('http:')) {
-                    $(this).attr('href', href.replace('http:', 'https:'));
-                }
-            });
-            $('link').each(function() {
-                var href = $(this).attr('href');
-                if (href && href.startsWith('http:')) {
-                    $(this).attr('href', href.replace('http:', 'https:'));
-                }
-            });
+        // $(document).ready(function() {
+        //     // Update href attributes of all <a> tags
+        //     $('a').each(function() {
+        //         var href = $(this).attr('href');
+        //         if (href && href.startsWith('http:')) {
+        //             $(this).attr('href', href.replace('http:', 'https:'));
+        //         }
+        //     });
+        //     $('link').each(function() {
+        //         var href = $(this).attr('href');
+        //         if (href && href.startsWith('http:')) {
+        //             $(this).attr('href', href.replace('http:', 'https:'));
+        //         }
+        //     });
     
-            // Update action attributes of all <form> tags
-            $('form').each(function() {
-                var action = $(this).attr('action');
-                if (action && action.startsWith('http:')) {
-                    $(this).attr('action', action.replace('http:', 'https:'));
-                }
-            });
+        //     // Update action attributes of all <form> tags
+        //     $('form').each(function() {
+        //         var action = $(this).attr('action');
+        //         if (action && action.startsWith('http:')) {
+        //             $(this).attr('action', action.replace('http:', 'https:'));
+        //         }
+        //     });
     
-            // Update src attributes of all elements with src attributes
-            $('[src]').each(function() {
-                var src = $(this).attr('src');
-                if (src && src.startsWith('http:')) {
-                    $(this).attr('src', src.replace('http:', 'https:'));
-                }
-            });
-        });
+        //     // Update src attributes of all elements with src attributes
+        //     $('[src]').each(function() {
+        //         var src = $(this).attr('src');
+        //         if (src && src.startsWith('http:')) {
+        //             $(this).attr('src', src.replace('http:', 'https:'));
+        //         }
+        //     });
+        // });
         // click to select all checkbox
         function headerCheckFunc() {
             if ($('#flexCheckDefault').is(':checked')) {
