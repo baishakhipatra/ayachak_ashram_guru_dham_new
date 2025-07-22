@@ -73,7 +73,7 @@ class AppServiceProvider extends ServiceProvider
                 $settings = Settings::where('status', 1)->get();
             }
             // Base URL
-            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "http://" : "http://";
     
             // Get the host
             $host = $_SERVER['HTTP_HOST'];
