@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
     {{-- <link href="{{$base_url}}admin/css/bootstrap.min.css" rel="stylesheet"> --}}
-    <link rel="stylesheet" href="{{asset('admin/css/styles/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('admin/css/bootstrap.min.css')}}">
     <link href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('admin/plugins/croppie/croppie.css')}}">
     <link href="{{asset('admin/css/style.css')}}" rel="stylesheet">
@@ -199,37 +199,37 @@
     <script type="text/javascript" src="{{asset('admin/js/custom.js')}}"></script>
 
     <script>
-        $(document).ready(function() {
-            // Update href attributes of all <a> tags
-            $('a').each(function() {
-                var href = $(this).attr('href');
-                if (href && href.startsWith('http:')) {
-                    $(this).attr('href', href.replace('http:', 'https:'));
-                }
-            });
-            $('link').each(function() {
-                var href = $(this).attr('href');
-                if (href && href.startsWith('http:')) {
-                    $(this).attr('href', href.replace('http:', 'https:'));
-                }
-            });
+        // $(document).ready(function() {
+        //     // Update href attributes of all <a> tags
+        //     $('a').each(function() {
+        //         var href = $(this).attr('href');
+        //         if (href && href.startsWith('http:')) {
+        //             $(this).attr('href', href.replace('http:', 'https:'));
+        //         }
+        //     });
+        //     $('link').each(function() {
+        //         var href = $(this).attr('href');
+        //         if (href && href.startsWith('http:')) {
+        //             $(this).attr('href', href.replace('http:', 'https:'));
+        //         }
+        //     });
     
-            // Update action attributes of all <form> tags
-            $('form').each(function() {
-                var action = $(this).attr('action');
-                if (action && action.startsWith('http:')) {
-                    $(this).attr('action', action.replace('http:', 'https:'));
-                }
-            });
+        //     // Update action attributes of all <form> tags
+        //     $('form').each(function() {
+        //         var action = $(this).attr('action');
+        //         if (action && action.startsWith('http:')) {
+        //             $(this).attr('action', action.replace('http:', 'https:'));
+        //         }
+        //     });
     
-            // Update src attributes of all elements with src attributes
-            $('[src]').each(function() {
-                var src = $(this).attr('src');
-                if (src && src.startsWith('http:')) {
-                    $(this).attr('src', src.replace('http:', 'https:'));
-                }
-            });
-        });
+        //     // Update src attributes of all elements with src attributes
+        //     $('[src]').each(function() {
+        //         var src = $(this).attr('src');
+        //         if (src && src.startsWith('http:')) {
+        //             $(this).attr('src', src.replace('http:', 'https:'));
+        //         }
+        //     });
+        // });
         // click to select all checkbox
         function headerCheckFunc() {
             if ($('#flexCheckDefault').is(':checked')) {

@@ -71,37 +71,37 @@
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="{{$base_url}}admin/js/bootstrap.bundle.min.js"></script>
 <script>
-$(document).ready(function() {
-    // Update href attributes of all <a> tags
-    $('a').each(function() {
-        var href = $(this).attr('href');
-        if (href && href.startsWith('http:')) {
-            $(this).attr('href', href.replace('http:', 'https:'));
-        }
-    });
-    $('link').each(function() {
-        var href = $(this).attr('href');
-        if (href && href.startsWith('http:')) {
-            $(this).attr('href', href.replace('http:', 'https:'));
-        }
-    });
+// $(document).ready(function() {
+//     // Update href attributes of all <a> tags
+//     $('a').each(function() {
+//         var href = $(this).attr('href');
+//         if (href && href.startsWith('http:')) {
+//             $(this).attr('href', href.replace('http:', 'https:'));
+//         }
+//     });
+//     $('link').each(function() {
+//         var href = $(this).attr('href');
+//         if (href && href.startsWith('http:')) {
+//             $(this).attr('href', href.replace('http:', 'https:'));
+//         }
+//     });
 
-    // Update action attributes of all <form> tags
-    $('form').each(function() {
-        var action = $(this).attr('action');
-        if (action && action.startsWith('http:')) {
-            $(this).attr('action', action.replace('http:', 'https:'));
-        }
-    });
+//     // Update action attributes of all <form> tags
+//     $('form').each(function() {
+//         var action = $(this).attr('action');
+//         if (action && action.startsWith('http:')) {
+//             $(this).attr('action', action.replace('http:', 'https:'));
+//         }
+//     });
 
-    // Update src attributes of all elements with src attributes
-    $('[src]').each(function() {
-        var src = $(this).attr('src');
-        if (src && src.startsWith('http:')) {
-            $(this).attr('src', src.replace('http:', 'https:'));
-        }
-    });
-});
+//     // Update src attributes of all elements with src attributes
+//     $('[src]').each(function() {
+//         var src = $(this).attr('src');
+//         if (src && src.startsWith('http:')) {
+//             $(this).attr('src', src.replace('http:', 'https:'));
+//         }
+//     });
+// });
 </script>
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
