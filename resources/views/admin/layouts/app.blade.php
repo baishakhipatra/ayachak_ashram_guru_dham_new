@@ -8,6 +8,8 @@
     {{-- <link href="{{$base_url}}admin/css/bootstrap.min.css" rel="stylesheet"> --}}
     <link rel="stylesheet" href="{{asset('admin/css/bootstrap.min.css')}}">
     <link href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
     <link rel="stylesheet" href="{{asset('admin/plugins/croppie/croppie.css')}}">
     <link href="{{asset('admin/css/style.css')}}" rel="stylesheet">
     <link rel="shortcut icon" href="{{asset('frontend/images/favicon.png')}}" type="image/x-icon">
@@ -35,6 +37,44 @@
         <nav class="main__nav">
             <ul>
                 <li class="{{ ( request()->is('admin/home*') ) ? 'active' : '' }}"><a href="{{ route('admin.home') }}"><i class="fi fi-br-home"></i> <span>Dashboard</span></a></li>
+
+
+                <li class="@if(request()->is('admin/admin-user-management*') || request()->is('admin/user-management*') || request()->is('admin/cms-module*')) active @endif">
+                    <a href="javascript:void(0)"><i class="fi fi-br-cube"></i> <span>Super Admin Module</span></a>
+                    <ul>
+                        <li class="{{ request()->is('admin/admin-user-management*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.admin-user-management.index') }}">
+                                <i class="fi fi-br-database"></i> <span>Admin User Management</span>
+                            </a>
+                        </li>
+
+                        {{-- <li class="{{ request()->is('admin/user-management*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.user-management.index') }}">
+                                <i class="fi fi-br-database"></i> <span>User Management</span>
+                            </a>
+                        </li> --}}
+
+                        <li class="{{ request()->is('admin/cms-module*') ? 'active' : '' }}">
+                            <a href="javascript:void(0)">
+                                <i class="fi fi-br-database"></i> <span>CMS Module</span>
+                            </a>
+                            <ul>
+                                <li class="{{ request()->is('admin/static-page-management*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.pages.index') }}">
+                                        <i class="fi fi-br-database"></i> <span>Static Page Management</span>
+                                    </a>
+                                </li>
+
+                                <li class="{{ request()->is('admin/menu-manager*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.menus.index') }}">
+                                        <i class="fi fi-br-database"></i> <span>Menu Manager</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
 
                 <li class="@if(request()->is('admin/category*') || request()->is('admin/subcategory*') || request()->is('admin/collection*') || request()->is('admin/color*') || request()->is('admin/size*')) { {{'active'}} }  @endif">
                     <a href="javascript: void(0)"><i class="fi fi-br-cube"></i> <span>Master</span></a>

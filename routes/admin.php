@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\{AdminUserManagementController, PageController, MenuController};
+
 // admin guard
 use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -16,6 +18,35 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Change password
         Route::view('/change/password','admin.auth.change-password')->name('change.password');
         Route::post('/update/password','Admin\AdminController@updatePassword')->name('update.password');
+
+        //admin-user-management
+        Route::prefix('admin-user-management')->group(function () {
+            Route::get('/', [AdminUserManagementController::class, 'index'])->name('admin-user-management.index');
+            Route::get('/create', [AdminUserManagementController::class, 'create'])->name('admin-user-management.create');
+            Route::post('/store', [AdminUserManagementController::class, 'store'])->name('admin-user-management.store');
+            Route::get('/show/{id}', [AdminUserManagementController::class, 'show'])->name('admin-user-management.show');
+            Route::get('/edit/{id}', [AdminUserManagementController::class, 'edit'])->name('admin-user-management.edit');
+            Route::post('/update', [AdminUserManagementController::class, 'update'])->name('admin-user-management.update');
+            Route::get('/status/{id}', [AdminUserManagementController::class, 'status'])->name('admin-user-management.status');
+            Route::post('/delete', [AdminUserManagementController::class, 'delete'])->name('admin-user-management.delete');
+            Route::get('/export', [AdminUserManagementController::class, 'export'])->name('admin-user-management.export');
+        });
+
+        //CMS module
+        Route::prefix('pages')->group(function () {
+            Route::get('/', [PageController::class, 'index'])->name('pages.index');
+            Route::get('/create', [PageController::class, 'create'])->name('pages.create');
+            Route::post('/store', [PageController::class, 'store'])->name('pages.store');
+            Route::get('/edit/{id}', [PageController::class, 'edit'])->name('pages.edit');
+            Route::post('/update/{id}', [PageController::class, 'update'])->name('pages.update');
+            Route::get('/status/{id}', [PageController::class, 'status'])->name('pages.status');
+            Route::post('/delete', [PageController::class, 'delete'])->name('pages.delete');
+
+
+            Route::get('menus', [MenuController::class, 'index'])->name('menus.index');
+            Route::post('menus', [MenuController::class, 'store'])->name('menus.store');
+            Route::post('menus/update-order', [MenuController::class, 'updateOrder'])->name('menus.updateOrder');
+        });
 
         // category
         Route::prefix('category')->name('category.')->group(function () {

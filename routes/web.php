@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+
 Route::get('/cache-clear', function()
 {
     \Artisan::call('optimize:clear');
