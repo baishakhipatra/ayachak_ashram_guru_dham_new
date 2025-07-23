@@ -18,7 +18,7 @@
     <aside class="side__bar shadow-sm">
         <div class="admin__logo">
             <div class="logo">
-                <a href="{{url('/')}}" target="_blank">
+                {{-- <a href="{{url('/')}}" target="_blank"> --}}
                     {{-- <svg width="322" height="322" viewBox="0 0 322 322" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="231.711" y="47.8629" width="60" height="260" rx="30" transform="rotate(45 231.711 47.8629)" fill="#c10909" />
                         <rect x="236.66" y="137.665" width="60" height="180" rx="30" transform="rotate(45 236.66 137.665)" fill="#c10909" />
@@ -98,6 +98,7 @@
                 <li class="{{ ( request()->is('admin/voucher*') ) ? 'active' : '' }}"><a href="{{ route('admin.voucher.index') }}"><i class="fi fi-br-database"></i> <span>Voucher</span></a></li>
 
                 <li class="{{ ( request()->is('admin/transaction*') ) ? 'active' : '' }}"><a href="{{ route('admin.transaction.index') }}"><i class="fi fi-br-database"></i> <span>Online Transactions</span></a></li>
+                <li class="{{ ( request()->is('admin/transaction*') ) ? 'active' : '' }}"><a href="#"><i class="fi fi-br-database"></i> <span>Online Events</span></a></li>
 				{{-- <li class="@if(request()->is('admin/scanandwin/Qr*') || request()->is('admin/scanandwin/customers*') || request()->is('admin/scanandwin/gift*') || request()->is('admin/scanandwin/cms*') || request()->is('admin/scanandwin/terms*')) { {{'active'}} }  @endif">
                     <a href="javascript: void(0)"><i class="fi fi-br-cube"></i> <span>Scan and Win</span></a>
                     <ul>
@@ -139,8 +140,18 @@
                 </li> --}}
             </ul>
         </nav>
-        <div class="nav__footer">
+        {{-- <div class="nav__footer">
             <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fi fi-br-sign-out"></i> <span>Log Out</span></a>
+        </div> --}}
+
+        <div class="nav__footer">
+            <a href="#" onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
+                <i class="fi fi-br-sign-out"></i> <span>Log Out</span>
+            </a>
+
+            <form id="admin-logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
     </aside>
     <main class="admin">

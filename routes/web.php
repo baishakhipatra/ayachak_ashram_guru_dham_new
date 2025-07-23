@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Front;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+Route::get('/', function () {
+    return redirect('/admin/login');
+});
+
 Route::get('/cache-clear', function()
 {
     \Artisan::call('optimize:clear');

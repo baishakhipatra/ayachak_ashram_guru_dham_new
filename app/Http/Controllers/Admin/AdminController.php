@@ -27,11 +27,17 @@ class AdminController extends Controller
 
         $adminCreds = $request->only('email', 'password');
 
-        if ( Auth::guard('admin')->attempt($adminCreds) ) {
+        // if ( Auth::guard('admin')->attempt($adminCreds) ) {
+        //     return redirect()->route('admin.home');
+        // } else {
+        //     return redirect()->route('admin.login')->withInputs($request->all())->with('failure', 'Invalid credentials. Try again');
+        // }
+        if(Auth::guard('admin')->attempt($adminCreds)) {
             return redirect()->route('admin.home');
         } else {
-            return redirect()->route('admin.login')->withInputs($request->all())->with('failure', 'Invalid credentials. Try again');
+            return redirect()->route('admin.login')->withInput()->with('failure', 'Invalid credentials. Try again.');
         }
+
     }
 
     public function home(Request $request)
@@ -59,13 +65,28 @@ class AdminController extends Controller
         return view('admin.home', compact('data','sku_product_count'));
     }
 
+    // public function logout(Request $request)
+    // {
+    //     Auth::guard('admin')->logout();
+    //     $request->session()->flush();
+    //     $request->session()->regenerate();
+    //     return redirect()->guest(route('admin.login'));
+    // }
+
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout();
-        $request->session()->flush();
-        $request->session()->regenerate();
-        return redirect()->guest(route('admin.login'));
+
+        // Invalidate the session to prevent session fixation
+        $request->session()->invalidate();
+
+        // Regenerate CSRF token
+        $request->session()->regenerateToken();
+
+        // Redirect to admin login
+        return redirect()->route('admin.login');
     }
+
 
     public function updatePassword(Request $request){
 
