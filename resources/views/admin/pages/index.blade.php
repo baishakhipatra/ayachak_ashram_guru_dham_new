@@ -22,7 +22,6 @@
                     <th>SL</th>
                     <th>Title</th>
                     <th>Slug</th>
-                    <th>Content</th>
                     <th>Status</th>
                     <th>Created At</th>
                     <th>Action</th>
@@ -34,7 +33,6 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ ucwords($page->title) }}</td>
                         <td>{{ $page->slug }}</td>
-                        <td>{{ ucwords(Str::limit(strip_tags($page->content), 500)) }}</td>
                         <td>                 
                             <div class="form-check form-switch" data-bs-toggle="tooltip" title="Toggle status">
                                 <input class="form-check-input ms-auto" type="checkbox" id="customSwitch{{$page->id}}"
@@ -45,6 +43,12 @@
                         <td>{{ $page->created_at->format('d-m-Y H:i') }}</td>
                         <td> 
                             <div class="btn-group" role="group" aria-label="Action Buttons">
+                                <div>
+                                    <a href="{{ route('admin.pages.show', $page->id) }}" class="btn btn-sm btn-icon btn-outline-primary"
+                                        data-bs-toggle="tooltip" title="View">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </div>
                                 <div>
                                     <a href="{{ route('admin.pages.edit', $page->id) }}" class="btn btn-sm btn-icon btn-outline-dark"                     
                                         data-bs-toggle="tooltip"  title="Edit">

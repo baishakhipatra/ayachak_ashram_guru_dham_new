@@ -23,26 +23,40 @@ class PageController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:pages,slug',
             'content' => 'nullable',
+            'status' => 'nullable|boolean',            
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
         ]);
 
-        $title = $request->title;
-        $slug = Str::slug($title);
-        $originalSlug = $slug;
-        $i = 1;
+        // $title = $request->title;
+        // $slug = Str::slug($title);
+        // $originalSlug = $slug;
+        // $i = 1;
 
-        while (Page::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $i++;
-        }
+        // while (Page::where('slug', $slug)->exists()) {
+        //     $slug = $originalSlug . '-' . $i++;
+        // }
 
         Page::create([
             'title' => $request->title,
-            'slug' => $slug,
+            'slug' => $request->slug,
             'content' => $request->content,
+            'status' => $request->status ? 1 : 0,
+            'meta_title' => $request->meta_title,
+            'meta_description' => $request->meta_description,
         ]);
 
         return redirect()->route('admin.pages.index')->with('success', 'Page created successfully.');
     }
+
+    public function show($id)
+    {
+        $page = Page::findOrFail($id);
+        return view('admin.pages.show', compact('page'));
+    }
+
 
     public function edit($id)
     {
@@ -56,22 +70,28 @@ class PageController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'nullable'
+            'slug' => 'required|unique:pages,slug,' . $page->id,
+            'content' => 'nullable',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:255',
         ]);
 
-        if($page->title !== $request->title) {
+        $slug = $request->slug;
+        if (!$slug) {
             $slug = Str::slug($request->title);
-            $originalSlug = $slug;
-            $i = 1;
-
-            while (Page::where('slug', $slug)->where('id', '!=', $page->id)->exists()) {
-                $slug = $originalSlug . '-' . $i++;
-            }
-
-            $page->slug = $slug;
         }
+        $originalSlug = $slug;
+        $i = 1;
+        while (Page::where('slug', $slug)->where('id', '!=', $page->id)->exists()) {
+            $slug = $originalSlug . '-' . $i++;
+        }
+
         $page->title = $request->title;
+        $page->slug = $slug;
         $page->content = $request->content;
+        $page->meta_title = $request->meta_title;
+        $page->meta_description = $request->meta_description;
+        $page->status = $request->status ? 1 : 0;
         $page->save();
 
         return redirect()->route('admin.pages.index')->with('success', 'Page updated successfully.');

@@ -10,7 +10,7 @@
     <link href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css" rel="stylesheet">
     <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
 
-    <title>Luxcozi | Admin @yield('page')</title>
+    <title>Ayachak Ashrama | Admin @yield('page')</title>
 </head>
 
 <body>

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\{AdminUserManagementController, PageController, MenuController};
+use App\Http\Controllers\Admin\{AdminUserManagementController, PageController, MenuController,CSRProjectController, TagController};
 
 // admin guard
 use Illuminate\Support\Facades\Route;
@@ -37,6 +37,7 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             Route::get('/', [PageController::class, 'index'])->name('pages.index');
             Route::get('/create', [PageController::class, 'create'])->name('pages.create');
             Route::post('/store', [PageController::class, 'store'])->name('pages.store');
+            Route::get('/view/{id}', [PageController::class, 'show'])->name('pages.show');
             Route::get('/edit/{id}', [PageController::class, 'edit'])->name('pages.edit');
             Route::post('/update/{id}', [PageController::class, 'update'])->name('pages.update');
             Route::get('/status/{id}', [PageController::class, 'status'])->name('pages.status');
@@ -46,6 +47,24 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             Route::get('menus', [MenuController::class, 'index'])->name('menus.index');
             Route::post('menus', [MenuController::class, 'store'])->name('menus.store');
             Route::post('menus/update-order', [MenuController::class, 'updateOrder'])->name('menus.updateOrder');
+        });
+
+        Route::prefix('csr-projects')->group(function() {
+            Route::get('/', [CSRProjectController::class, 'index'])->name('csr_projects.index');
+            Route::get('/create', [CSRProjectController::class, 'create'])->name('csr_projects.create');
+            Route::post('/store', [CSRProjectController::class, 'store'])->name('csr_projects.store');
+            Route::get('/edit/{id}', [CSRProjectController::class, 'edit'])->name('csr_projects.edit');
+            Route::post('/update/{id}', [CSRProjectController::class, 'update'])->name('csr_projects.update');
+            Route::post('/delete', [CSRProjectController::class, 'delete'])->name('csr_projects.delete');
+        });
+
+        Route::prefix('tags')->group(function() {
+            Route::get('/', [TagController::class, 'index'])->name('tags.index');
+            Route::get('/create', [TagController::class, 'create'])->name('tags.create');
+            Route::post('/store', [TagController::class, 'store'])->name('tags.store');
+            Route::get('/edit/{id}', [TagController::class, 'edit'])->name('tags.edit');
+            Route::post('/update/{id}', [TagController::class, 'update'])->name('tags.update');
+            Route::post('/delete', [TagController::class, 'delete'])->name('tags.delete');
         });
 
         // category

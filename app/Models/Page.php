@@ -14,6 +14,8 @@ class Page extends Model
         'title',
         'slug',
         'content',
-        'status'
+        'status',
+        'meta_title',
+        'meta_description'
     ];
 }

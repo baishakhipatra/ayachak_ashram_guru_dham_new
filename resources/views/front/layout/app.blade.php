@@ -30,7 +30,7 @@
 </head>
 <body>
     <div class="promotion-top-header">
-        <a href="https://www.luxcozi.com/" target="_blank">Click Here</a> to Buy LUX COZI Products
+        <a href="https://www.luxcozi.com/" target="_blank">Click Here</a> to Buy ayachak ashrama Products
     </div>
     <header>
         <div class="container">

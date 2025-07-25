@@ -8,7 +8,8 @@
     <link href="{{$base_url}}admin/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{$base_url}}admin/css/style.css" rel="stylesheet">
 
-    <title>Luxcozi | admin panel1254</title>
+    {{-- <title>Luxcozi | admin panel1254</title> --}}
+    <title>Ayachak Ashrama</title>
   </head>
   <body>
     <main class="login">
