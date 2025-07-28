@@ -12,6 +12,24 @@
                         @csrf
                         <h4>Register Now</h4>
                         <div class="log_in_from">
+                            <input class="log_in_from_input" name="fname" type="text" placeholder="Enter First Name" value="{{old('fname')}}" autocomplete="new-password">
+                            @error('fname')
+                                <div class="text-danger text-small">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="log_in_from">
+                            <input class="log_in_from_input" name="lname" type="text" placeholder="Enter Last Name" value="{{old('lname')}}" autocomplete="new-password">
+                            @error('lname')
+                                <div class="text-danger text-small">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="log_in_from">
+                            <input class="log_in_from_input" name="email" type="email" placeholder="Enter email" value="{{old('email')}}" autocomplete="new-password">
+                            @error('email')
+                                <div class="text-danger text-small">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="log_in_from">
                             <input class="log_in_from_input" name="mobile" type="tel" placeholder="Mobile Number" value="{{old('mobile')}}" autocomplete="new-password">
                             @error('mobile')
                                 <div class="text-danger text-small">{{$message}}</div>

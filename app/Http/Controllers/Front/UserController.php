@@ -58,6 +58,10 @@ class UserController extends Controller
 
                 // Create a new user
                     $user = new User();
+                    $user->fname = $request->fname;
+                    $user->lname = $request->lname;
+                    $user->name = $request->fname . ' ' . $request->lname;
+                    $user->email = $request->email;
                     $user->mobile = $request->mobile;
                     $user->password = Hash::make($request->password);
                     $save = $user->save();
@@ -74,10 +78,6 @@ class UserController extends Controller
                     } else {
                         return redirect()->back()->with('failure', 'Failed to create User')->withInput($request->all());
                     }
-
-
-
-
 
         // $storeData = $this->userRepository->create($request->except('_token'));
 

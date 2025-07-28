@@ -40,7 +40,7 @@
                                 <label class="form-check-label" for="customSwitch{{$page->id}}"></label>
                             </div>
                         </td>
-                        <td>{{ $page->created_at->format('d-m-Y H:i') }}</td>
+                        <td>{{ $page->created_at->format('d-m-Y') }}</td>
                         <td> 
                             <div class="btn-group" role="group" aria-label="Action Buttons">
                                 <div>

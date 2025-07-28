@@ -18,8 +18,8 @@
     <p><strong>Slug:</strong> {{ $page->slug }}</p>
     <p><strong>Content:</strong></p>
     <div>{!! $page->content !!}</div>
-    <p><strong>Meta Title:</strong> {{ $page->meta_title }}</p>
-    <p><strong>Meta Description:</strong> {{ $page->meta_description }}</p>
+    <p><strong>Meta Title:</strong> {{ ucwords($page->meta_title) }}</p>
+    <p><strong>Meta Description:</strong> {{ ucwords($page->meta_description) }}</p>
     <p><strong>Created At:</strong> {{ $page->created_at->format('d-m-Y H:i') }}</p>
 </div>
 

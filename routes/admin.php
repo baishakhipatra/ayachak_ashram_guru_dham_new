@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\{AdminUserManagementController, PageController, MenuController,CSRProjectController, TagController};
+use App\Http\Controllers\Admin\{AdminUserManagementController, PageController, MenuController,CSRProjectController, TagController,
+                                DonationController};
 
 // admin guard
 use Illuminate\Support\Facades\Route;
@@ -65,6 +66,12 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             Route::get('/edit/{id}', [TagController::class, 'edit'])->name('tags.edit');
             Route::post('/update/{id}', [TagController::class, 'update'])->name('tags.update');
             Route::post('/delete', [TagController::class, 'delete'])->name('tags.delete');
+        });
+
+        Route::prefix('donations')->group(function() {
+            Route::get('/', [DonationController::class, 'index'])->name('donations.index');
+            Route::get('/create', [DonationController::class, 'create'])->name('donations.create');
+            Route::post('/store', [DonationController::class, 'store'])->name('donations.store');
         });
 
         // category

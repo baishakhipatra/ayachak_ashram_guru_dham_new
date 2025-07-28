@@ -20,13 +20,13 @@
                                 <div class="text-small text-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <!-- <div class="log_in_from">
+                        <div class="log_in_from">
                             <input class="log_in_from_input" name="password" type="password" placeholder="Password"  autocomplete="new-password">
                             @error('password')
                                 <div class="text-small text-danger">{{$message}}</div>
                             @enderror
-                        </div> -->
-                        <input type="hidden" name="password" value=12345    >
+                        </div>
+                        {{-- <input type="hidden" name="password" value=12345    > --}}
                         <div class="log_in_from_btn">
                             <button  class="log_in_btn">Login</button>
                         </div>

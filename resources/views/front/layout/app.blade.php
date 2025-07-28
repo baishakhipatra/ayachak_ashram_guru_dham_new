@@ -44,7 +44,7 @@
                     <button type="submit" class="search_btn">GO</button>
                     <div id="autocomplete-list" class="autocomplete-items"></div>
                 </form>
-                <h5 class="promotion-tag"><a href="https://www.luxcozi.com/" target="_blank">Click Here</a> to Buy LUX COZI Products</h5>
+                <h5 class="promotion-tag"><a href="https://www.luxcozi.com/" target="_blank">Donate Now</a></h5>
                 <div class="wishlist">
                     <div class="search_for_mob">
                         <a href="#url" class="search_for_mob_a" data-bs-toggle="modal" data-bs-target="#examplesearchModal">
@@ -77,15 +77,16 @@
                                     stroke="#655D5D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </a>
-                     <ul class="dropdown-menu header_user_dropdown">  
-                     @if(Auth::guard('web')->check())
-                        <!-- $userId = Auth::guard('web')->user()->id; -->
-                        <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log out</a></li>
-                        <li><a class="dropdown-item" href="{{ route('front.user.profile') }}">My account</a></li>
-                        @else
-                        <li><a class="dropdown-item" href="{{route('front.user.login')}}">Log in</a></li>
-                     @endif
-                    </ul>
+                        <ul class="dropdown-menu header_user_dropdown">  
+                        @if(Auth::guard('web')->check())
+                            <!-- $userId = Auth::guard('web')->user()->id; -->
+                            <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log out</a></li>
+                            <li><a class="dropdown-item" href="{{ route('front.user.profile') }}">My account</a></li>
+                            @else
+                            <li><a class="dropdown-item" href="{{route('front.user.login')}}">Log in</a></li>
+                            <li><a class="dropdown-item" href="{{route('front.user.register')}}">Registration</a></li>
+                        @endif
+                        </ul>
                     </div>
                     <div class="header_bag header_user_menu">
                         <a href="{{route('front.cart.index')}}"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">

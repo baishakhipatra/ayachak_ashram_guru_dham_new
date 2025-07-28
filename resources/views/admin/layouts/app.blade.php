@@ -83,6 +83,18 @@
                     </ul>
                 </li>
 
+                
+                <li class="@if(request()->is('admin/donation-management*')) active @endif">
+                    <a href="javascript:void(0)"><i class="fi fi-br-cube"></i> <span>Donation Management</span></a>
+                    <ul>
+                        <li class="{{ request()->is('admin/admin-user-management*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.donations.index') }}">
+                                <i class="fi fi-br-database"></i> <span>Donations</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
 
                 <li class="@if(request()->is('admin/category*') || request()->is('admin/subcategory*') || request()->is('admin/collection*') || request()->is('admin/color*') || request()->is('admin/size*')) { {{'active'}} }  @endif">
                     <a href="javascript: void(0)"><i class="fi fi-br-cube"></i> <span>Master</span></a>
