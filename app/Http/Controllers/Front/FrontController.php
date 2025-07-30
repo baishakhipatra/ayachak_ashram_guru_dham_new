@@ -15,31 +15,35 @@ use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
 {
-    public function __construct(ProductInterface $productRepository) 
+    public function __construct(ProductInterface $productRepository)
     {
         $this->productRepository = $productRepository;
     }
     public function index(Request $request)
     {
-        // $category = Category::latest('id')->get();
-        // $collections = Collection::latest('id')->get();
-        $products = Product::where('is_trending', 1)->latest('view_count', 'id')->where('status',1)->limit(14)->get();
-        $hot_deals = Product::where('status',1)->orderBy('position','ASC')->get();
-
-        foreach ($hot_deals as $product) {
-            $availableColors[$product->id] = $this->productRepository->getAvailableColorByProductId($product->id);
-        }
-        $demo_product = Product::where('is_feature',1)->take(5)->get(); 
-        $mobile_product = Product::where('cat_id',17)->get(); 
-        
-        // dd($mobile_product);
-        $deal_of_the_day_products = Product::where('is_deal_of_the_day', 1)->latest('view_count', 'id')->where('status',1)->limit(14)->get();
-        // dd($demo_product[2]);  
-        // $products = Product::latest('view_count', 'id')->limit(16)->get();
-        $galleries = Gallery::latest('id')->get();
-        $banner = Banner::where('status', 1)->latest('id')->first();
-        return view('front.welcome', compact('products', 'galleries', 'banner','hot_deals','demo_product','deal_of_the_day_products','mobile_product','availableColors'));
+        return view('front.index');
     }
+    // public function index(Request $request)
+    // {
+    //     // $category = Category::latest('id')->get();
+    //     // $collections = Collection::latest('id')->get();
+    //     $products = Product::where('is_trending', 1)->latest('view_count', 'id')->where('status', 1)->limit(14)->get();
+    //     $hot_deals = Product::where('status', 1)->orderBy('position', 'ASC')->get();
+
+    //     foreach ($hot_deals as $product) {
+    //         $availableColors[$product->id] = $this->productRepository->getAvailableColorByProductId($product->id);
+    //     }
+    //     $demo_product = Product::where('is_feature', 1)->take(5)->get();
+    //     $mobile_product = Product::where('cat_id', 17)->get();
+
+    //     // dd($mobile_product);
+    //     $deal_of_the_day_products = Product::where('is_deal_of_the_day', 1)->latest('view_count', 'id')->where('status', 1)->limit(14)->get();
+    //     // dd($demo_product[2]);  
+    //     // $products = Product::latest('view_count', 'id')->limit(16)->get();
+    //     $galleries = Gallery::latest('id')->get();
+    //     $banner = Banner::where('status', 1)->latest('id')->first();
+    //     return view('front.welcome', compact('products', 'galleries', 'banner', 'hot_deals', 'demo_product', 'deal_of_the_day_products', 'mobile_product', 'availableColors'));
+    // }
 
     public function mailSubscribe(Request $request)
     {
@@ -67,140 +71,140 @@ class FrontController extends Controller
             return response()->json(['resp' => 400, 'message' => $validator->errors()->first()]);
         }
     }
-	
-	
+
+
     public function declare(Request $request)
     {
         return view('front.declaration');
     }
-	
-	
-	public function one(Request $request)
+
+
+    public function one(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function two(Request $request)
+
+    public function two(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function three(Request $request)
+
+    public function three(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function four(Request $request)
+
+    public function four(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function five(Request $request)
+
+    public function five(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function six(Request $request)
+
+    public function six(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function seven(Request $request)
+
+    public function seven(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function eight(Request $request)
+
+    public function eight(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function nine(Request $request)
+
+    public function nine(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function ten(Request $request)
+
+    public function ten(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function eleven(Request $request)
+
+    public function eleven(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function twelve(Request $request)
+
+    public function twelve(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function thirteen(Request $request)
+
+    public function thirteen(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function fourteen(Request $request)
+
+    public function fourteen(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	
-	public function fifteen(Request $request)
+
+
+    public function fifteen(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function sixteen(Request $request)
+
+    public function sixteen(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function seventeen(Request $request)
+
+    public function seventeen(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	public function eightteen(Request $request)
+    public function eightteen(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function nineteen(Request $request)
+
+    public function nineteen(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function twenty(Request $request)
+
+    public function twenty(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function twentyone(Request $request)
+
+    public function twentyone(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	
-	public function twentytwo(Request $request)
+
+
+    public function twentytwo(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function twentythree(Request $request)
+
+    public function twentythree(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function twentyfour(Request $request)
+
+    public function twentyfour(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	
-	public function twentyfive(Request $request)
+
+    public function twentyfive(Request $request)
     {
         return redirect('https://www.luxinnerwear.com/men/lux-cozi');
     }
-	public function privacy(Request $request)
+    public function privacy(Request $request)
     {
         return view('front.privacyPolicy');
     }
@@ -212,6 +216,4 @@ class FrontController extends Controller
     {
         return view('front.customer_care');
     }
-
- 
 }

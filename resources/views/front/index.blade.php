@@ -1,55 +1,631 @@
-@extends('layouts.app')
-
-@section('page', $page)
-
+@extends('front/layout.app')
 @section('content')
 
-<style type="text/css">
-    .cms_context h1, .cms_context h2, .cms_context h3, .cms_context h4, .cms_context h5, .cms_context h6 {
-        margin: 0 0 25px;
-    }
-    .cms_context p {
-        margin-bottom: 30px;
-    }
-    .cms_context ul {
-        list-style-type: disc;
-    }
-</style>
-<section class="cart-header mb-3 mb-sm-5 mt-5">
+<section class="banner">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h4>{{$page}}</h4>
+        <div class="row align-items-center justify-content-between">
+            <div class="col-lg-6">
+                <div class="banner-content">
+                    <div class="group-image">
+                        <img src="./assets/images/group-flower.png" alt="">
+                    </div>
+                    <h2 class="banner-sub-heading">Find Your Zen</h2>
+                    <h1 class="banner-heading">Unleash Inner Peace and Vitality</h1>
+                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="banner-image">
+                    <div class="single-image">
+                        <img src="{{asset('assets/images/sinle-flower.png')}}" alt="">
+                    </div>
+                    <div class="image-holder">
+                        <img src="{{asset('assets/images/banner-image.jpg')}}" alt="">
+                    </div>
+                    <div class="play-btm" data-bs-toggle="modal" data-bs-target="#videoModal">
+                        <img src="{{asset('assets/images/play.svg')}}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="circle-bottom">
+        <img src="{{asset('assets/images/circle-image.svg')}}" alt="">
+    </div>
+    <div class="circle-top">
+        <img src="{{asset('assets/images/circle-image.svg')}}" alt="">
+    </div>
+    <div class="overlay-bg"></div>
+</section>
+
+<section class="about-section">
+    <div class="container">
+        <div class="heading-group">
+            <figure>
+                <img src="./assets/images/divider.svg" alt="">
+            </figure>
+            <h3 class="section-sub-heading">Introduction</h3>
+            <h2 class="section-heading">About Our Guru Dham</h2>
+        </div>
+        <p>India is the holy land. The soil of India is blessed with the foot dust of innumerable ascetic saints and sages. The required religious sentiment, transcendence
+        and geist to awaken the inner divinity of the human being can’t get flourished unless someone gets birth in India.</p>
+        <a href="#" class="bton btn-fill">Read More</a>
+    </div>
+</section>
+
+<section class="guru-section">
+    <div class="container">
+       <div class="content-holder-stack">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-12 col-lg-5 mb-4 mb-md-5 mb-lg-0">
+                    <div class="section-image-holder">
+                        <div class="section-image-holder image-holder-big radious-bottom-right">
+                            <img src="{{asset('assets/images/babamoni.jpg')}}" alt="">
+                        </div>
+                        <div class="image-group">
+                            <img src="{{asset('assets/images/double-flower.png')}}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="heading-group">
+                        <figure>
+                            <img src="{{asset('assets/images/divider.svg')}}" alt="">
+                        </figure>
+                        <h2 class="section-heading">Sri Srimat Swami Swarupananda Paramhansa Dev</h2>
+                        <h3 class="section-sub-heading">Popularly known as SRI SRI BABAMONI</h3>
+                    </div>
+                    <div class="section-content-place">
+                        <p>A versatile genius, Sri Sri Swami Swarupananda Paramhansa Dev was born in around the first half of last decade of nineteenth century in Chandpur, 
+                        the then sub-divisional town of the then District Comilla of undivided Bengal in British India. No exact date of birth was stated by His Divine Grace and no reliable document has been found about it. He came from a very rich, religious, benevolent family. The grand father of Sri Sri Babamoni, Sri Harihar Gangopadhay, Zamindar and who was famous for his profound knowledge. Maharishi Sri Sri Bholananda Giri Moharaj gave Him Honour by title ‘KALIR BASISTHA’.</p>
+                    </div>
+                        
+                    <a href="#" class="bton btn-fill">Read More</a>
+                </div>
+            </div>
+       </div>
+    </div>
+    <div class="section-overlay"></div>
+</section>
+
+<section class="content-image-section pb-4">
+    <div class="container">
+        <div class="content-holder-stack">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-12 col-lg-6 md-lg-6 order-lg-1 order-2">
+                    <div class="heading-group">
+                        <figure>
+                            <img src="{{asset('assets/images/divider.svg')}}" alt="">
+                        </figure>
+                        <h2 class="section-heading">Uniqueness of Principles of Sri Sri Babamoni</h2>
+                    </div>
+                    <ul class="content-list">
+                        <li>
+                            <figure>
+                                <img src="{{asset('assets/images/icon.svg')}}" alt="">
+                            </figure>
+                            <figcaption>
+                                <h4>Abhiksha</h4>
+                                <p>It is wellknown that any Ashram or of such nature always perform welfare activities in society by taking financial aid from general public or from Government.</p>
+                            </figcaption>
+                        </li>
+                        <li>
+                            <figure>
+                                <img src="{{asset('assets/images/icon.svg')}}" alt="">
+                            </figure>
+                            <figcaption>
+                                <h4>Morality Campaign</h4>
+                                <p>Transformation of the present human race into a completely divine society is His ultimate object and character-building movement is the means to achieve this object.</p>
+                            </figcaption>
+                        </li>
+                    </ul>
+                    <a href="#" class="bton btn-fill">Read More</a>
+                </div>
+                <div class="col-md-12 col-lg-5 mb-4 mb-md-5 mb-lg-0 order-lg-2 order-1">
+                    <div class="section-image-holder">
+                        <div class="section-image-holder image-holder-medium radious-bottom-left">
+                            <img src="{{asset('assets/images/dummy-image.jpg')}}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section-circle-image">
+        <img src="{{asset('assets/images/circle-divider.svg')}}" alt="">
+    </div>
+</section>
+
+<section class="flower-divider">
+    <div class="container">
+        <img src="{{asset('assets/images/double-flower.png')}}" alt="">
+    </div>
+</section>
+
+<section class="image-content-section ">
+    <div class="container">
+        <div class="content-holder-stack">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-12 col-lg-5 mb-4 mb-md-5 mb-lg-0">
+                    <div class="section-image-holder">
+                        <div class="section-image-holder image-holder-medium radious-top-right">
+                            <img src="{{asset('assets/images/dummy-image.jpg')}}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="heading-group">
+                        <figure>
+                            <img src="{{asset('assets/images/divider.svg')}}" alt="">
+                        </figure>
+                        <h2 class="section-heading">Institutions Founded by Sri Sri Babamoni</h2>
+                    </div>
+                    <ul class="content-list">
+                        <li>
+                            <figure>
+                                <img src="{{asset('assets/images/icon.svg')}}" alt="">
+                            </figure>
+                            <figcaption>
+                                <h4>Ayachak Ashram</h4>
+                                <p>The non-begging Saint, Sri Sri Babamoni, has appropriately named his Ashram as AYACHAK (i.e ‘A’ connotes one, who and ‘YACHAK’ connotes Yachana, bhiksha) which means ‘ONE WHO NEVER BEGS.’</p>
+                            </figcaption>
+                        </li>
+                        <li>
+                            <figure>
+                                <img src="{{asset('assets/images/icon.svg')}}" alt="">
+                            </figure>
+                            <figcaption>
+                                <h4>The Multiversity</h4>
+                                <p>The Multiversity was established, by His Divine Grace Sri Srimat Swami Swarupananda Paramhansa Dev in the year 1973-1974 and registered under the West-Bengal Societies Act, 1961, vide Registration No. S\13107 of 1973-74 dated 15th June, 1975 solely for the benefit of the public in general and the students and inmates of The Multiversity.</p>
+                            </figcaption>
+                        </li>
+                    </ul>
+                    <a href="#" class="bton btn-fill">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section-circle-image">
+        <img src="{{asset('assets/images/circle-divider.svg')}}" alt="">
+    </div>
+</section>
+
+<section class="section-donation">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="heading-group">
+                    <figure>
+                        <img src="{{asset('assets/images/divider.svg')}}" alt="">
+                    </figure>
+                    <h2 class="section-heading">Donating to charity helps support those in need and makes a positive difference in the world.</h2>
+                    <a href="#" class="bton btn-fill">Donate Now</a>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="cart-wrapper">
+<section class="three-grid-section">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-3">
-                <ul class="account-list mt-0">
-                    <li>
-                        <span><strong>Quick Links</strong></span>
-                        <ul>
-                            <li><a href="{{route('front.faq.index')}}">FAQ</a></li>
-                            <li><a href="{{route('front.user.order')}}">My Shopping</a></li>
-                            <li><a href="{{route('front.content.shipping')}}">Shipping & Delivery</a></li>
-                            <li><a href="{{route('front.content.payment')}}">Payment, Voucher & Promotions</a></li>
-                            <li><a href="{{route('front.content.return')}}">Returns Policy</a></li>
-                            <li><a href="{{route('front.content.refund')}}">Refund & Cancellation Policy</a></li>
-                            <li><a href="{{route('front.content.service')}}">Service & Contact</a></li>
-                        </ul>
-                    </li>
-                </ul>
+        <div class="heading-group">
+            <figure>
+                <img src="{{asset('assets/images/divider.svg')}}" alt="">
+            </figure>
+            <h2 class="section-heading">Policy For Smooth Running Welfare Activities By <br> Following Principle of Abhiksha</h2>
+        </div>
+
+        <ul class="grid-list">
+            <li>
+                <div class="inner">
+                    <figure>
+                        <img src="{{asset('assets/images/icon2.svg')}}" alt="">
+                    </figure>
+                    <figcaption>
+                        <h2>Ayurvedic Medicines</h2>
+                        <p>
+                            In initial stage, there was extreme financial crunch. Due to extreme poverty, Sri Sri Babamoni had to take only ‘Mahua leaf’ for living. 
+                            But crisis could not be able to create obstacle on the path of selfless service to the mankind.
+                        </p>
+                    </figcaption>
+                    <a href="#" class="bton btn-fill">Shop Now</a>
+                </div>
+            </li>
+            <li>
+                <div class="inner">
+                    <figure>
+                        <img src="{{asset('assets/images/icon3.svg')}}" alt="">
+                    </figure>
+                    <figcaption>
+                        <h2>Books</h2>
+                        <p>
+                            ‘Ayachak Ashram’ earns from selling valuable books written by Sri Sri Babamoni.
+                        </p>
+                    </figcaption>
+                    <a href="#" class="bton btn-fill">Shop Now</a>
+                </div>
+            </li>
+            <li>
+                <div class="inner">
+                    <figure>
+                        <img src="{{asset('assets/images/icon1.svg')}}" alt="">
+                    </figure>
+                    <figcaption>
+                        <h2>Voluntary Donations</h2>
+                        <p>
+                            Ayachak Ashram never begs from anyone, still, the disciples of this order (who are called Akhandas), 
+                            voluntarily contribute donations for building up Akhanda Mandir at different places and they always come forward to perform relief work...
+                        </p>
+                    </figcaption>
+                    <a href="#" class="bton btn-fill">Donate Now</a>
+                </div>
+            </li>
+        </ul>
+
+
+    </div>
+</section>
+
+<section class="guru-section mamoni-section">
+    <div class="container">
+       <div class="content-holder-stack">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-12 col-lg-6 order-lg-1 order-2">
+                    <div class="heading-group">
+                        <figure>
+                            <img src="{{asset('assets/images/divider.svg')}}" alt="">
+                        </figure>
+                        <h2 class="section-heading">Mahasonnyasini Sri Sri Samhita Devi</h2>
+                        <h3 class="section-sub-heading">Popularly known as ‘SRI SRI MAMONI’</h3>
+                    </div>
+                    <div class="section-content-place">
+                        <p>Mahasonnyasini Sri Sri Samhita Devi alias Mangalmoyee Bandyopadhyay was only child of Sri Hrishikesh Bandyopadhyay and Smt. Urmila Devi. Parents of Sri Sri Samhita Devi were very much devoted to Sri Sri Babamoni and they were initiated disciples of Sri Sri Babamani. Hrishikesh Bandyopadhyay was a fabulously rich person who was a diamond merchant in Lucknow. When Samhita Devi was only about one year old, her mother Urmila Devi expired. 
+                            A feeling of renunciation has been stirred up in the mind of the father of Sri Sri Samhita Devi and so he decided that he would embrace Sanyas by leaving the material world. He took permission from Sri Sri Babamani and finally left for an unknown place near Haridwar and he never returned</p>
+                    </div>
+                        
+                    <a href="#" class="bton btn-fill">Read More</a>
+                </div>
+                <div class="col-md-12 col-lg-5 mb-4 mb-md-5 mb-lg-0 order-lg-2 order-1">
+                    <div class="section-image-holder">
+                        <div class="section-image-holder image-holder-big radious-bottom-left">
+                            <img src="{{asset('assets/images/mamoni.jpg')}}" alt="">
+                        </div>
+                        <div class="image-group">
+                            <img src="{{asset('assets/images/double-flower.png')}}" alt="">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-8">
-                <div class="cms_context">
-                    {!! $data->content !!}
+       </div>
+    </div>
+    <div class="section-overlay"></div>
+</section>
+
+<section class="single-heading-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h2 class="section-heading">Two Strong Pillars Without Whom Probably Ayachak Ashram Would Not Come Into Reality</h2>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<section class="image-content-section pb-4">
+    <div class="container">
+        <div class="content-holder-stack">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-12 col-lg-5 mb-4 mb-md-5 mb-lg-0">
+                    <div class="section-image-holder">
+                        <div class="section-image-holder image-holder-medium radious-bottom-right">
+                            <img src="{{asset('assets/images/sadhana-devi.jpg')}}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="heading-group">
+                        <figure>
+                            <img src="{{asset('assets/images/divider.svg')}}" alt="">
+                        </figure>
+                        <h2 class="section-heading">Brahmacharini Sri Sri Sadhana Devi</h2>
+                        <h3 class="section-sub-heading">Popularly known as Ashram Mata</h3>
+                    </div>
+                    <div class="section-content-place">
+                        <p>Brahmacharini Sadhana Devi was one of the most affectionate, reliable, efficient, committed and trustworthy disciple and wellwisher of Sri Sri Babamoni. She was the eldest daughter of eminent physician and great devotee Respectable Nagesh Brahmachary and Kadambini Devi.</p>
+                    </div>
+                    <a href="#" class="bton btn-fill">Read More</a>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="section-circle-image">
+        <img src="{{asset('assets/images/circle-divider.svg')}}" alt="">
+    </div>
+</section>
+
+<section class="flower-divider">
+    <div class="container">
+        <img src="{{asset('assets/images/double-flower.png')}}" alt="">
+    </div>
+</section>
+
+<section class="content-image-section pt-4">
+    <div class="container">
+        <div class="content-holder-stack">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-12 col-lg-6 order-lg-1 order-2">
+                    <div class="heading-group">
+                        <figure>
+                            <img src="{{asset('assets/images/divider.svg')}}" alt="">
+                        </figure>
+                        <h2 class="section-heading">Sri Sri Snehamoy Brahmachary</h2>
+                        <h3 class="section-sub-heading">Popularly known as Bhaida</h3>
+                    </div>
+                    <div class="section-content-place">
+                        <p>Like Ashram-mata Sri Sri Sadhana Devi, the name of other pillar of our Ayachak Ashram is Sri Sri Snehamoy Brahmachary who spent his life with Sri Sri Babamoni since his childhood. He has sacrificed and gifted himself to the holy feet of Sri Sri Babamoni and worked throughout life for various service of Ayachak Ashram.</p>
+                    </div>
+                    <a href="#" class="bton btn-fill">Read More</a>
+                </div>
+                <div class="col-md-12 col-lg-5 mb-4 mb-md-5 mb-lg-0 order-lg-2 order-1">
+                    <div class="section-image-holder">
+                        <div class="section-image-holder image-holder-medium radious-top-left">
+                            <img src="{{asset('assets/images/snehamoy.jpg')}}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section-circle-image">
+        <img src="{{asset('assets/images/circle-divider.svg')}}" alt="">
+    </div>
+</section>
+
+<section class="four-grid-section">
+   <ul class="four-grid-list">
+        <li>
+            <div class="inner">
+                <figure>
+                    <img src="{{asset('assets/images/image1.jpg')}}" alt="">
+                </figure>
+                <figcaption>
+                    <h3>Who is Akhanda</h3>
+                    <p>Those who are spiritually connected to Sri Sri Babamoni love to call themselves as ‘Akhanda’ (the undivided).</p>
+                    <a  href="#" class="text-arrow">
+                        Read More
+                        <img src="{{asset('assets/images/text-arrow.svg')}}" alt="">
+                    </a>
+                </figcaption>
+            </div>
+        </li>
+        <li>
+            <div class="inner">
+                <figure>
+                    <img src="{{asset('assets/images/image2.jpg')}}" alt="">
+                </figure>
+                <figcaption>
+                    <h3>What is meant by ‘OMKAR’</h3>
+                    <p>Sri Sri Babamoni,—There is no doubt that Omkar is the king of all mantras. Omkar is the combination of all mantras of the world...</p>
+                    <a  href="#" class="text-arrow">
+                        Read More
+                        <img src="{{asset('assets/images/text-arrow.svg')}}" alt="">
+                    </a>
+                </figcaption>
+            </div>
+        </li>
+
+        <li>
+            <div class="inner">
+                <figure>
+                    <img src="{{asset('assets/images/image3.jpg')}}" alt="">
+                </figure>
+                <figcaption>
+                    <h3>The Structure 0f Akhanda Sangathan</h3>
+                    <p>From the above chart, the shape of Akhanda Sangathan will be clear. It works Statewise (in different State), Districtwise...</p>
+                    <a  href="#" class="text-arrow">
+                        Read More
+                        <img src="{{asset('assets/images/text-arrow.svg')}}" alt="">
+                    </a>
+                </figcaption>
+            </div>
+        </li>
+        <li>
+            <div class="inner">
+                <figure>
+                    <img src="{{asset('assets/images/image4.jpg')}}" alt="">
+                </figure>
+                <figcaption>
+                    <h3>Samabeta Upasana</h3>
+                    <p>Samabeta Upasana i.e. congretional prayer means an assemble of disciples and devotees of Ayachak Ashram...</p>
+                    <a  href="#" class="text-arrow">
+                        Read More
+                        <img src="{{asset('assets/images/image4.jpg')}}" alt="">
+                    </a>
+                </figcaption>
+            </div>
+        </li>
+   </ul>
+</section>
+
+<section class="cat-section">
+    <div class="container">
+        <div class="heading-group">
+            <h2 class="section-heading">Shop by Category</h2>
+        </div>
+        <ul class="cat-list">
+            <li>
+                <a href="#">
+                    <figure>
+                        <img src="{{asset('assets/images/books.svg')}}" alt="">
+                    </figure>
+                    <h4>Books</h4>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <figure>
+                        <img src="{{asset('assets/images/medicine.svg')}}" alt="">
+                    </figure>
+                    <h4>Medicine</h4>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <figure>
+                        <img src="{{asset('assets/images/water.svg')}}" alt="">
+                    </figure>
+                    <h4>Water</h4>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <figure>
+                        <img src="{{asset('assets/images/water.svg')}}" alt="">
+                    </figure>
+                    <h4>Photo Frame</h4>
+                </a>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section class="product-section">
+    <div class="container">
+        <div class="heading-group">
+            <h2 class="section-heading">Featured Products</h2>
+        </div>
+
+        <ul class="product-list">
+            <li>
+                <div class="pro-inner">
+                    <figure>
+                        <a href="">
+                            <img src="{{asset('assets/images/placeholder-product.jpg')}}" alt="">
+                        </a>
+                    </figure>
+                    <figcaption>
+                        <a href="#">
+                            <h3>A Virgins Chestity</h3>
+                        </a>
+                        <div class="price-group">
+                            <span class="original-price">₹20</span>
+                        </div>
+                        <a href="#" class="bton btn-fill">Shop Now</a>
+                    </figcaption>
+                </div>
+            </li>
+
+            <li>
+                <div class="pro-inner">
+                    <figure>
+                        <a href="">
+                            <img src="{{asset('assets/images/placeholder-product.jpg')}}" alt="">
+                        </a>
+                    </figure>
+                    <figcaption>
+                        <a href="#">
+                            <h3>Adarsha Chhatra Jibon</h3>
+                        </a>
+                        <div class="price-group">
+                            <span class="original-price strike">₹25</span>
+                            <span class="sale-price">₹18</span>
+                            <div class="sale-persentage">28% save</div>
+                        </div>
+                        <div class="sale-badge">Sale</div>
+
+                        <a href="#" class="bton btn-fill">Shop Now</a>
+                    </figcaption>
+                </div>
+            </li>
+
+            <li>
+                <div class="pro-inner">
+                    <figure>
+                        <a href="">
+                            <img src="{{asset('assets/images/placeholder-product.jpg')}}" alt="">
+                        </a>
+                    </figure>
+                    <figcaption>
+                        <a href="#">
+                            <h3>Akhanda Achar Samhita</h3>
+                        </a>
+                        <div class="price-group">
+                            <span class="original-price strike">₹40</span>
+                            <span class="sale-price">₹30</span>
+                            <div class="sale-persentage">25% save</div>
+                        </div>
+                        <div class="sale-badge">Sale</div>
+
+                        <a href="#" class="bton btn-fill">Shop Now</a>
+                    </figcaption>
+                </div>
+            </li>
+        </ul>
+
+        <a href="#" class="bton btn-fill">View More</a>
+    </div>
+    <div class="overlay-pattern"></div>
+</section>
+
+<section class="event-section">
+    <div class="container">
+        <div class="heading-group">
+            <h2 class="section-heading">Latest Events</h2>
+        </div>
+        <ul class="event-list">
+            <li>
+                <div class="inner-grid">
+                    <a href="#">
+                        <figure>
+                            <img src="{{asset('assets/images/image5.jpg')}}" alt="">
+                        </figure>
+                        <figcaption>
+                            <h3>How to train yourself to meditate regularly?</h3>
+                            <div class="event-date">
+                                <img src="{{asset('assets/images/calender.svg')}}">
+                                <span>Mar 31, 2022</span>
+                            </div>
+                        </figcaption>
+                    </a>
+                </div>
+            </li>
+
+            <li>
+                <div class="inner-grid">
+                    <a href="#">
+                        <figure>
+                            <img src="{{asset('assets/images/image6.jpg')}}" alt="">
+                        </figure>
+                        <figcaption>
+                            <h3>The most unusual spiritual practices</h3>
+                            <div class="event-date">
+                                <img src="{{asset('assets/images/calender.svg')}}">
+                                <span>Mar 31, 2022</span>
+                            </div>
+                        </figcaption>
+                    </a>
+                </div>
+            </li>
+
+            <li>
+                <div class="inner-grid">
+                    <a href="#">
+                        <figure>
+                            <img src="{{asset('assets/images/image8.jpg')}}" alt="">
+                        </figure>
+                        <figcaption>
+                            <h3>Bhakti yoga for beginners: exercises and postures</h3>
+                            <div class="event-date">
+                                <img src="{{asset('assets/images/calender.svg')}}">
+                                <span>Mar 31, 2022</span>
+                            </div>
+                        </figcaption>
+                    </a>
+                </div>
+            </li>
+        </ul>
+        <a href="#" class="bton btn-fill">View More</a>
     </div>
 </section>
 @endsection

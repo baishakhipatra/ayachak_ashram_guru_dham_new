@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-
+        //dd('hi');
         // $recommendedProducts = $this->userRepository->recommendedProducts();
         // return view('front.login', compact('recommendedProducts'));
         return view('front.login');
@@ -40,11 +40,14 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
+        //dd($request->all());
         $request->validate([
+                    'name' => 'required|string|max:255',
                     'mobile' => 'required|numeric|digits:10|unique:users,mobile',
                     'password' => 'required|min:6|max:12',
                     'confirm_password' => 'required_with:password|same:password',
                 ], [
+                    'full_name.required' => 'The full name field is required.',
                     'mobile.required' => 'The mobile number field is required.',
                     'mobile.numeric' => 'The mobile number must be numeric.',
                     'mobile.unique' => 'The mobile number has already been taken.',
@@ -56,11 +59,16 @@ class UserController extends Controller
                     'confirm_password.same' => 'The confirm password must match the password.',
                 ]);
 
+                // ✅ Split full_name into fname and lname
+                $nameParts = explode(' ', $request->name, 2);
+                $fname = $nameParts[0];
+                $lname = isset($nameParts[1]) ? $nameParts[1] : '';
+
                 // Create a new user
                     $user = new User();
-                    $user->fname = $request->fname;
-                    $user->lname = $request->lname;
-                    $user->name = $request->fname . ' ' . $request->lname;
+                    $user->fname = $fname;
+                    $user->lname = $lname;
+                    $user->name = $fname . ' ' . $lname;
                     $user->email = $request->email;
                     $user->mobile = $request->mobile;
                     $user->password = Hash::make($request->password);
@@ -95,7 +103,7 @@ class UserController extends Controller
     //     }
     }
 
-     public function check(Request $request)
+    public function check(Request $request)
     {
         // dd($request->all());
         $existsNumber = User::where('mobile',$request->mobile)->first();
@@ -159,13 +167,33 @@ class UserController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->intended('/');
+        return redirect()->route('front.user.login');
     }
 
 	public function forgotPassword(Request $request)
     {
         return view('auth.passwords.email');
     }
+
+    public function forgotPasswordCheck(Request $request)
+    {
+        $request->validate([
+            'mobile' => 'required|digits:10|exists:users,mobile',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = User::where('mobile', $request->mobile)->first();
+
+        if ($user) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            return redirect()->route('front.user.login')->with('success', 'Password reset successfully.');
+        }
+
+        return back()->with('failure', 'Mobile number not found.');
+    }
+
     public function order(Request $request)
     {
         $data = $this->userRepository->orderDetails();

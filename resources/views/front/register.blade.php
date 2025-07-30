@@ -3,55 +3,63 @@
 @section('page-title', 'login')
 
 @section('content')
-<section class="login_sec">
+<section class="main">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="login_register">
-                    <form action="{{route('front.user.create')}}" method="post" class="from_login">
-                        @csrf
-                        <h4>Register Now</h4>
-                        <div class="log_in_from">
-                            <input class="log_in_from_input" name="fname" type="text" placeholder="Enter First Name" value="{{old('fname')}}" autocomplete="new-password">
-                            @error('fname')
-                                <div class="text-danger text-small">{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="log_in_from">
-                            <input class="log_in_from_input" name="lname" type="text" placeholder="Enter Last Name" value="{{old('lname')}}" autocomplete="new-password">
-                            @error('lname')
-                                <div class="text-danger text-small">{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="log_in_from">
-                            <input class="log_in_from_input" name="email" type="email" placeholder="Enter email" value="{{old('email')}}" autocomplete="new-password">
-                            @error('email')
-                                <div class="text-danger text-small">{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="log_in_from">
-                            <input class="log_in_from_input" name="mobile" type="tel" placeholder="Mobile Number" value="{{old('mobile')}}" autocomplete="new-password">
-                            @error('mobile')
-                                <div class="text-danger text-small">{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="log_in_from">
-                            <input class="log_in_from_input" name="password" type="password" placeholder="Password" autocomplete="new-password">
-                            @error('password')
-                            <div class="text-danger text-small">{{$message}}</div>
-                           @enderror
-                        </div>
-                        <div class="log_in_from">
-                            <input class="log_in_from_input" name="confirm_password" type="password" placeholder="Confirm Password">
-                            @error('confirm_password')
-                            <div class="text-danger text-small">{{$message}}</div>
-                            @enderror
-                        </div>
-                        <div class="log_in_from_btn">
-                            <button class="log_in_btn">Register</button>
-                        </div>
-                        <a href="{{route('front.user.login')}}">Login Here</a>
-                    </form>
+        <div class="login-stack">
+            <div class="row justify-content-center">
+                <div class="col-lg-5 mb-4 mb-md-5 mb-lg-0">
+                    <div class="login-wrap">
+                        <h2 class="section-heading mb-4">Register</h2>
+                        <form action="{{route('front.user.create')}}" method="post">
+                            @csrf
+                            <div class="form-group"> 
+                                <input type="text" class="form-control input-style" placeholder=" " id="name" name="name" value="{{ old('name') }}">
+                                <label class="placeholder-text">Full Name</label>
+                                @error('name')
+                                    <div class="text-danger text-small">{{$message}}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group"> 
+                                <input type="email" class="form-control input-style" placeholder=" " id="email" name="email" value="{{ old('email') }}">
+                                <label class="placeholder-text">Enter Email</label>
+                                @error('email')
+                                    <div class="text-danger text-small">{{$message}}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group"> 
+                                <input type="tel" class="form-control input-style" placeholder=" " id="mobile" name="mobile" value="{{ old('mobile') }}">
+                                <label class="placeholder-text">Enter mobile</label>
+                                @error('mobile')
+                                    <div class="text-danger text-small">{{$message}}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control input-style password-input" placeholder=" " id="password" name="password">
+                                <label class="placeholder-text">Password</label>
+                                <span class="toggle-password">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </span>
+                                @error('password')
+                                    <div class="text-danger text-small">{{$message}}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control input-style password-input" placeholder=" " id="confirm_password" name="confirm_password">
+                                <label class="placeholder-text">Confirm Password</label>
+                                <span class="toggle-password">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </span>
+                                @error('confirm_password')
+                                    <div class="text-danger text-small">{{$message}}</div>
+                                @enderror
+                            </div>
+
+                            <p class="form-text">Sign up for early Sale access plus tailored new arrivals, trends and promotions. To opt out, click unsubscribe in our emails.</p>
+
+                            <input type="submit" class="bton btn-fill" value="Register">
+                            <a href="{{ route('front.user.login') }}" class="bton btn-fill">Login</a>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
