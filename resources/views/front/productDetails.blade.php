@@ -1,4 +1,482 @@
 @extends('front.layout.app')
+@section('page-title', 'Product Details')
+@section('content')
+
+
+{{-- <section class="main">
+    <div class="container">
+        <ul class="breadcrumb breadcrumb-white mt-4">
+            <li><a href="{{route('front.home')}}">Home</a></li>
+            <li>Chyawanprash</li>
+        </ul>
+    </div>
+</section>
+
+<section class="details-body">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-4 mb-md-5 mb-lg-0">
+                <div class="gallery-place">
+
+                    <div class="slider-big swiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="single-image-big">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="single-image-big">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="single-image-big">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="single-image-big">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div thumbsSlider="" class="slider-thumb swiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="single-image-thumb">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="single-image-thumb">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="single-image-thumb">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="single-image-thumb">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="details-conetnt">
+                    <h1>Chyawanprash</h1>
+                    <div class="description">
+                        <p>
+                            This anti-aging medicine has been applying to rejuvenate people from the ancient period. It is specially used for tuburculosis, heart-disease, diabetes, seminal discharge, ejaculation, urinal difficulty etc. It can be taken in childhood, young or old age. Our speciality is to make it with pure ingredients.
+
+                        </p>
+                        <h3>Intake method</h3>
+                        <p>
+                            6 to 12 gram Chayawanprash with 30 drops of honey will be sucked like a logence keeping inside the mouth in empty stomach. After that milk or hot water may be taken. For children only two ounces and for infants only one ounce is applicable. For the severity of the disease it can be taken in the morning and the evening.
+                        </p>
+                    </div>
+                    <form action="">
+                        <div class="price">₹224.00</div>
+
+                        <div class="variation-list">
+                            <label>
+                                500 Gms
+                                <input type="radio" id="weight-500" name="weight" value="500" checked>
+                                <span></span>
+                            </label>
+                            <label>
+                                300 Gms
+                                <input type="radio" id="weight-300" name="weight" value="300">
+                                <span></span>
+                            </label>
+                        </div>
+
+                        <div class="quantity-group">
+                            <div class="number-input">
+                                <button class="decrement">-</button>
+                                <input type="number" id="quantity" min="1" max="10" value="1" step="1">
+                                <button class="increment">+</button>
+                            </div>
+                            <input type="submit" class="bton btn-fill" id="" value="Add to Cart">
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="related-product-stack">
+            <div class="heading-group">
+                <h2 class="section-heading">Related Product</h2>
+
+                <div class="navi-slide">
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+
+
+            <div class="relared-pro-stack swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="pro-inner">
+                            <figure>
+                                <a href="">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </a>
+                            </figure>
+                            <figcaption>
+                                <a href="#">
+                                    <h3>A Virgins Chestity</h3>
+                                </a>
+                                <div class="price-group">
+                                    <span class="original-price">₹20</span>
+                                </div>
+                                <a href="#" class="bton btn-fill">Shop Now</a>
+                            </figcaption>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="pro-inner">
+                            <figure>
+                                <a href="">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </a>
+                            </figure>
+                            <figcaption>
+                                <a href="#">
+                                    <h3>Adarsha Chhatra Jibon</h3>
+                                </a>
+                                <div class="price-group">
+                                    <span class="original-price strike">₹25</span>
+                                    <span class="sale-price">₹18</span>
+                                    <div class="sale-persentage">28% save</div>
+                                </div>
+                                <div class="sale-badge">Sale</div>
+
+                                <a href="#" class="bton btn-fill">Shop Now</a>
+                            </figcaption>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="pro-inner">
+                            <figure>
+                                <a href="">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </a>
+                            </figure>
+                            <figcaption>
+                                <a href="#">
+                                    <h3>Akhanda Achar Samhita</h3>
+                                </a>
+                                <div class="price-group">
+                                    <span class="original-price strike">₹40</span>
+                                    <span class="sale-price">₹30</span>
+                                    <div class="sale-persentage">25% save</div>
+                                </div>
+                                <div class="sale-badge">Sale</div>
+
+                                <a href="#" class="bton btn-fill">Shop Now</a>
+                            </figcaption>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="pro-inner">
+                            <figure>
+                                <a href="">
+                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                </a>
+                            </figure>
+                            <figcaption>
+                                <a href="#">
+                                    <h3>Brihat Ashwgandharista</h3>
+                                </a>
+                                <div class="price-group">
+                                    <span class="original-price">₹119.86</span>
+                                </div>
+                                <a href="#" class="bton btn-fill">Shop Now</a>
+                            </figcaption>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> --}}
+
+<section class="main">
+    <div class="container">
+        <ul class="breadcrumb breadcrumb-white mt-4">
+            <li><a href="{{ route('front.home') }}">Home</a></li>
+            <li>{{ $data->name }}</li>
+        </ul>
+    </div>
+</section>
+
+<section class="details-body">
+    <div class="container">
+        <div class="row">
+            {{-- Product Images --}}
+            <div class="col-lg-6 mb-4 mb-md-5 mb-lg-0">
+                <div class="gallery-place">
+
+                    {{-- Big slider --}}
+                    <div class="slider-big swiper">
+                        <div class="swiper-wrapper">
+                            @if($images && count($images))
+                                @foreach($images as $image)
+                                    <div class="swiper-slide">
+                                        <div class="single-image-big">
+                                            <img src="{{ asset($image->image) }}" alt="{{ $data->name }}">
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="swiper-slide">
+                                    <div class="single-image-big">
+                                        <img src="{{ asset('assets/images/placeholder-product.jpg') }}" alt="{{ $data->name }}">
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Thumb slider --}}
+                    <div thumbsSlider="" class="slider-thumb swiper">
+                        <div class="swiper-wrapper">
+                            @if($images && count($images))
+                                @foreach($images as $image)
+                                    <div class="swiper-slide">
+                                        <div class="single-image-thumb">
+                                            <img src="{{ asset($image->image) }}" alt="{{ $data->name }}">
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="swiper-slide">
+                                    <div class="single-image-thumb">
+                                        <img src="{{ asset('assets/images/placeholder-product.jpg') }}" alt="{{ $data->name }}">
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            {{-- Product Details --}}
+            <div class="col-lg-6">
+                <div class="details-conetnt">
+                    <h1>{{ $data->name }}</h1>
+
+                    <div class="description">
+                        {!! $data->description !!}
+                    </div>
+
+                    <form action="">
+                        <div class="price">
+                            @if($data->offer_price > 0 && $data->offer_price < $data->price)
+                                <span class="original-price strike">₹{{ number_format($data->price, 2) }}</span>
+                                <span class="sale-price">₹{{ number_format($data->offer_price, 2) }}</span>
+                            @else
+                                ₹{{ number_format($data->price, 2) }}
+                            @endif
+                        </div>
+
+                        {{-- Example static variations, replace with dynamic if you have --}}
+                        <div class="variation-list">
+                            <label>
+                                500 Gms
+                                <input type="radio" id="weight-500" name="weight" value="500" checked>
+                                <span></span>
+                            </label>
+                            <label>
+                                300 Gms
+                                <input type="radio" id="weight-300" name="weight" value="300">
+                                <span></span>
+                            </label>
+                        </div>
+
+                        <div class="quantity-group">
+                            <div class="number-input">
+                                <button class="decrement">-</button>
+                                <input type="number" id="quantity" min="1" max="10" value="1" step="1">
+                                <button class="increment">+</button>
+                            </div>
+                            <input type="submit" class="bton btn-fill" value="Add to Cart">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        {{-- Related Products --}}
+        @if($relatedProducts && $relatedProducts->count())
+            <div class="related-product-stack">
+                <div class="heading-group">
+                    <h2 class="section-heading">Related Products</h2>
+
+                    <div class="navi-slide">
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                </div>
+
+                <div class="relared-pro-stack swiper">
+                    <div class="swiper-wrapper">
+                        @foreach($relatedProducts as $related)
+                            <div class="swiper-slide">
+                                <div class="pro-inner">
+                                    <figure>
+                                        <a href="{{ route('front.shop.detail', $related->slug) }}">
+                                            <img src="{{ $related->image ? asset($related->image) : asset('assets/images/placeholder-product.jpg') }}" alt="{{ $related->name }}">
+                                        </a>
+                                    </figure>
+                                    <figcaption>
+                                        <a href="{{ route('front.shop.detail', $related->slug) }}">
+                                            <h3>{{ $related->name }}</h3>
+                                        </a>
+                                        <div class="price-group">
+                                            @if($related->offer_price > 0 && $related->offer_price < $related->price)
+                                                <span class="original-price strike">₹{{ number_format($related->price, 2) }}</span>
+                                                <span class="sale-price">₹{{ number_format($related->offer_price, 2) }}</span>
+                                                <div class="sale-persentage">
+                                                    {{ round((($related->price - $related->offer_price) / $related->price) * 100) }}% save
+                                                </div>
+                                                <div class="sale-badge">Sale</div>
+                                            @else
+                                                <span class="original-price">₹{{ number_format($related->price, 2) }}</span>
+                                            @endif
+                                        </div>
+                                        <a href="{{ route('front.shop.detail', $related->slug) }}" class="bton btn-fill">Shop Now</a>
+                                    </figcaption>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
+
+    </div>
+</section>
+
+
+@endsection
+
+@section('script')
+
+  <script>
+  $( function() {
+        // const rangeInput = document.querySelectorAll(".range-input input"),
+        // priceInput = document.querySelectorAll(".price-input input"),
+        // range = document.querySelector(".slider .progress");
+        // let priceGap = 1000;
+
+        // priceInput.forEach((input) => {
+        // input.addEventListener("input", (e) => {
+        //     let minPrice = parseInt(priceInput[0].value),
+        //     maxPrice = parseInt(priceInput[1].value);
+
+        //     if (maxPrice - minPrice >= priceGap && maxPrice <= rangeInput[1].max) {
+        //     if (e.target.className === "input-min") {
+        //         rangeInput[0].value = minPrice;
+        //         range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
+        //     } else {
+        //         rangeInput[1].value = maxPrice;
+        //         range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+        //     }
+        //     }
+        // });
+        // });
+
+        // rangeInput.forEach((input) => {
+        // input.addEventListener("input", (e) => {
+        //     let minVal = parseInt(rangeInput[0].value),
+        //     maxVal = parseInt(rangeInput[1].value);
+
+        //     if (maxVal - minVal < priceGap) {
+        //     if (e.target.className === "range-min") {
+        //         rangeInput[0].value = maxVal - priceGap;
+        //     } else {
+        //         rangeInput[1].value = minVal + priceGap;
+        //     }
+        //     } else {
+        //     priceInput[0].value = minVal;
+        //     priceInput[1].value = maxVal;
+        //     range.style.left = (minVal / rangeInput[0].max) * 100 + "%";
+        //     range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+        //     }
+        // });
+        // });
+
+
+    
+  } );
+
+    // quantity jquery
+    document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("quantity");
+    document.querySelector(".increment").addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent form submission
+        input.stepUp();
+    });
+    document.querySelector(".decrement").addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent form submission
+        input.stepDown();
+    });
+    });
+  </script>
+
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{-- @extends('front.layout.app')
    @section('content')
    <style>
     .product_details_wishlist.active {
@@ -127,15 +605,6 @@
                                         Cart</button>
                                            
                                 </div>
-                                {{-- @if (session('warning'))
-                                    <p class="text-danger" id="message_div">
-                                        {{ session('warning') }}
-                                    </p>
-                                @elseif  (session('success'))
-                                    <p class="text-success" id="message_div">
-                                        {{ session('success') }}
-                                    </p>  
-                                @endif --}}
                             </div>
                         </form>
                         <p id="Error_show" class="text-danger test-sm"></p>
@@ -423,4 +892,4 @@
     // });
 </script>
    
-@endsection
+@endsection --}}

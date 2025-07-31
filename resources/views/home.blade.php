@@ -3,7 +3,7 @@
 @section('content')
 
 <!-- @if (Auth::guard('web')->check())
-    <script>window.location = "{{route('front.user.profile')}}"</script>
+    <script>window.location = "{{route('front.profile')}}"</script>
 @else
     <script>window.location = "{{route('front.home')}}"</script>
 @endif -->

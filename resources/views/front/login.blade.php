@@ -13,7 +13,7 @@
                     @endif
                     <div class="login-wrap">
                         <h2 class="section-heading mb-4">Login</h2>
-                        <form action="{{route('front.user.check')}}" method="post">
+                        <form action="{{route('front.check')}}" method="post">
                             @csrf
                             <div class="form-group"> 
                                 <input type="mobile" class="form-control input-style" type="tel" placeholder=" " value="{{old('mobile')}}" id="mobile" name="mobile">
@@ -30,7 +30,7 @@
                                 </span>
                             </div>
 
-                            <a href="{{route('front.user.forgot.password')}}" class="forget-pass mb-4">Forgot your password?</a>
+                            <a href="{{route('front.forgot.password')}}" class="forget-pass mb-4">Forgot your password?</a>
 
                             <input type="submit" class="bton btn-fill" value="Login">
                         </form>
@@ -43,7 +43,7 @@
                             Sign up for early Sale access plus tailored new arrivals, 
                             trends and promotions. To opt out, click unsubscribe in our emails.
                         </p>
-                        <a href="{{route('front.user.register')}}" class="bton btn-fill">Register</a>
+                        <a href="{{route('front.register')}}" class="bton btn-fill">Register</a>
                     </div>
                 </div>
             </div>

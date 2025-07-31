@@ -1,3 +1,20 @@
+@media(max-width:1400px) {
+    .filter-area {
+        max-width: 270px;
+        flex: 0 0 270px;
+    }
+    .product-list__shop {
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    }
+    .product-list li .pro-inner figure {
+        height: 245px;
+    }
+    .product-list__shop li figcaption h3 {
+        font-size: 18px;
+    }
+}
+
+
 @media(max-width:1200px) {
     .menu li a {
         font-size: 14px;
@@ -240,6 +257,46 @@
         flex: 0 0 100%;
         width: 100%;
     }
+    .filter-area {
+        max-width: 270px;
+        flex: 0 0 270px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background: #fff;
+        width: 270px;
+        z-index: 99;
+        padding: 34px 27px;
+        transform: translateX(-100%);
+        transition:all 0.8s ease-in-out;
+        overflow-y: auto;
+        height: 100%;
+    }
+
+    .filter-area.slide {
+        transform: translateX(0%);
+    }
+
+    .product-listing-area {
+        padding-left: 0;
+    }
+    .filter-toggle {
+        display: block;
+        cursor: pointer;
+    }
+    .pro-inner figure {
+        height: 240px;
+    }
+    .login-stack {
+        padding: 50px 0px 50px;
+    }
+    .cart-right-stack::after {
+        display: none;
+    }
+    .cart-form-stack {
+        border:none;
+    }
+
 }
 
 @media(max-width:778px) {
@@ -272,10 +329,31 @@
     .event-list li .inner-grid {
         height: 356px;
     }
+    .cart-item-list li .inner-wrap figure {
+        max-width: 100px;
+        flex: 0 0 100px;
+        height: 100px;
+    }
+    .product-details-cart h3 {
+        font-size: 20px;
+        margin-bottom: 0;
+    }
+    .pro-meta {
+        font-size: 14px;
+    }
+    .cart-form-wrap {
+        margin-top: 20px;
+    }
+
+    .cart-value-wrap {
+        position:static;
+        top: 0;
+    }
 }
 
 
 @media(max-width:576px) {
+
     .menu-holder .bton {
         display: block;
         margin-top: 25px;
@@ -343,6 +421,45 @@
         font-size: 20px;
         line-height: 23px;
     }
+
+    .inner-banner {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+    .related-product-stack {
+        margin-top: 50px;
+        padding-top: 50px;
+    }
+    .single-image-big {
+        height: 346px;
+    }
+    .details-conetnt {
+        padding: 19px 0 0 0;
+    }
+    .navi-slide .swiper-button-next, .navi-slide .swiper-button-prev {
+        width: 35px;
+        height: 35px;
+    }
+    .form-group {
+        height: 56px;
+    }
+    .input-style {
+        padding: 16px 19px 0;
+    }
+    .placeholder-text {
+        padding: 0px 3px;
+    }
+    .cart-form-stack, .cart-right-stack {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .order-complete-stack {
+        padding: 50px 30px;
+        margin: 40px 0;
+    }
+    .profile-right {
+        padding: 0 0px;
+    }
 }
 
 @media(max-width:481px) {
@@ -366,6 +483,53 @@
     .radious-top-right {
         border-top-right-radius: 90px;
     }
+    .cart-item-list li .inner-wrap figure {
+        max-width: 60px;
+        flex: 0 0 60px;
+        height: 60px;
+    }
+    .cart-price {
+        font-size: 15px;
+    }
+    .cart-item-wrap {
+        padding: 14px;
+    }
+    .product-details-cart h3 {
+        font-size: 17px;
+    }
+    .order-complete-stack {
+        padding: 37px 13px;
+        margin: 34px 0;
+    }
+    .order-complete-stack figure {
+        max-width: 65px;
+        margin: 0 auto 18px auto;
+    }
+    .order-complete-stack .section-heading {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+    .summery-stack {
+        padding: 17px;
+        margin: 30px auto 0 auto;
+    }
+    .summery-stack h4 {
+        font-size: 21px;
+        margin-bottom: 26px;
+    }
+    .summery-list .cart-item-list li .inner-wrap figure {
+        max-width: 50px;
+        flex: 0 0 50px;
+        height: 50px;
+    }
+    .summery-list .product-details-cart h3 {
+        font-size: 16px;
+    }
+    .detail-summery .address {
+        text-align: left;
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
 }
 
 @media(max-width:431px) {
@@ -376,6 +540,9 @@
     }
     .image-holder {
         height: 465px;
+    }
+    .tracking-wrap ul li span {
+        font-size: 13px;
     }
 }
 

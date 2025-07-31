@@ -81,26 +81,11 @@ class UserController extends Controller
                             $intendedUrl = Session::pull('url.intended', route('front.home'));
                             return redirect()->intended($intendedUrl)->with('success', 'Registration successful');
                         } else {
-                            return redirect()->route('front.user.login')->with('failure', 'Please enter valid credentials');
+                            return redirect()->route('front.login')->with('failure', 'Please enter valid credentials');
                         }
                     } else {
                         return redirect()->back()->with('failure', 'Failed to create User')->withInput($request->all());
                     }
-
-        // $storeData = $this->userRepository->create($request->except('_token'));
-
-        // if ($storeData) {
-            // $credentials = $request->only('email', 'password');
-
-            // if (Auth::attempt($credentials)) {
-            //     // return redirect()->intended('home');
-            //     return redirect()->url('home');
-            // }
-
-    //         return redirect()->route('front.user.login')->with('success', 'Account created successfully');
-    //     } else {
-    //         return redirect()->route('front.user.register')->withInput($request->all())->with('failure', 'Something happened');
-    //     }
     }
 
     public function check(Request $request)
@@ -125,7 +110,7 @@ class UserController extends Controller
                             $intendedUrl = Session::pull('url.intended', route('front.home'));
                             return redirect()->intended($intendedUrl)->with('success', 'Registration successful');
                         } else {
-                            return redirect()->route('front.user.login')->with('failure', 'Please enter valid credentials');
+                            return redirect()->route('front.login')->with('failure', 'Please enter valid credentials');
                         }
                     }else {
                         return redirect()->back()->with('failure', 'Failed to create User')->withInput($request->all());
@@ -142,23 +127,10 @@ class UserController extends Controller
                 $credentials = $request->only('mobile', 'password');
 
                 if (Auth::attempt($credentials)) {
-
-                    // update cart
-                    // if (!empty($_COOKIE['cartToken'])) {
-                    //     // dd($_COOKIE['cartToken']);
-                    //     Cart::where('guest_token', $_COOKIE['cartToken'])->update([
-                    //         'user_id' => Auth::guard('web')->user()->id
-                    //     ]);
-
-                    //     // removing cookie
-                    //     setcookie('cartToken', NULL, 1);
-                    //     // setcookie('cartToken', time() - 3600);
-                    // }
                     $intendedUrl = Session::pull('url.intended', route('front.home'));
-                    return redirect()->intended($intendedUrl);
-                    // return redirect()->url('home');
+                    return redirect()->intended($intendedUrl)->with('success', 'Login successful');
                 } else {
-                    return redirect()->route('front.user.login')->withInput($request->all())->with('failure', 'Please enter valid credentials');
+                    return redirect()->route('front.login')->withInput($request->all())->with('failure', 'Please enter valid credentials');
                 }
         }
     }
@@ -167,7 +139,7 @@ class UserController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('front.user.login');
+        return redirect()->route('front.login');
     }
 
 	public function forgotPassword(Request $request)
@@ -188,7 +160,7 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
 
-            return redirect()->route('front.user.login')->with('success', 'Password reset successfully.');
+            return redirect()->route('front.login')->with('success', 'Password reset successfully.');
         }
 
         return back()->with('failure', 'Mobile number not found.');
@@ -245,9 +217,9 @@ class UserController extends Controller
         $storeData = $this->userRepository->addressCreate($params);
 
         if ($storeData) {
-            return redirect()->route('front.user.address');
+            return redirect()->route('front.address');
         } else {
-            return redirect()->route('front.user.address.add')->withInput($request->all());
+            return redirect()->route('front.address.add')->withInput($request->all());
         }
     }
 
@@ -267,9 +239,9 @@ class UserController extends Controller
         $storeData = $this->userRepository->updateUserProfile($params);
 
         if ($storeData) {
-            return redirect()->route('front.user.profile')->with('success', 'Profile updated successfully');
+            return redirect()->route('front.profile')->with('success', 'Profile updated successfully');
         } else {
-            return redirect()->route('front.user.profile')->withInput($request->all())->with('failure', 'Something happened. Try again');
+            return redirect()->route('front.profile')->withInput($request->all())->with('failure', 'Something happened. Try again');
         }
     }
     public function updatePassword(Request $request)

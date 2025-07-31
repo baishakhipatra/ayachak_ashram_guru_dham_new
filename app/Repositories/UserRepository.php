@@ -79,12 +79,6 @@ class UserRepository implements UserInterface
         DB::commit();
 
         return true;
-        // } catch (\Throwable $th) {
-        //     //throw $th;
-
-        //     DB::rollback();
-        //     return false;
-        // }
     }
 
     public function update($id, array $newDetails)

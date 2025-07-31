@@ -1,30 +1,305 @@
 @extends('front.layout.app')
+@section('page-title', 'Shop')
+@section('content')
+
+
+<section class="inner-banner">
+    <div class="container">
+        <div class="inner-heading-group">
+            <h2>Products</h2>
+            <ul class="breadcrumb">
+                <li><a href="{{route('front.home')}}">Home</a></li>
+                <li>Products</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="inner-body">
+    <div class="container">
+        <div class="shop-wrapper">
+
+            <div class="filter-area">
+                <!-- <div class="price-filter">
+                    <h4>Price</h4>
+                    <div class="price-range">
+                        <div class="slider">
+                            <div class="progress"></div>
+                        </div>
+                        <div class="range-input">
+                            <input type="range" class="range-min" min="0" max="10000" value="2500" step="1">
+                            <input type="range" class="range-max" min="0" max="10000" value="7500" step="100">
+                        </div>
+
+                        <div class="price-input">
+                            <div class="field">
+                                <span>Min</span>
+                                <input type="number" class="input-min" value="20">
+                            </div>
+                            <div class="separator">-</div>
+                            <div class="field">
+                                <span>Max</span>
+                                <input type="number" class="input-max" value="200">
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="stack">
+                    <h4>Category</h4>
+                    <ul class="filter-list">
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>Books</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>Medicines</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>Water</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>Photo Frame</span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="stack">
+                    <h4>Weight</h4>
+                    <ul class="filter-list">
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>325 Ml</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>60 Gms</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>30 Ml</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>30 Batika</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>100 Ml</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>10 Ml</span>
+                            </label>
+                        </li>
+
+
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>500 Gms</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>300 Gms</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>7 Does</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>50 Ml</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>7 Does</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>50 Ml</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>7 Does</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <div class="style-stack">
+                                    <input type="checkbox" id="" value="">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <span>50 Ml</span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="product-listing-area">
+                <div class="filter-toggle">
+                    Filter <i class="fa-solid fa-arrow-up-short-wide"></i>
+                </div>
+
+                <ul class="product-list product-list__shop">
+                    @forelse($data as $product)
+                        <li>
+                            <div class="pro-inner">
+                                <figure>
+                                    <a href="{{ route('front.shop.detail', $product->slug) }}">
+                                        <img src="{{ $product->image ? asset($product->image) : asset('assets/images/placeholder-product.jpg') }}" alt="{{ $product->name }}">
+                                    </a>
+                                </figure>
+                                <figcaption>
+                                    <a href="{{ route('front.shop.detail', $product->slug) }}">
+                                        <h3>{{ $product->name }}</h3>
+                                    </a>
+                                    <div class="price-group">
+                                        @if($product->offer_price > 0 && $product->offer_price < $product->price)
+                                            <span class="original-price strike">₹{{ number_format($product->price, 2) }}</span>
+                                            <span class="sale-price">₹{{ number_format($product->offer_price, 2) }}</span>
+                                            <div class="sale-persentage">
+                                                {{ round((($product->price - $product->offer_price) / $product->price) * 100) }}% save
+                                            </div>
+                                            <div class="sale-badge">Sale</div>
+                                        @else
+                                            <span class="original-price">₹{{ number_format($product->price, 2) }}</span>
+                                        @endif
+                                    </div>
+                                    <a href="{{ route('front.shop.detail', $product->slug) }}" class="bton btn-fill">Shop Now</a>
+                                </figcaption>
+                            </div>
+                        </li>
+                    @empty
+                        <li>No products found.</li>
+                    @endforelse
+                </ul>
+
+                <div class="pagination-stack">
+                    {{-- <ul class="pagination">
+                        <li><a href=""><i class="fa-solid fa-arrow-left"></i></a></li>
+                        <li><a href="">1</a></li>
+                        <li><a href="">2</a></li>
+                        <li><a href="">3</a></li>
+                        <li><a href=""><i class="fa-solid fa-arrow-right"></i></a></li>
+                    </ul> --}}
+                    {{ $data->links() }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+{{-- @extends('front.layout.app')
    @section('content')
    <style>
     .blue_heart.active {
     background-color: red;
    
-}
-</style>
+} --}}
+{{-- </style>
     <section class="all_product_sec">
         <div class="container">
             <form class="all_product_form" method="GET" id="filter_form">
                 <h4>All Products</h4>
                 <div class="select_from">
-                    {{-- <select name="range" id="range" class="product_select_from">
-                        <option value="" selected hidden>Filter by price</option>
-                        @if(count($priceRanges)>0)
-                            @foreach($priceRanges as $key =>$item)
-                                <option value="{{$item}}" {{$range==$item?"selected":""}}>{{$item}}</option>
-                            @endforeach
-                        @endif
-                    </select> --}}
-                    {{-- <select name="" id="" class="product_select_from">
-                        <option value="">Arrange by</option>
-                        <option value="">Filter by Price 2</option>
-                        <option value="">Filter by Price 3</option>
-                        <option value="">Filter by Price 4</option>
-                    </select> --}}
                 </div>
             </form>
         </div>
@@ -38,7 +313,7 @@
                     <div class="swiper_slide_deal_product_p">
                         <div class="swiper_slide_deal_product">
                             <figure class="deal_img">
-                                <a href="{{route('front.product.details',$product->slug)}}" class="deal_img_anch">
+                                <a href="{{route('front.shop.details',$product->slug)}}" class="deal_img_anch">
                                     <img src="{{asset($product->image)}}" alt="">
                                 </a>
 
@@ -56,7 +331,7 @@
                                 </a>
                             </figure>
                             <div class="swiper_deal_text">
-                                <a href="{{route('front.product.details',$product->slug)}}" class="product_text">
+                                <a href="{{route('front.shop.details',$product->slug)}}" class="product_text">
                                     <h4>{{ Str::limit($product->name,50)}}</h4>
                                 </a>
                                 <div class="swiper_deal_flex">
@@ -75,7 +350,7 @@
                                             @else
                                             <h5>₹{{ $product->offer_price }}</h5>         
                                             @endif
-                                    <a href="{{route('front.product.details',$product->slug)}}" class="swiper_deal_btn"><svg width="20" height="20" viewBox="0 0 20 20"
+                                    <a href="{{route('front.shop.details',$product->slug)}}" class="swiper_deal_btn"><svg width="20" height="20" viewBox="0 0 20 20"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <g clip-path="url(#clip0_53_867)">
                                                 <path
@@ -110,10 +385,10 @@
                                     @foreach($availableColors[$product->id] as $color)
                                         @if($colorCounter < $maxColorsToShow)
                                             <!--<input style="background-color: {{ $color->code }}" class="form-check-input form_color_input" type="radio" name="choose_color" id="" value="" onclick="">-->
-                                            <!--<a href="{{route('front.product.details',['slug'=>$product->slug,'color'=>$color->id])}}" >-->
+                                            <!--<a href="{{route('front.shop.details',['slug'=>$product->slug,'color'=>$color->id])}}" >-->
                                             <!--<input style="background-color: {{ $color->code }}" class="form-check-input form_color_input" type="radio" name="choose_color" id="color_{{ $color->id }}" value="{{ $color->id }}">-->
                                             <!--</a>-->
-                                             <a href="{{ route('front.product.details', ['slug' => $product->slug, 'color' => $color->id]) }}" 
+                                             <a href="{{ route('front.shop.details', ['slug' => $product->slug, 'color' => $color->id]) }}" 
                                                 style="background-color: {{ $color->code }}" class="form-check-input form_color_input" type="radio" name="choose_color" id="color_{{ $color->id }}" 
                                                 value="{{ $color->id }}">
                                             </a>
@@ -136,9 +411,9 @@
         </div>
     </section>
 
-    @endsection
-   
-   @section('script')
+@endsection --}}
+{{--    
+@section('script')
 <script>
     $(document).ready(function(){
         $('#range').change(function(){
@@ -147,5 +422,5 @@
         });
     });
 </script>
-   @endsection
+@endsection --}}
    

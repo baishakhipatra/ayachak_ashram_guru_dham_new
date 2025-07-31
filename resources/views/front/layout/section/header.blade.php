@@ -7,6 +7,7 @@
             <div class="main-nav">
                 <ul class="menu">
                     <li><a href="{{route('front.home')}}">Home</a></li>
+                    <li><a href="{{route('front.shop.list')}}">Shop</a></li>
                     <li><a href="">About Us</a></li>
                     <li><a href="#">Books</a></li>
                     <li><a href="#">Medicines</a></li>
@@ -19,11 +20,21 @@
                 <a href="#" class="search">
                     <img src="{{asset('assets/images/search.svg')}}">
                 </a>
-                
-                {{-- <a href="{{ route('front.user.login') }}" class="account">
+                {{--                 
+                <a href="{{ route('front.user.login') }}" class="account">
                     <img src="./assets/images/user.svg">
                 </a> --}}
-                <div class="dropdown">
+                <a href="
+                    @if(Auth::guard('web')->check())
+                        {{ route('front.profile') }}
+                    @else
+                        {{ route('front.login') }}
+                    @endif
+                    " class="account">
+                    <img src="{{ asset('assets/images/user.svg') }}" alt="User">
+                </a>
+
+                {{-- <div class="dropdown">
                     <a href="#" class="account dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{asset('assets/images/user.svg')}}" alt="User">
                     </a>
@@ -35,15 +46,15 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('front.user.profile') }}">My account</a>
+                                <a class="dropdown-item" href="{{ route('front.profile') }}">My account</a>
                             </li>
                         @else
                             <li>
-                                <a class="dropdown-item" href="{{ route('front.user.login') }}">Log in</a>
+                                <a class="dropdown-item" href="{{ route('front.login') }}">Log in</a>
                             </li>
                         @endif
                     </ul>
-                </div>
+                </div> --}}
 
                 <a href="#" class="cart">
                     <img src="{{asset('assets/images/bag.svg')}}">
@@ -78,6 +89,6 @@
         </div>
     </div>
 </header>
-<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+<form id="logout-form" action="{{ route('front.logout') }}" method="POST" style="display: none;">
     @csrf
 </form>
