@@ -349,6 +349,18 @@
         position:static;
         top: 0;
     }
+    .event-stack-listing .event-list {
+        margin-bottom: 0;
+    }
+    .pagination-stack {
+        margin-top: 51px;
+    }
+
+    .blog-single-header {
+        padding-left: 80px;
+        padding-right: 80px;
+    }
+
 }
 
 
@@ -400,7 +412,7 @@
         line-height: 30px;
     }
     .bton {
-        padding: 7px 23px;
+        padding:15px 23px;
         font-size: 14px;
     }
     .guru-section .image-group img {
@@ -459,6 +471,19 @@
     }
     .profile-right {
         padding: 0 0px;
+    }
+    .blog-single-header {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .single-blog-title {
+        font-size: 39px;
+    }
+    .single-thumb-image {
+        height: 306px;
+    }
+    .blog-single-content-wrapper {
+        margin: 33px 0;
     }
 }
 
@@ -530,6 +555,21 @@
         max-width: 100%;
         flex: 0 0 100%;
     }
+    .donation-stack {
+        padding: 20px;
+    }
+    .image-caption {
+        font-size: 33px;
+        max-width: 329px;
+    }
+    .donation-stack {
+        margin-top: 0;
+    }
+    .blog-single-header {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
 }
 
 @media(max-width:431px) {
@@ -544,6 +584,10 @@
     .tracking-wrap ul li span {
         font-size: 13px;
     }
+  .image-caption {
+    font-size: 26px;
+    max-width: 264px;
+  }
 }
 
 @media(max-width:361px) {

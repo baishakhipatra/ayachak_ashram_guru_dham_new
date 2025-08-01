@@ -1,4 +1,209 @@
 @extends('front.layout.app')
+@section('page-title', 'Order Details')
+@section('content')
+
+<section class="main">
+    <div class="container">
+        <div class="profile-wrapper">
+            <div class="row">
+                <div class="col-lg-3 mb-4 mb-md-5 mb-lg-0">
+                    @include('front/sidebar_profile')
+                </div>
+                <div class="col-lg-9">
+                    <div class="profile-right">
+                        <div class="profile-heading-group">
+                            <h2 class="mb-0">Order Summery</h2>
+                            <a href="#" class="bton btn-fill">Download Invoice</a>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="summery-list">
+                                    <ul class="cart-item-list">
+                                        <li>
+                                            <div class="inner-wrap">
+                                                <figure>
+                                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                                </figure>
+                                                <figcaption>
+                                                    <div class="product-details-cart">
+                                                        <a href="#"><h3>Chyawanprash</h3></a>
+                                                        <div class="pro-meta">
+                                                            <span>Categry:</span> Medicines
+                                                        </div>
+                                                        <div class="pro-meta">
+                                                            <span>Weight:</span> 500Gms
+                                                        </div>
+                                                    </div>
+                                                    <span class="cart-price">₹224.00</span>
+                                                </figcaption>
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <div class="inner-wrap">
+                                                <figure>
+                                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                                </figure>
+                                                <figcaption>
+                                                    <div class="product-details-cart">
+                                                        <a href="#"><h3>Amritarista</h3></a>
+                                                        <div class="pro-meta">
+                                                            <span>Categry:</span> Medicines
+                                                        </div>
+                                                        <div class="pro-meta">
+                                                            <span>Weight:</span> 500Gms
+                                                        </div>
+                                                    </div>
+                                                    <span class="cart-price">₹84.78</span>
+                                                </figcaption>
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <div class="inner-wrap">
+                                                <figure>
+                                                    <img src="./assets/images/placeholder-product.jpg" alt="">
+                                                </figure>
+                                                <figcaption>
+                                                    <div class="product-details-cart">
+                                                        <a href="#"><h3>Sitopladi Churna</h3></a>
+                                                        <div class="pro-meta">
+                                                            <span>Categry:</span> Medicines
+                                                        </div>
+                                                        <div class="pro-meta">
+                                                            <span>Weight:</span> 50Gms
+                                                        </div>
+                                                    </div>
+                                                    <span class="cart-price">₹112.00</span>
+                                                </figcaption>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-lg-9">
+                                <div class="detail-summery">
+                                    <h3 class="mb-5">Billing Details</h3>
+                                    <div class="cart-row">
+                                        <span>Subtotal</span>
+                                        ₹308.00
+                                    </div>
+                                    <div class="cart-row">
+                                        <span>Shipping</span>
+                                        FREE
+                                    </div>
+                                    <div class="cart-total">
+                                        <span>
+                                            Total
+                                            <p>Including ₹90.29 in taxes</p>
+                                        </span>
+                                        ₹308.00
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-lg-9">
+                                <div class="detail-summery">
+                                    <h3 class="mb-5">Order Details</h3>
+                                    <div class="cart-row">
+                                        <span>Order ID</span>
+                                        #B457687
+                                    </div>
+                                    <div class="cart-row">
+                                        <span>Payment</span>
+                                        VISA******234
+                                    </div>
+                                    <div class="cart-row">
+                                        <span>Deliver to</span>
+                                        <div class="address">5, Amratala St, Bara Bazar, Barabazar Market, Kolkata, West Bengal 700001</div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-lg-9">
+                                <div class="detail-summery">
+                                    <h3 class="mb-5">Order Tracking</h3>
+                                    <div class="tracking-wrap">
+                                        <ul>
+                                            <li class="active"><span>Processing</span></li>
+                                            <li><span>Packing</span></li>
+                                            <li><span>Shipping</span></li>
+                                            <li><span>Delivered</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{-- @extends('front.layout.app')
    @section('content')
 
    <section class="profile_sec">
@@ -8,11 +213,6 @@
             </div>
             <div class="row">
                 <div class="col-sm-5 col-lg-3">
-                    <!-- <div class="profile_name">
-                        <h4>Lux</h4>
-                        <h5>Example@gmail.com</h5>
-                        <h5>1234567890</h5>
-                    </div> -->
                     <div class="profile_details">
                     <ul class="account-list">
                             <li>
@@ -117,4 +317,4 @@
    
    @section('script')
 
-   @endsection
+   @endsection --}}

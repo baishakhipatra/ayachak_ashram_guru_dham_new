@@ -25,7 +25,7 @@
                             <div class="form-group">
                                 <input type="password" class="form-control input-style password-input" placeholder=" " id="password" name="password">
                                 <label class="placeholder-text">Password</label>
-                                <span class="toggle-password" toggle="#password">
+                                <span class="toggle-password" data-toggle="#password">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </span>
                             </div>
@@ -54,6 +54,10 @@
 
 @section('script')
 <script>
+//     $(document).on('click', '.toggle-password', function () {
+//     console.log('Clicked!');
+// });
+
     $(document).on('click', '.toggle-password', function () {
         let input = $($(this).attr('toggle'));
         let icon = $(this).find('i');

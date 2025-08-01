@@ -267,13 +267,13 @@
                         @error('desc') <p class="small text-danger">{{ $message }}</p> @enderror
                     </div>
                 </div>
-                <div class="card shadow-sm">
+                {{-- <div class="card shadow-sm">
                     <div class="card-body">
                         <label class="label-control">Wash Care <span class="text-danger">*</span></label>
                         <textarea id="wash_care" name="wash_care">{{$data->wash_care}}</textarea>
                         @error('wash_care') <p class="small text-danger">{{ $message }}</p> @enderror
                     </div>
-                </div>
+                </div> --}}
                 <div class="card shadow-sm">
                     <div class="card-body pt-0">
                         <div class="admin__content">
@@ -348,63 +348,15 @@
                                         <input type="text" id="inputprice6" class="form-control" aria-describedby="priceHelpInline" name="style_no" value="{{$data->style_no}}">
                                         @error('style_no') <p class="small text-danger">{{ $message }}</p> @enderror
                                     </div>
-                                </div>
-                                <div class="row mb-2 align-items-center">
+
                                     <div class="col-3">
-                                        <label for="inputPassword6" class="col-form-label">Pattern</label>
+                                        <label for="inputPassword6" class="col-form-label">Gst</label>
                                     </div>
                                     <div class="col-9">
-                                        <input type="text" id="pattern" class="form-control" aria-describedby="priceHelpInline" name="pattern" value="{{old('pattern',$data->pattern)}}">
-                                        @error('pattern') <p class="small text-danger">{{ $message }}</p> @enderror
+                                        <input type="number" id="gst" class="form-control" aria-describedby="priceHelpInline" name="gst" value="{{old('gst')}}" step="0.01">
+                                        @error('gst') <p class="small text-danger">{{ $message }}</p> @enderror
                                     </div>
-                                    {{-- <div class="col-auto">
-                                        <span id="priceHelpInline" class="form-text">
-                                        Must be 8-20 characters long.
-                                        </span>
-                                    </div> --}}
-                                    </div>
-                                    <div class="row mb-2 align-items-center">
-                                        <div class="col-3">
-                                            <label for="inputPassword6" class="col-form-label">Fabric</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <input type="text" id="fabric" class="form-control" aria-describedby="priceHelpInline" name="fabric" value="{{old('fabric',$data->fabric)}}">
-                                            @error('pattern') <p class="small text-danger">{{ $message }}</p> @enderror
-                                        </div>
-                                        {{-- <div class="col-auto">
-                                            <span id="priceHelpInline" class="form-text">
-                                            Must be 8-20 characters long.
-                                            </span>
-                                        </div> --}}
-                                        </div>
-                                    <div class="row mb-2 align-items-center">
-                                        <div class="col-3">
-                                            <label for="inputPassword6" class="col-form-label">Brand</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <input type="text" id="inputprice6" class="form-control" aria-describedby="priceHelpInline" name="brand" value="{{old('brand',$data->brand)}}">
-                                            @error('brand') <p class="small text-danger">{{ $message }}</p> @enderror
-                                        </div>
-                                        {{-- <div class="col-auto">
-                                            <span id="priceHelpInline" class="form-text">
-                                            Must be 8-20 characters long.
-                                            </span>
-                                        </div> --}}
-                                        </div>
-                                        <div class="row mb-2 align-items-center">
-                                            <div class="col-3">
-                                                <label for="inputPassword6" class="col-form-label">Gst</label>
-                                            </div>
-                                            <div class="col-9">
-                                                <input type="number" id="gst" class="form-control" aria-describedby="priceHelpInline" name="gst" value="{{old('gst',$data->gst)}}" step="0.01">
-                                                @error('gst') <p class="small text-danger">{{ $message }}</p> @enderror
-                                            </div>
-                                            {{-- <div class="col-auto">
-                                                <span id="priceHelpInline" class="form-text">
-                                                Must be 8-20 characters long.
-                                                </span>
-                                            </div> --}}
-                                            </div>
+                                </div>
                             </content>
                         </div>
                         <div class="admin__content">
@@ -449,7 +401,7 @@
                         </script>
                     </div>
                 </div>
-				<div class="card shadow-sm">
+				{{-- <div class="card shadow-sm">
                     <div class="card-header">
                         Size chart image
                     </div>
@@ -479,7 +431,7 @@
                             };
                         </script>
                     </div>
-                </div>
+                </div> --}}
                 <div class="card shadow-sm" style="position: sticky;top: 60px;">
                     <div class="card-body text-end">
                         <input type="hidden" name="product_id" value="{{$data->id}}">
@@ -493,7 +445,7 @@
 
 
 
-    <div class="card shadow-sm" id="singleProductVariation">
+    {{-- <div class="card shadow-sm" id="singleProductVariation">
         <div class="card-header">
             <div class="row justify-content-between">
                 <div class="col-6">
@@ -516,7 +468,6 @@
                     @php
                         $test = \DB::select('SELECT pc.id, pc.position, pc.color, c.name as color_id FROM product_color_sizes pc JOIN colors c ON pc.color = c.id WHERE pc.product_id = 13 GROUP BY pc.color ORDER BY pc.position ASC');
 
-                        // dd($test);
                     @endphp
 
                     <div class="color_holder row_position">
@@ -580,15 +531,12 @@
                                     <option value="edit">Edit</option>
                                 </select>
                             </form>
-                            {{-- <strong>Action</strong> --}}
                         </div>
                     </div>
                     <hr>
                     @endif
                     <div class="row">
-                        {{-- <div class="col-sm-2">
-                            <label for="inputPassword6" class="col-form-label">{{ $productColorKey + 1 }}</label>
-                        </div> --}}
+                      
                         <div class="col-sm-2">
                             <label for="inputPassword6" class="col-form-label">{{ $productColorKey + 1 }}</label>
                             <div class="color_box" id="color_box_down_{{$productColorGroupVal->color}}">
@@ -631,7 +579,6 @@
                                     @php
                                         $productVariationColorSizes = \App\Models\ProductColorSize::where('product_id', $id)->where('color', $productColorGroupVal->color)->orderBy('size')->get();
 
-                                        // dd($productVariationColorSizes);
 
                                         $prodSizesDIsplay = '';
                                         foreach($productVariationColorSizes as $productSizeKey => $productSizeVal) {
@@ -693,10 +640,6 @@
                                                 </div>
                                             </div>';
 
-                                            /*
-                                            delete option below edit (removed for now)
-                                            <a href='.route('admin.product.variation.size.delete', $productSizeVal->id).' onclick="'.$returnAlert.'" class="badge bg-danger">Delete</a>
-                                            */
                                         }
                                         $prodSizesDIsplay .= '';
                                     @endphp
@@ -739,7 +682,6 @@
                         <div class="col-sm-2">
                             <div class="text-center">
                                 <div class="color-fabric-image-holder position-relative mb-3">
-                                    {{-- {{dd($productColorGroupVal)}} --}}
                                     <img class="color-fabric-image" src="{{ ($productColorGroupVal->color_fabric) ? asset($productColorGroupVal->color_fabric) : asset('admin/images/square-placeholder-image.jpg') }}" alt="profile-picture" id="fabric_id_{{ $productColorGroupVal->color }}">
 
                                     <div class="change-image">
@@ -766,11 +708,11 @@
             </div>
             @endforeach
         </div>
-    </div>
+    </div> --}}
 </section>
 
 {{-- add new color modal --}}
-<div class="modal fade" tabindex="-1" id="addColorModal">
+{{-- <div class="modal fade" tabindex="-1" id="addColorModal">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <div class="modal-header">
@@ -780,7 +722,6 @@
         <div class="modal-body">
             <form action="{{route('admin.product.variation.color.add')}}" method="post">@csrf
                 <input type="hidden" name="product_id" value="{{$id}}">
-                {{-- <input type="hidden" name="color" value="{{$productColorGroupVal->color}}"> --}}
                 <div class="form-group mb-3">
                 <select class="form-control" name="color" id="">
                     <option value="" selected>Select color...</option>
@@ -802,10 +743,7 @@
                         }
                     @endphp
                 </select>
-                </div>
-                {{-- <div class="form-group mb-3">
-                <input class="form-control" type="text" name="price" id="" placeholder="Price">
-                </div> --}}          
+                </div>          
                 <div class="form-group mb-3">
                     <input class="form-control" type="text" name="price" id="" placeholder="Price">
                 </div>
@@ -822,10 +760,10 @@
         </div>
       </div>
     </div>
-</div>
+</div> --}}
 
 {{-- edit color modal --}}
-<div class="modal fade" tabindex="-1" id="editColorModal">
+{{-- <div class="modal fade" tabindex="-1" id="editColorModal">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -860,10 +798,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 {{-- rename color modal --}}
-<div class="modal fade" tabindex="-1" id="renameColorModal">
+{{-- <div class="modal fade" tabindex="-1" id="renameColorModal">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -890,10 +828,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 {{-- rename size modal --}}
-<div class="modal fade" tabindex="-1" id="sizeDetailModal">
+{{-- <div class="modal fade" tabindex="-1" id="sizeDetailModal">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -902,7 +840,6 @@
             </div>
             <div class="modal-body">
                 <form action="{{route('admin.product.variation.size.edit')}}" method="post">@csrf
-                    {{-- <input type="hidden" name="product_id" value="{{$id}}"> --}}
                     <input type="hidden" name="id" value="">
                     <div class="form-group">
                         <p>Style no: <strong>{{$data->style_no}}</strong></p>
@@ -943,10 +880,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 {{-- image change crop modal --}}
-<div class="modal" id="uploadimageModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-bs-backdrop="static">
+{{-- <div class="modal" id="uploadimageModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -965,10 +902,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 {{-- bulk upload variation modal --}}
-<div class="modal fade" id="csvUploadModal" data-backdrop="static">
+{{-- <div class="modal fade" id="csvUploadModal" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -989,7 +926,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endsection
 
 @section('script')

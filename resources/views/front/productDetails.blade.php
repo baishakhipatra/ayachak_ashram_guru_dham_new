@@ -2,7 +2,15 @@
 @section('page-title', 'Product Details')
 @section('content')
 
-
+<style>
+    .strike {
+        text-decoration: line-through;
+    }
+    .sale-price {
+        color: #E91E63; /* any highlight color */
+        font-weight: bold;
+    }
+</style>
 {{-- <section class="main">
     <div class="container">
         <ul class="breadcrumb breadcrumb-white mt-4">
@@ -272,8 +280,8 @@
                             @endif
                         </div>
 
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-thumb-button-next"></div>
+                        <div class="swiper-thumb-button-prev"></div>
                     </div>
 
                 </div>
@@ -283,10 +291,10 @@
             {{-- Product Details --}}
             <div class="col-lg-6">
                 <div class="details-conetnt">
-                    <h1>{{ $data->name }}</h1>
+                    <h1>{{ ucwords($data->name) }}</h1>
 
                     <div class="description">
-                        {!! $data->description !!}
+                        {!! $data->desc !!}
                     </div>
 
                     <form action="">
@@ -429,19 +437,19 @@
 
 
     
-  } );
+    });
 
     // quantity jquery
     document.addEventListener("DOMContentLoaded", () => {
-    const input = document.getElementById("quantity");
-    document.querySelector(".increment").addEventListener("click", (e) => {
-        e.preventDefault(); // Prevent form submission
-        input.stepUp();
-    });
-    document.querySelector(".decrement").addEventListener("click", (e) => {
-        e.preventDefault(); // Prevent form submission
-        input.stepDown();
-    });
+        const input = document.getElementById("quantity");
+        document.querySelector(".increment").addEventListener("click", (e) => {
+            e.preventDefault(); // Prevent form submission
+            input.stepUp();
+        });
+        document.querySelector(".decrement").addEventListener("click", (e) => {
+            e.preventDefault(); // Prevent form submission
+            input.stepDown();
+        });
     });
   </script>
 

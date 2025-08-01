@@ -118,20 +118,20 @@ class UserController extends Controller
 
         }else{
 
-                $request->validate([
-                    'mobile' => 'required|numeric|exists:users,mobile',
-                    // 'password' => 'required|string|min:2|max:100',
-                ]);
-                // $user = User::where('mobile',$request->mobile)->first();
-                // // $password =Hash::check($user->password);
-                $credentials = $request->only('mobile', 'password');
+            $request->validate([
+                'mobile' => 'required|numeric|exists:users,mobile',
+                // 'password' => 'required|string|min:2|max:100',
+            ]);
+            // $user = User::where('mobile',$request->mobile)->first();
+            // // $password =Hash::check($user->password);
+            $credentials = $request->only('mobile', 'password');
 
-                if (Auth::attempt($credentials)) {
-                    $intendedUrl = Session::pull('url.intended', route('front.home'));
-                    return redirect()->intended($intendedUrl)->with('success', 'Login successful');
-                } else {
-                    return redirect()->route('front.login')->withInput($request->all())->with('failure', 'Please enter valid credentials');
-                }
+            if (Auth::attempt($credentials)) {
+                $intendedUrl = Session::pull('url.intended', route('front.home'));
+                return redirect()->intended($intendedUrl)->with('success', 'Login successful');
+            } else {
+                return redirect()->route('front.login')->withInput($request->all())->with('failure', 'Please enter valid credentials');
+            }
         }
     }
     public function logout(Request $request)
@@ -244,23 +244,31 @@ class UserController extends Controller
             return redirect()->route('front.profile')->withInput($request->all())->with('failure', 'Something happened. Try again');
         }
     }
+
+    public function showChangePasswordForm(){
+        return view('front.profile.password-edit');
+    }
+
     public function updatePassword(Request $request)
     {
-     
+        
         $request->validate([
-            "old_password" => "required|string|max:255",
-            "new_password" => "required|string|max:255|same:confirm_password",
+            "old_password" => "nullable|string|max:255",
+            "new_password" => "required|string|same:confirm_password",
             "confirm_password" => "required|string|max:255",
         ]);
 
-        $params = $request->except('_token');
-        $storeData = $this->userRepository->updatePassword($params);
-
-        if ($storeData) {
-            return redirect()->route('front.user.profile')->with('success', 'Password updated successfully');
-        } else {
-            return redirect()->route('front.user.profile')->withInput($request->all())->with('failure', 'Something happened');
+        $user = auth()->user();
+        if ($user->password && $request->filled('old_password')) {
+            if (!Hash::check($request->old_password, $user->password)) {
+                return back()->withErrors(['old_password' => 'Your old password is incorrect.']);
+            }
         }
+
+        $user->password = bcrypt($request->new_password);
+        $user->save();
+
+        return redirect()->route('front.profile')->with('success', 'Password updated successfully');
     }
 
     public function wishlist(Request $request)

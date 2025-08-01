@@ -51,6 +51,7 @@ Route::name('front.')->group(function () {
             Route::view('profile', 'front.profile')->name('profile');
             Route::view('manage', 'front.profile.edit')->name('manage');
             Route::post('manage/update', 'Front\UserController@updateProfile')->name('manage.update');
+            Route::get('password/change', 'Front\UserController@showChangePasswordForm')->name('password.change');
             Route::post('password/update', 'Front\UserController@updatePassword')->name('password.update');
             Route::get('order', 'Front\UserController@order')->name('order');
             Route::get('/order/details/{id}', 'Front\UserController@orderDetails')->name('order.details');
@@ -82,6 +83,22 @@ Route::name('front.')->group(function () {
         Route::get('/shop', 'Front\ProductController@ProductList')->name('list');
         Route::get('/shop/{slug}', 'Front\ProductController@detail')->name('detail');
         Route::get('/shop/search', 'Front\ProductController@ProductSearch')->name('search');
+    });
+
+        // cart
+    Route::prefix('cart')->name('cart.')->group(function () {
+        Route::get('/details', 'Front\CartController@index')->name('index');
+        Route::post('/add-to-checkoout', 'Front\CartController@add_to_checkoout')->name('add_to_checkoout');
+        Route::post('/coupon/check', 'Front\CartController@couponCheck')->name('coupon.check');
+        Route::post('/coupon/remove', 'Front\CartController@couponRemove')->name('coupon.remove');
+        Route::post('/add', 'Front\CartController@add')->name('add');
+        Route::get('/delete/{id}', 'Front\CartController@delete')->name('delete');
+        Route::get('/quantity/{id}/{type}', 'Front\CartController@qtyUpdate')->name('quantity');
+    });
+
+    Route::name('donation.')->group(function () {
+        Route::get('/donation', 'Front\DonationController@DonationForm')->name('form');
+        Route::post('/store', 'Front\DonationController@store')->name('store');
     });
 });
 

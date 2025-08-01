@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{asset('admin/css/bootstrap.min.css')}}">
     <link href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
     <link rel="stylesheet" href="{{asset('admin/plugins/croppie/croppie.css')}}">
     <link href="{{asset('admin/css/style.css')}}" rel="stylesheet">
     <link rel="shortcut icon" href="{{asset('frontend/images/favicon.png')}}" type="image/x-icon">

@@ -130,12 +130,12 @@ class ProductRepository implements ProductInterface
             $newEntry->style_no = $collectedData['style_no'];
             $newEntry->pack = $collectedData['pack'];
             $newEntry->gst = $collectedData['gst'];
-            $newEntry->brand = $collectedData['brand'];
-            $newEntry->wash_care = $collectedData['wash_care'];
-            $newEntry->pattern = $collectedData['pattern'];
-            $newEntry->fabric = $collectedData['fabric'];
+            //$newEntry->brand = $collectedData['brand'];
+            //$newEntry->wash_care = $collectedData['wash_care'];
+           // $newEntry->pattern = $collectedData['pattern'];
+           // $newEntry->fabric = $collectedData['fabric'];
             // slug generate
-            $slug = \Str::slug($collectedData['name'].'-'.$collectedData['style_no'], '-');
+            $slug = Str::slug($collectedData['name'].'-'.$collectedData['style_no'], '-');
             $slugExistCount = Product::where('slug', $slug)->count();
             if ($slugExistCount > 0) $slug = $slug . '-' . ($slugExistCount + 1);
             $newEntry->slug = $slug;
@@ -167,24 +167,24 @@ class ProductRepository implements ProductInterface
             // check color & size
             // dd($data['color'], $data['size']);
 
-            if (!empty($data['color']) && !empty($data['size'])) {
-                $multipleColorData = [];
+            // if (!empty($data['color']) && !empty($data['size'])) {
+            //     $multipleColorData = [];
 
-                foreach ($data['color'] as $colorKey => $colorValue) {
-                    $multipleColorData[] = [
-                        'product_id' => $newEntry->id,
-                        'color' => $colorValue,
-                    ];
-                }
+            //     foreach ($data['color'] as $colorKey => $colorValue) {
+            //         $multipleColorData[] = [
+            //             'product_id' => $newEntry->id,
+            //             'color' => $colorValue,
+            //         ];
+            //     }
 
-                foreach ($data['size'] as $sizeKey => $sizeValue) {
-                    $multipleColorData[$sizeKey]['size'] = $sizeValue;
-                }
+            //     foreach ($data['size'] as $sizeKey => $sizeValue) {
+            //         $multipleColorData[$sizeKey]['size'] = $sizeValue;
+            //     }
 
-                // dd($multipleColorData);
+            //     // dd($multipleColorData);
 
-                ProductColorSize::insert($multipleColorData);
-            }
+            //     ProductColorSize::insert($multipleColorData);
+            // }
 
             DB::commit();
             return $newEntry;
@@ -230,10 +230,10 @@ class ProductRepository implements ProductInterface
             $updatedEntry->style_no = $collectedData['style_no'];
             $updatedEntry->pack = $collectedData['pack'];
             $updatedEntry->gst = $collectedData['gst'];
-            $updatedEntry->brand = $collectedData['brand'];
-            $updatedEntry->wash_care = $collectedData['wash_care'];
-            $updatedEntry->pattern = $collectedData['pattern'];
-            $updatedEntry->fabric = $collectedData['fabric'];
+            // $updatedEntry->brand = $collectedData['brand'];
+            // $updatedEntry->wash_care = $collectedData['wash_care'];
+            // $updatedEntry->pattern = $collectedData['pattern'];
+            // $updatedEntry->fabric = $collectedData['fabric'];
             if (isset($newDetails['image'])) {
                 // delete old image
                 if (Storage::exists($updatedEntry->image)) unlink($updatedEntry->image);

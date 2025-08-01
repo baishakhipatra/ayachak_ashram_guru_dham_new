@@ -15,7 +15,7 @@
                     <li><a href="#">Photo Frame</a></li>
                 </ul>
             </div>
-            <a href="#" class="bton btn-fill">Donate Now</a>
+            <a href="{{route('front.donation.form')}}" class="bton btn-fill">Donate Now</a>
             <div class="icon-place">
                 <a href="#" class="search">
                     <img src="{{asset('assets/images/search.svg')}}">

@@ -96,8 +96,8 @@
         loop: true,
         spaceBetween: 10,
         navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
+        nextEl: ".swiper-thumb-button-next",
+        prevEl: ".swiper-thumb-button-prev",
         },
         thumbs: {
         swiper: swiper,
@@ -107,6 +107,34 @@
 
     // related post slider
     var swiper = new Swiper(".relared-pro-stack", {
+      slidesPerView: 3,
+      spaceBetween: 10,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        360: {
+          slidesPerView: 1,
+          spaceBetween:9,
+        },
+        640: {
+          slidesPerView: 2,
+          spaceBetween:15,
+        },
+        768: {
+          slidesPerView:2,
+          spaceBetween:15,
+        },
+        1024: {
+          slidesPerView:3,
+          spaceBetween:15,
+        },
+      },
+    });
+
+    // related events
+    var swiperevents = new Swiper(".relared-event-stack", {
       slidesPerView: 3,
       spaceBetween: 10,
       navigation: {
