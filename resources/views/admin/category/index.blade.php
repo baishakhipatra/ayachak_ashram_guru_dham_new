@@ -182,11 +182,11 @@
                                             <input type="text" name="name" placeholder="" class="form-control" value="{{old('name')}}">
                                             @error('name') <p class="small text-danger">{{ $message }}</p> @enderror
                                         </div>
-                                        <div class="form-group mb-3">
+                                        {{-- <div class="form-group mb-3">
                                             <label class="label-control">Parent <span class="text-danger">*</span> </label>
                                             <input type="text" name="parent" placeholder="" class="form-control" value="{{old('parent')}}">
                                             @error('parent') <p class="small text-danger">{{ $message }}</p> @enderror
-                                        </div>
+                                        </div> --}}
                                         <div class="form-group mb-3">
                                             <label class="label-control">Description </label>
                                             <textarea name="description" class="form-control">{{old('description')}}</textarea>

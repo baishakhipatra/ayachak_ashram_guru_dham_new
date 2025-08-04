@@ -36,7 +36,7 @@ class CategoryController extends Controller
     {
         $request->validate([
             "name" => "required|regex:/^[\pL\s\-]+$/u|max:255",
-            "parent" => "required|alpha|max:255",
+            //"parent" => "required|alpha|max:255",
             "description" => "nullable|string",
             "icon_path" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
             "sketch_icon" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",

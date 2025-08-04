@@ -50,7 +50,7 @@ class CategoryRepository implements CategoryInterface
 
     public function deleteCategory($categoryId)
     {
-
+        
         Category::destroy($categoryId);
     }
 
@@ -61,7 +61,7 @@ class CategoryRepository implements CategoryInterface
 
         $category = new Category;
         $category->name = $collection['name'];
-        $category->parent = $collection['parent'];
+       // $category->parent = $collection['parent'];
         $category->description = $collection['description'];
 
         // generate slug

@@ -7,22 +7,24 @@
     <div class="search__filter">
         <div class="row mb-3">
             <div class="col-12 text-end">
-                <a href="{{ route('admin.product.sku_list.sync.all') }}" class="btn btn-sm btn-danger">SYNC ALL SKUs</a>
+                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#importWeightVariationModal">
+                    Import Weight Variation
+                </button>
             </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-8">
                 <p class="small text-muted">Displaying {{$products->firstItem()}} - {{$products->lastItem()}} out of {{$products->total()}} data</p>
             </div>
             <div class="col-4">
                 <form action="">
                     <div class="d-flex justify-content-end">
-                        {{-- <div class="me-3">
+                        <div class="me-3">
                             <select name="order" id="order" class="form-control">
                                 <option value="">Sort by</option>
                                 <option value="synched_desc">Latest synched</option>
                             </select>
-                        </div> --}}
+                        </div>
                         <div class="me-3">
                             <input type="search" name="term" id="term" class="form-control" placeholder="Search SKU/ Style no..." value="{{ app('request')->input('term') }}" autocomplete="off">
                         </div>
@@ -38,7 +40,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div> --}}
     </div>
 
     {{-- @if (Session::has('message'))
@@ -53,49 +55,244 @@
             <tr>
                 <th>#SR</th>
                 <th>SKU Code</th>
-                <th>Inventory</th>
                 <th>Product Name</th>
-                <th>Color</th>
-                <th>Size</th>
+                <th>Product No.</th>
+                <th>Weight</th>
+                <th>Position</th>
                 <th>Price</th>
-                <th>Sync</th>
+                <th>Offer Price</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
         @forelse ($products as $index => $item)
             <tr>
-                <td>{{$index + $products->firstItem()}}</td>
-                <td>{{$item->code}}</td>
+                <td>{{ $index + $products->firstItem() }}</td>
+                <td>{{ $item->code }}</td>
+                <td> 
+                    {{ ucwords($item->product->name ?? '') }}
+                    {{-- <p class="small mb-0">{{ $item->product->style_no ?? '' }}</p> --}}
+                </td> 
+                <td>{{ $item->product->style_no }}</td>
+                <td>{{ $item->weight}}</td>
+                <td>{{ $item->position }}</td>
+                <td>{{ number_format($item->price, 2) }}</td>
+                <td>{{ number_format($item->offer_price, 2) }}</td>
                 <td>
-                    <p class="text-dark mb-0">{{$item->stock}}</p>
-                    <p class="small mb-0">{{ $item->last_stock_synched ? 'Synched '.\Carbon\Carbon::createFromTimeStamp(strtotime($item->last_stock_synched))->diffForHumans() : '' }}</p>
-                </td>
-                <td>
-                    {{ $item->productDetails->name ?? '' }}
-                    <p class="small mb-0">#{{ $item->productDetails->style_no ?? '' }}</p>
-                    <div class="row__action">
-                        <a href="{{ route('admin.product.edit', $item->product_id) }}">Edit</a>
+                    <div class="form-check form-switch" data-bs-toggle="tooltip" title="Toggle status">
+                        <input class="form-check-input ms-auto" type="checkbox"
+                        id="customSwitch{{ $item->id }}"
+                        {{ $item->status ? 'checked' : '' }}
+                        onclick="statusToggle('{{ route('admin.product.variation.status', $item->id) }}', this)">
+                        <label class="form-check-label" for="customSwitch{{ $item->id }}"></label>
                     </div>
                 </td>
-                <td>{{ $item->color_name ? $item->color_name : $item->colorDetails->name }}</td>
-                <td>{{$item->sizeDetails->name ?? ''}}</td>
-                <td>Rs.{{number_format($item->offer_price) ?? 0}}</td>
                 <td>
-                    <a href="{{ route('admin.product.unicommerce.sync.single', $item->id) }}" class="badge bg-danger rounded-0">
-                        Sync NOW
-                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    <a href="javascript:void(0);" 
+                        class="btn btn-sm btn-icon btn-outline-primary editBtn"
+                        data-id="{{ $item->id }}" data-bs-toggle="tooltip" title="Edit">
+                        <i class="fa fa-edit"></i>
+                    </a>
+
+                    <a href="javascript:void(0);" class="btn btn-sm btn-icon btn-outline-danger"
+                        onclick="deleteUser({{ $item->id }})" data-bs-toggle="tooltip" title="Delete">
+                        <i class="fa fa-trash"></i>
                     </a>
                 </td>
             </tr>
         @empty
             <tr>
-                <td colspan="100%" class="small text-muted text-center">No data found</td>
+                <td colspan="8" class="small text-muted text-center">No data found</td>
             </tr>
         @endforelse
         </tbody>
     </table>
 
+    <div class="modal fade" id="editVariationModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form id="editVariationForm">
+                @csrf
+                <input type="hidden" name="id" id="edit_id">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Variation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body row g-3">
+                        <div class="col-md-6">
+                            <label>SKU Code</label>
+                            <input type="text" class="form-control" name="code" id="edit_code">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Product Name</label>
+                            <input type="text" class="form-control" id="edit_product_name">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Product No.</label>
+                            <input type="text" class="form-control" id="edit_style_no">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Weight</label>
+                            <input type="text" class="form-control" name="weight" id="edit_weight">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Position</label>
+                            <input type="text" class="form-control" name="position" id="edit_position">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Price</label>
+                            <input type="text" class="form-control" name="price" id="edit_price">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Offer Price</label>
+                            <input type="text" class="form-control" name="offer_price" id="edit_offer_price">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Update Variation</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    
+    <div class="modal fade" id="importWeightVariationModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="{{ route('admin.product.variation.import') }}" method="POST" enctype="multipart/form-data" class="modal-content">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="importModalLabel">Import Weight Variation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    <strong>Sample Format:</strong> <br>
+                    <code>product_no,weight,code,price,offer_price</code>
+                </p>
+
+                <a href="{{ asset('sample/weight_variation_sample.xlsx') }}" class="text-decoration-underline" download>
+                    Download sample file
+                </a>
+
+                <div class="mb-3">
+                    <label for="csv_file" class="form-label">Upload CSV File</label>
+                    <input type="file" name="csv_file" id="csv_file" class="form-control" accept=".csv" required>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Import</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
     {{$products->appends($_GET)->links()}}
 
 </section>
+@endsection
+
+@section('script')
+<script>
+
+    $(document).ready(function () {
+        $('.editBtn').on('click', function () {
+            let id = $(this).data('id');
+            let url = "{{ route('admin.product.variation.edit', ':id') }}".replace(':id', id);
+
+            $.get(url, function (res) {
+                $('#edit_id').val(res.id);
+                $('#edit_name').val(res.name);
+                $('#edit_code').val(res.code);
+                $('#edit_product_name').val(res.product?.name ?? '');
+                $('#edit_style_no').val(res.product?.style_no ?? '');
+                $('#edit_weight').val(res.weight);
+                $('#edit_position').val(res.position);
+                $('#edit_price').val(res.price);
+                $('#edit_offer_price').val(res.offer_price);
+                $('#editVariationModal').modal('show');
+            });
+        });
+
+        $('#editVariationForm').on('submit', function (e) {
+            e.preventDefault();
+            let formData = $(this).serialize();
+
+            $.ajax({
+                url: "{{ route('admin.product.variation.update') }}",
+                method: "POST",
+                data: formData,
+                success: function (res) {
+                    if (res.status === 200) {
+                        $('#editVariationModal').modal('hide');
+                        toastFire('success', res.message);
+                        location.reload();
+                    } else {
+                        toastFire('error', res.message);
+                    }
+                }
+            });
+        });
+    });
+
+
+  function deleteUser(userId) {
+    Swal.fire({
+        icon: 'warning',
+        title: "Are you sure you want to delete this?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "{{ route('admin.product.variation.delete')}}",
+                type: 'POST',
+                data: {
+                    "id": userId,
+                    "_token": '{{ csrf_token() }}',
+                },
+                success: function (data){
+                    if (data.status != 200) {
+                        toastFire('error', data.message);
+                    } else {
+                        toastFire('success', data.message);
+                        location.reload();
+                    }
+                }
+            });
+        }
+    });
+  }
+
+    function statusToggle(url, checkbox) {
+        fetch(url, {
+            method: 'GET',
+            headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 200) {
+            toastFire('success', data.message);
+            } else {
+            toastFire('error', data.message);
+            }
+        })
+        .catch(err => {
+            toastFire('error', 'Something went wrong!');
+            console.error(err);
+        });
+    }
+</script>
 @endsection

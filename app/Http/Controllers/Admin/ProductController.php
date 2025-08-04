@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use PhpParser\Node\Stmt\Return_;
+use App\Models\ProductVariation;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ProductController extends Controller
 {
@@ -81,7 +83,7 @@ class ProductController extends Controller
             "meta_desc" => "nullable",
             "meta_keyword" => "nullable",
             "style_no" => "nullable|unique:products",
-            "image" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "image" => "required|mimes:jpg,jpeg,png,svg,gif,webp|max:10000000",
             'gst'=>'required|regex:/^[^\+\-\&\%]+$/',
             "pack" => "nullable|string|max:255",
 
@@ -1101,22 +1103,164 @@ class ProductController extends Controller
         }
     }
 
+    public function ProductSkuEdit($id)
+    {
+        $variation = ProductVariation::find($id);
+        return response()->json($variation);
+    }
+
+    public function ProductSkuUpdate(Request $request)
+    {
+        $request->validate([
+            'id'           => 'required|exists:product_variations,id',
+            'name'         => 'required|string|max:255',
+            'weight'       => 'nullable|string|max:100',
+            'price'        => 'required|numeric',
+            'offer_price'  => 'nullable|numeric',
+        ]);
+
+        $variation = ProductVariation::find($request->id);
+
+        if (!$variation) {
+            return response()->json(['status' => 404, 'message' => 'Variation not found.']);
+        }
+
+        $variation->name         = $request->name;
+        $variation->weight       = $request->weight;
+        $variation->price        = $request->price;
+        $variation->offer_price  = $request->offer_price;
+        $variation->save();
+
+        return response()->json(['status' => 200, 'message' => 'Variation updated successfully.']);
+    }
+
+
     public function productSkuList(Request $request)
     {
         if(!empty($request->term)) {
-            $products = ProductColorSize::where('code','like','%'.$request->term.'%')->with('sizeDetails','productDetails','sizeDetails')
+            $products = ProductVariation::where('code','like','%'.$request->term.'%')->with('sizeDetails','productDetails','sizeDetails')
             ->where('code', '!=', '')->where('code', '!=', NULL)
             ->orderBy('id', 'asc')
             ->paginate(100);
         } else {
-            $products = ProductColorSize::with('sizeDetails','productDetails','sizeDetails')
-            ->where('code', '!=', '')->where('code', '!=', NULL)
+            $products = ProductVariation::
+            where('code', '!=', '')->where('code', '!=', NULL)
             // ->latest('last_stock_synched')
             ->orderBy('id', 'asc')
             ->paginate(100);
         }
 
         return view('admin.product.product-sku',compact('products'));
+    }
+
+    public function ProductSkuStatus($id)
+    {
+        $variation = ProductVariation::find($id);
+
+        if (!$variation) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Variation not found.',
+            ]);
+        }
+
+        $variation->status = $variation->status ? 0 : 1;
+        $variation->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Status updated successfully.',
+        ]);
+    }
+
+    public function ProductSkuDelete(Request $request)
+    {
+        $variation = ProductVariation::find($request->id); 
+
+        if (!$variation) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Product variation not found.',
+            ]);
+        }
+
+        $variation->delete(); // hard delete
+        return response()->json([
+            'status' => 200,
+            'message' => 'Variation deleted successfully.',
+        ]);
+    }
+
+
+    public function productSkuListImport(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+        ]);
+
+        $file = $request->file('csv_file');
+        $extension = $file->getClientOriginalExtension();
+
+        if (in_array($extension, ['xlsx', 'xls'])) {
+            $spreadsheet = IOFactory::load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $rows = $sheet->toArray();
+        } else {
+            // Fallback to CSV
+            $rows = array_map('str_getcsv', file($file->getRealPath()));
+        }
+
+        $header = array_map('trim', $rows[0]);
+        unset($rows[0]);
+
+        $imported = 0;
+        $skipped = 0;
+
+        foreach ($rows as $index => $row) {
+            if (count($row) < count($header)) {
+                $skipped++;
+                continue;
+            }
+
+            $data = array_combine($header, $row);
+           // dd($data);
+
+            $product = Product::where('style_no', $data['product_no'])->first();
+            //dd($product);
+
+            if (!$product) {
+                $skipped++;
+                continue;
+            }
+
+            $validator = Validator::make($data, [
+                'product_no'   => 'required',
+                'weight'       => 'required|string|max:255',
+                'code'         => 'required|string|max:255',
+                'price'        => 'required|numeric',
+                'offer_price'  => 'nullable|numeric',
+            ]);
+
+            if ($validator->fails()) {
+                $skipped++;
+                continue;
+            }
+
+            ProductVariation::create([
+                'product_id'   => $product->id,
+                'weight'       => $data['weight'],
+                'code'         => $data['code'],
+                'price'        => $data['price'],
+                'offer_price'  => $data['offer_price'] ?? null,
+                'position'     => 1,
+                'stock'        => 0,
+                'status'       => 1,
+            ]);
+
+            $imported++;
+        }
+
+        return redirect()->back()->with('success', "$imported variations imported, $skipped skipped.");
     }
 
     public function productSkuListExport(Request $request)

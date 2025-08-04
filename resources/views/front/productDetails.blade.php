@@ -246,7 +246,8 @@
                                 @foreach($images as $image)
                                     <div class="swiper-slide">
                                         <div class="single-image-big">
-                                            <img src="{{ asset($image->image) }}" alt="{{ $data->name }}">
+                                            {{-- <img src="{{ asset($image->image) }}" alt="{{ $data->name }}"> --}}
+                                            <img src="{{ asset('uploads/product/' . $image->image) }}" alt="{{ $data->name }}">
                                         </div>
                                     </div>
                                 @endforeach
@@ -267,7 +268,8 @@
                                 @foreach($images as $image)
                                     <div class="swiper-slide">
                                         <div class="single-image-thumb">
-                                            <img src="{{ asset($image->image) }}" alt="{{ $data->name }}">
+                                            {{-- <img src="{{ asset($image->image) }}" alt="{{ $data->name }}"> --}}
+                                            <img src="{{ asset('uploads/product/' . $image->image) }}" alt="{{ $data->name }}">
                                         </div>
                                     </div>
                                 @endforeach

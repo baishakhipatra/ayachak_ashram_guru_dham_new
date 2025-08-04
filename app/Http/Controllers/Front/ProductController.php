@@ -80,7 +80,7 @@ class ProductController extends Controller
 
         if ($data) {
             $images = $this->productRepository->listImagesById($data->id);
-            //dd($images);
+            //dd($data->id);
             $relatedProducts = $this->productRepository->relatedProducts($data->id);
             $wishlistCheck = $this->productRepository->wishlistCheck($data->id);
             $primaryColorSizes = $this->productRepository->primaryColorSizes($data->id);    
