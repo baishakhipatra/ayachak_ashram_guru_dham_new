@@ -1,46 +1,26 @@
 @extends('admin.layouts.app')
 
-@section('page', 'Product SKU codes')
+@section('page', 'Product SKU Codes')
 
 @section('content')
 <section>
-    <div class="search__filter">
-        <div class="row mb-3">
-            <div class="col-12 text-end">
+    <div class="search__filter mb-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <form method="GET" action="{{ route('admin.product.sku_list') }}">
+                    <div class="input-group">
+                        <input type="text" name="term" class="form-control" placeholder="Search by Product No. or Name" value="{{ request('term') }}">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a href="{{ route('admin.product.sku_list') }}" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 text-end">
                 <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#importWeightVariationModal">
                     Import Weight Variation
                 </button>
             </div>
         </div>
-        {{-- <div class="row">
-            <div class="col-8">
-                <p class="small text-muted">Displaying {{$products->firstItem()}} - {{$products->lastItem()}} out of {{$products->total()}} data</p>
-            </div>
-            <div class="col-4">
-                <form action="">
-                    <div class="d-flex justify-content-end">
-                        <div class="me-3">
-                            <select name="order" id="order" class="form-control">
-                                <option value="">Sort by</option>
-                                <option value="synched_desc">Latest synched</option>
-                            </select>
-                        </div>
-                        <div class="me-3">
-                            <input type="search" name="term" id="term" class="form-control" placeholder="Search SKU/ Style no..." value="{{ app('request')->input('term') }}" autocomplete="off">
-                        </div>
-                        <div>
-                            <div class="btn-group">
-                                <button type="submit" data-bs-toggle="tooltip" title="Search" class="btn btn-sm btn-danger"> <i class="fi fi-br-search"></i> </button>
-
-                                <a href="{{ route('admin.product.sku_list') }}" class="btn btn-sm btn-light" data-bs-toggle="tooltip" title="Clear search"> <i class="fi fi-br-x"></i> </a>
-
-                                <a href="{{ route('admin.product.sku_list.export') }}" data-bs-toggle="tooltip" class="btn btn-sm btn-danger" title="Export"> <i class="fi fi-br-download"></i> </a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div> --}}
     </div>
 
     {{-- @if (Session::has('message'))
@@ -90,6 +70,24 @@
                 </td>
                 <td>
                     <a href="javascript:void(0);" 
+                        class="btn btn-sm btn-icon btn-outline-info viewImagesBtn"
+                        data-id="{{ $item->id }}"
+                        data-sku="{{ $item->code }}"
+                        data-bs-toggle="tooltip" title="View Images">
+                        <i class="fa fa-image"></i>
+                    </a>
+
+                    <a href="javascript:void(0);" 
+                        class="btn btn-sm btn-icon btn-outline-info uploadImagesBtn" 
+                        data-id="{{ $item->id }}" 
+                        data-sku="{{ $item->code }}" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#uploadImagesModal"
+                        title="Upload Images">
+                        <i class="fa fa-image"></i>
+                    </a>
+
+                    <a href="javascript:void(0);" 
                         class="btn btn-sm btn-icon btn-outline-primary editBtn"
                         data-id="{{ $item->id }}" data-bs-toggle="tooltip" title="Edit">
                         <i class="fa fa-edit"></i>
@@ -125,20 +123,8 @@
                             <input type="text" class="form-control" name="code" id="edit_code">
                         </div>
                         <div class="col-md-6">
-                            <label>Product Name</label>
-                            <input type="text" class="form-control" id="edit_product_name">
-                        </div>
-                        <div class="col-md-6">
-                            <label>Product No.</label>
-                            <input type="text" class="form-control" id="edit_style_no">
-                        </div>
-                        <div class="col-md-6">
                             <label>Weight</label>
                             <input type="text" class="form-control" name="weight" id="edit_weight">
-                        </div>
-                        <div class="col-md-6">
-                            <label>Position</label>
-                            <input type="text" class="form-control" name="position" id="edit_position">
                         </div>
                         <div class="col-md-6">
                             <label>Price</label>
@@ -157,7 +143,6 @@
         </div>
     </div>
 
-
     
     <div class="modal fade" id="importWeightVariationModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -171,7 +156,7 @@
             <div class="modal-body">
                 <p>
                     <strong>Sample Format:</strong> <br>
-                    <code>product_no,weight,code,price,offer_price</code>
+                    <code>material_code,weight,code,price,offer_price</code>
                 </p>
 
                 <a href="{{ asset('sample/weight_variation_sample.xlsx') }}" class="text-decoration-underline" download>
@@ -192,6 +177,56 @@
         </div>
     </div>
 
+    <!-- Upload Images Modal -->
+    <div class="modal fade" id="uploadImagesModal" tabindex="-1" aria-labelledby="uploadImagesLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="{{ route('admin.product.variation.uploadImages') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="product_variation_id" id="uploadProductId">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Upload Images for <span id="skuCodeText"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="images" class="form-label">Choose Images</label>
+                            <input type="file" class="form-control" name="images[]" multiple required>
+                            <small class="text-muted">You can upload multiple images.</small>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Images Modal -->
+    <div class="modal fade" id="viewImagesModal" tabindex="-1" aria-labelledby="viewImagesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Images for <span id="viewSkuCodeText"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row" id="imageGallery">
+                        {{-- Images will be appended here by JS --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     {{$products->appends($_GET)->links()}}
 
 </section>
@@ -200,6 +235,14 @@
 @section('script')
 <script>
 
+    $(document).on('click', '.uploadImagesBtn', function () {
+        const productId = $(this).data('id');
+        const skuCode = $(this).data('sku');
+
+        $('#uploadProductId').val(productId);
+        $('#skuCodeText').text(skuCode);
+    });
+
     $(document).ready(function () {
         $('.editBtn').on('click', function () {
             let id = $(this).data('id');
@@ -207,12 +250,8 @@
 
             $.get(url, function (res) {
                 $('#edit_id').val(res.id);
-                $('#edit_name').val(res.name);
                 $('#edit_code').val(res.code);
-                $('#edit_product_name').val(res.product?.name ?? '');
-                $('#edit_style_no').val(res.product?.style_no ?? '');
                 $('#edit_weight').val(res.weight);
-                $('#edit_position').val(res.position);
                 $('#edit_price').val(res.price);
                 $('#edit_offer_price').val(res.offer_price);
                 $('#editVariationModal').modal('show');
@@ -239,6 +278,55 @@
             });
         });
     });
+
+    $(document).ready(function () {
+        $('.viewImagesBtn').click(function () {
+            const id = $(this).data('id');
+            const sku = $(this).data('sku');
+            $('#viewSkuCodeText').text(sku);
+            $('#imageGallery').html('<p>Loading...</p>');
+            $('#viewImagesModal').modal('show');
+
+            $.get("{{ url('admin.product.variation.getImages') }}/" + id, function (data) {
+                let html = '';
+
+                if (data.length === 0) {
+                    html = '<p class="text-center">No images found.</p>';
+                } else {
+                    data.forEach(img => {
+                        html += `
+                            <div class="col-md-3 mb-3 text-center">
+                                <img src="/${img.image_path}" class="img-fluid mb-2" style="max-height: 150px;">
+                                <button class="btn btn-sm btn-danger deleteImageBtn" data-id="${img.id}">Delete</button>
+                            </div>
+                        `;
+                    });
+                }
+
+                $('#imageGallery').html(html);
+            });
+        });
+
+        $(document).on('click', '.deleteImageBtn', function () {
+            const btn = $(this);
+            const id = btn.data('id');
+
+            if (confirm('Are you sure you want to delete this image?')) {
+                let deleteUrl = "{{ url('admin.product.variation.deleteImage') }}";
+                $.ajax({
+                    url: `${deleteUrl}/${id}`,
+                    type: 'DELETE',
+                    data: { _token: '{{ csrf_token() }}' },
+                    success: function (response) {
+                        if (response.success) {
+                            btn.closest('.col-md-3').remove();
+                        }
+                    }
+                });
+            }
+        });
+    });
+
 
 
   function deleteUser(userId) {

@@ -108,4 +108,10 @@ class Product extends Model
         return $resp;
     }
 
+    // New code
+    public function variations()
+    {
+        return $this->hasMany(ProductVariation::class);
+    }
+
 }

@@ -215,6 +215,9 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             Route::get('/sku-list', 'Admin\ProductController@productSkuList')->name('sku_list');
             Route::get('/edit/{id}', [ProductController::class, 'ProductSkuEdit'])->name('variation.edit');
             Route::post('/update', [ProductController::class, 'ProductSkuUpdate'])->name('variation.update');
+            Route::post('upload-images',[ProductController::class, 'uploadImages'])->name('variation.uploadImages');
+            Route::get('variation-images/{id}', [ProductController::class, 'getVariationImages'])->name('variation.getImages');
+            Route::delete('variation-image/{id}', [ProductController::class, 'deleteVariationImage'])->name('variation.deleteImage');
             Route::get('/status/{id}', [ProductController::class, 'ProductSkuStatus'])->name('variation.status');
             Route::post('/delete', [ProductController::class, 'ProductSkuDelete'])->name('variation.delete');
             Route::post('variation/import', 'Admin\ProductController@productSkuListImport')->name('variation.import');

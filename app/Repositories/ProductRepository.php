@@ -15,6 +15,7 @@ use App\Models\Trend;
 use App\Models\ProductColor;
 use App\Models\ProductColorSize;
 use App\Models\Wishlist;
+use App\Models\ProductVariationImage;
 use App\Traits\UploadAble;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -104,9 +105,11 @@ class ProductRepository implements ProductInterface
         return Product::where('cat_id', $cat_id)->where('id', '!=', $id)->with('category', 'subCategory', 'collection', 'colorSize')->get();
     }
 
-    public function listImagesById($id)
+    public function listImagesById($productId)
     {
-        return ProductImage::where('product_id', $id)->latest('id')->get();
+        return ProductVariationImage::whereHas('productVariation', function ($query) use ($productId) {
+            $query->where('product_id', $productId);
+        })->get();
     }
 
     public function create(array $data)

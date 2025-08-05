@@ -75,14 +75,15 @@ Route::name('front.')->group(function () {
     });
 
     // product detail
-    Route::name('shop.')->group(function () {
-        Route::post('/add-to-cart', 'Front\ProductController@AddToCart')->name('add.to.cart');
-        Route::get('/details/{slug}', 'Front\ProductController@details')->name('details');
-        Route::get('/color-wise-size', 'Front\ProductController@colorWiseSize')->name('color.wise.size');
-        Route::get('/size', 'Front\ProductController@size')->name('size');
-        Route::get('/shop', 'Front\ProductController@ProductList')->name('list');
-        Route::get('/shop/{slug}', 'Front\ProductController@detail')->name('detail');
-        Route::get('/shop/search', 'Front\ProductController@ProductSearch')->name('search');
+    Route::prefix('shop')->group(function () {
+        Route::get('/', 'Front\ProductController@shop')->name('shop.list');
+        Route::get('/filter', 'Front\ProductController@ajaxFilter')->name('shop.filter');
+        Route::get('/{slug}', 'Front\ProductController@detail')->name('shop.detail');
+        Route::get('/search', 'Front\ProductController@ProductSearch')->name('shop.search');
+        Route::post('/add-to-cart', 'Front\ProductController@AddToCart')->name('shop.add.to.cart');
+        Route::get('/details/{slug}', 'Front\ProductController@details')->name('shop.details');
+        Route::get('/color-wise-size', 'Front\ProductController@colorWiseSize')->name('shop.color.wise.size');
+        Route::get('/size', 'Front\ProductController@size')->name('shop.size');
     });
 
         // cart
