@@ -56,7 +56,7 @@
                     </ul>
                 </div> --}}
 
-                <a href="#" class="cart">
+                <a href="{{route('front.cart.index')}}" class="cart">
                     <img src="{{asset('assets/images/bag.svg')}}">
                     <span>2</span>
                 </a>

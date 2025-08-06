@@ -241,8 +241,8 @@
 
                     {{-- Big slider --}}
                     <div class="slider-big swiper">
-                        <div class="swiper-wrapper">
-                            @if($images && count($images))
+                        <div class="swiper-wrapper" id="default-big-slider">
+                            {{-- @if($images && count($images))
                                 @foreach($images as $image)
                                     <div class="swiper-slide">
                                         <div class="single-image-big">
@@ -256,15 +256,20 @@
                                         <img src="{{ asset('assets/images/placeholder-product.jpg') }}" alt="{{ $data->name }}">
                                     </div>
                                 </div>
-                            @endif
+                            @endif --}}
+                            <div class="swiper-slide">
+                                <div class="single-image-big">
+                                    <img src="{{ asset('assets/images/placeholder-product.jpg') }}" alt="{{ $data->name }}">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
 
                     {{-- Thumb slider --}}
                     <div thumbsSlider="" class="slider-thumb swiper">
-                        <div class="swiper-wrapper">
-                            @if($images && count($images))
+                        <div class="swiper-wrapper" id="default-thumb-slider">
+                            {{-- @if($images && count($images))
                                 @foreach($images as $image)
                                     <div class="swiper-slide">
                                         <div class="single-image-thumb">
@@ -278,7 +283,12 @@
                                         <img src="{{ asset('assets/images/placeholder-product.jpg') }}" alt="{{ $data->name }}">
                                     </div>
                                 </div>
-                            @endif
+                            @endif --}}
+                            <div class="swiper-slide">
+                                <div class="single-image-thumb">
+                                    <img src="{{ asset('assets/images/placeholder-product.jpg') }}" alt="{{ $data->name }}">
+                                </div>
+                            </div>
                         </div>
                         <div class="swiper-thumb-button-next"></div>
                         <div class="swiper-thumb-button-prev"></div>
@@ -296,40 +306,52 @@
                         {!! $data->desc !!}
                     </div>
 
-                    <form action="">
-                        <div class="price">
+                    <form action="{{ route('front.cart.add') }}" method="POST" id="addToCartForm">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $data->id }}">
+                        @if (isset($productVariations[0]))
+                            <input type="hidden" name="variation_id" id="selectedVariation" value="{{ $productVariations[0]->id }}">
+                        @else
+                            <input type="hidden" name="variation_id" id="selectedVariation" value="">
+                        @endif
+
+                        <div class="price" id="price-section">
                             @if($data->offer_price > 0 && $data->offer_price < $data->price)
                                 <span class="original-price strike">₹{{ number_format($data->price, 2) }}</span>
                                 <span class="sale-price">₹{{ number_format($data->offer_price, 2) }}</span>
                             @else
-                                ₹{{ number_format($data->price, 2) }}
+                                {{-- ₹{{ number_format($data->price, 2) }} --}}
+                                <span class="single-price">₹{{ number_format($data->price, 2) }}</span>
                             @endif
                         </div>
 
-                        {{-- Example static variations, replace with dynamic if you have --}}
+                      
                         <div class="variation-list">
-                            <label>
-                                500 Gms
-                                <input type="radio" id="weight-500" name="weight" value="500" checked>
-                                <span></span>
-                            </label>
-                            <label>
-                                300 Gms
-                                <input type="radio" id="weight-300" name="weight" value="300">
-                                <span></span>
-                            </label>
+                            @foreach ($productVariations as $key => $variation)
+                                <label>
+                                    {{ $variation->weight }}
+                                    <input type="radio"
+                                        name="variation"
+                                        value="{{ $variation->id }}"
+                                        data-price="{{ $variation->price }}"
+                                        data-offer-price="{{ $variation->offer_price }}"
+                                        data-images="@json($variation->images)"
+                                        {{ $key == 0 ? 'checked' : '' }}>
+                                    <span></span>
+                                </label>
+                            @endforeach
                         </div>
+
 
                         <div class="quantity-group">
                             <div class="number-input">
-                                <button class="decrement">-</button>
-                                <input type="number" id="quantity" min="1" max="10" value="1" step="1">
-                                <button class="increment">+</button>
+                                <button type="button" class="decrement">-</button>
+                                <input type="number" class="quantity" name="quantity" min="1" max="10" value="1" step="1">
+                                <button type="button" class="increment">+</button>
                             </div>
                             <input type="submit" class="bton btn-fill" value="Add to Cart">
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -433,9 +455,6 @@
         //     }
         // });
         // });
-
-
-    
     });
 
     // quantity jquery
@@ -450,6 +469,138 @@
             input.stepDown();
         });
     });
+
+    let swiperBig;
+    let swiperThumb;
+
+    function initSwipers() {
+        swiperThumb = new Swiper(".slider-thumb", {
+            loop: false,
+            spaceBetween: 10,
+            slidesPerView: 4,
+            freeMode: true,
+            watchSlidesProgress: true,
+            navigation: {
+                nextEl: ".swiper-thumb-button-next",
+                prevEl: ".swiper-thumb-button-prev",
+            },
+        });
+
+        swiperBig = new Swiper(".slider-big", {
+            loop: false,
+            spaceBetween: 10,
+            thumbs: {
+                swiper: swiperThumb,
+            },
+        });
+    }
+
+    $(document).ready(function () {
+
+        // variation price + image change
+        $('input[name="variation"]').on('change', function () {
+            let price = parseFloat($(this).data('price')).toFixed(2);
+            let offerPrice = parseFloat($(this).data('offer-price')).toFixed(2);
+
+            let priceHtml = '';
+            if (offerPrice > 0 && offerPrice < price) {
+                priceHtml = `
+                    <span class="original-price strike">₹${price}</span>
+                    <span class="sale-price">₹${offerPrice}</span>
+                `;
+            } else {
+                priceHtml = `<span class="single-price">₹${price}</span>`;
+            }
+
+            $('#price-section').html(priceHtml);
+
+            let variationId = $(this).val();
+
+            $.ajax({
+                url: "{{ route('front.shop.variation-images') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    variation_id: variationId
+                },
+                success: function (response) {
+                    if (response.status) {
+                        let bigSlider = $('.slider-big .swiper-wrapper');
+                        let thumbSlider = $('.slider-thumb .swiper-wrapper');
+
+                        if (swiperBig) swiperBig.destroy(true, true);
+                        if (swiperThumb) swiperThumb.destroy(true, true);
+
+                        bigSlider.empty();
+                        thumbSlider.empty();
+
+                        if (response.images.length > 0) {
+                            response.images.forEach(function (img) {
+                                bigSlider.append(`
+                                    <div class="swiper-slide">
+                                        <div class="single-image-big">
+                                            <img src="${img}" alt="">
+                                        </div>
+                                    </div>
+                                `);
+                                thumbSlider.append(`
+                                    <div class="swiper-slide">
+                                        <div class="single-image-thumb">
+                                            <img src="${img}" alt="">
+                                        </div>
+                                    </div>
+                                `);
+                            });
+                        } else {
+                            let placeholder = "{{ asset('assets/images/placeholder-product.jpg') }}";
+                            bigSlider.append(`
+                                <div class="swiper-slide">
+                                    <div class="single-image-big">
+                                        <img src="${placeholder}" alt="">
+                                    </div>
+                                </div>
+                            `);
+                            thumbSlider.append(`
+                                <div class="swiper-slide">
+                                    <div class="single-image-thumb">
+                                        <img src="${placeholder}" alt="">
+                                    </div>
+                                </div>
+                            `);
+                        }
+                        initSwipers();
+                    }
+                }
+            });
+        });
+        
+        let defaultVariation = $('input[name="variation"]:checked');
+        if (defaultVariation.length > 0) {
+            defaultVariation.trigger('change');
+        }
+    });
+
+    $(document).on('change', 'input[name="variation"]', function () {
+        const selectedVariationId = $(this).val();
+        $('#selectedVariation').val(selectedVariationId);
+    });
+
+    $(document).on('click', '.increment', function (e) {
+        e.preventDefault();
+        let qtyInput = $(this).siblings('.quantity');
+        let currentQty = parseInt(qtyInput.val()) || 1;
+        qtyInput.val(currentQty + 1);
+    });
+
+    $(document).on('click', '.decrement', function (e) {
+        e.preventDefault();
+        let qtyInput = $(this).siblings('.quantity');
+        let currentQty = parseInt(qtyInput.val()) || 1;
+        if (currentQty > 1) {
+            qtyInput.val(currentQty - 1);
+        }
+    });
+
   </script>
 
 @endsection

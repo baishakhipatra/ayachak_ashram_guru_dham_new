@@ -136,6 +136,25 @@ class ProductController extends Controller
         return response()->json(['html' => $html]);
     }
 
+    public function getVariationImages(Request $request)
+    {
+        $variationId = $request->variation_id;
+
+        $variation = ProductVariation::with('images')->find($variationId);
+
+        if ($variation) {
+            $images = $variation->images->map(function ($img) {
+                return asset($img->image_path);
+            });
+
+            return response()->json([
+                'status' => true,
+                'images' => $images
+            ]);
+        }
+
+        return response()->json(['status' => false, 'images' => []]);
+    }
 
 
     public function detail(Request $request, $slug)
@@ -145,6 +164,7 @@ class ProductController extends Controller
         if ($data) {
             $images = $this->productRepository->listImagesById($data->id);
             //dd($data->id);
+            $productVariations = $this->productRepository->listVariationById($data->id);
             $relatedProducts = $this->productRepository->relatedProducts($data->id);
             $wishlistCheck = $this->productRepository->wishlistCheck($data->id);
             $primaryColorSizes = $this->productRepository->primaryColorSizes($data->id);    
@@ -152,7 +172,7 @@ class ProductController extends Controller
             // if ($slug == "test-product-2") {
             //     return view('front.product.detail-updated', compact('data', 'images', 'relatedProducts', 'wishlistCheck', 'primaryColorSizes'));
             // } else {
-                return view('front.productDetails', compact('data', 'images', 'relatedProducts', 'wishlistCheck', 'primaryColorSizes'));
+                return view('front.productDetails', compact('data', 'images', 'productVariations', 'relatedProducts', 'wishlistCheck', 'primaryColorSizes',));
             // }
         } else {
             return view('front.404');

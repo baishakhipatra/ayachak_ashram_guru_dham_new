@@ -74,7 +74,7 @@
                         data-id="{{ $item->id }}"
                         data-sku="{{ $item->code }}"
                         data-bs-toggle="tooltip" title="View Images">
-                        <i class="fa fa-image"></i>
+                        <i class="fa fa-eye"></i>
                     </a>
 
                     <a href="javascript:void(0);" 
@@ -287,7 +287,7 @@
             $('#imageGallery').html('<p>Loading...</p>');
             $('#viewImagesModal').modal('show');
 
-            $.get("{{ url('admin.product.variation.getImages') }}/" + id, function (data) {
+            $.get("{{ route('admin.product.variation.getImages', ':id') }}".replace(':id', id), function (data) {
                 let html = '';
 
                 if (data.length === 0) {
@@ -311,19 +311,24 @@
             const btn = $(this);
             const id = btn.data('id');
 
-            if (confirm('Are you sure you want to delete this image?')) {
-                let deleteUrl = "{{ url('admin.product.variation.deleteImage') }}";
-                $.ajax({
-                    url: `${deleteUrl}/${id}`,
-                    type: 'DELETE',
-                    data: { _token: '{{ csrf_token() }}' },
-                    success: function (response) {
-                        if (response.success) {
-                            btn.closest('.col-md-3').remove();
-                        }
+
+            let deleteUrl = "{{ route('admin.product.variation.deleteImage', ':id') }}".replace(':id', id);
+            $.ajax({
+                url: deleteUrl,
+                type: 'DELETE',
+                data: { _token: '{{ csrf_token() }}' },
+                success: function (response) {
+                    if (response.success) {
+                        btn.closest('.col-md-3').remove();
+                        toastFire('success', response.message || 'Image deleted successfully!');
+                    } else {
+                        toastFire('error', response.message || 'Something went wrong.');
                     }
-                });
-            }
+                },
+                error: function () {
+                    toastFire('error', 'Failed to delete image.');
+                }
+            });
         });
     });
 

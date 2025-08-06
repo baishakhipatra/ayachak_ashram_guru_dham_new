@@ -28,7 +28,7 @@ class ProductVariation extends Model
     }
     public function images()
     {
-        return $this->hasMany(ProductVariationImage::class);
+        return $this->hasMany(ProductVariationImage::class, 'product_variation_id');
     }
 
 }

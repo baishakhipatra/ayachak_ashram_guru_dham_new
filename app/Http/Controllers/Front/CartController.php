@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\CartInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\Product;
+use App\Models\ProductVariation;
 use App\Models\Cart;
 use App\Models\CartOffer;
 use App\Models\ProductColorSize;
@@ -32,56 +34,163 @@ class CartController extends Controller
         return $couponData;
     }
 
+    // public function add(Request $request) 
+    // {
+    //     //dd($request->all());
+    //     $request->validate([
+    //         'product_id' => 'required|exists:products,id',
+    //         'variation_id' => 'nullable|exists:product_variation,id',
+    //         'quantity' => 'required|integer|min:1',
+    //     ]);
+
+    //     $product = Product::findOrFail($request->product_id);
+    //     $variation = ProductVariation::findOrFail($request->variation_id);
+
+    //     // Check for existing cart item (based only on product + variation)
+    //     $existingCart = Cart::where('product_id', $request->product_id)
+    //         ->where('product_variation_id', $request->variation_id)
+    //         ->first();
+
+    //     if ($existingCart) {
+    //         $existingCart->qty += $request->quantity;
+    //         $existingCart->save();
+    //     } else {
+    //         Cart::create([
+    //             'product_id' => $product->id,
+    //             'product_name' => $product->name,
+    //             'product_slug' => $product->slug,
+    //             'product_image' => $product->thumbnail,
+    //             'product_variation_id' => $variation->id,
+    //             'price' => $variation->price,
+    //             'offer_price' => $variation->offer_price,
+    //             'qty' => $request->quantity,
+    //         ]);
+    //     }
+
+    //     return back()->with('success', 'Product added to cart!');
+    // }
     public function add(Request $request) 
     {
-        // dd($request->all());
+        $product = Product::findOrFail($request->product_id);
 
-        $request->validate([
-            "product_id" => "required|string|max:255",
-            "product_name" => "required|string|max:255",
-            "product_style_no" => "required|string|max:255",
-            "product_image" => "required|string|max:255",
-            "product_slug" => "required|string|max:255",
-            "product_variation_id" => "nullable|integer",
-            "price" => "required|string",
-            "offer_price" => "required|string",
-            "qty" => "required|integer|min:1",
-            "user_id" => "nullable",
-            "token" => "nullable"
-        ]);
+        $hasVariation = ProductVariation::where('product_id', $product->id)->exists();
 
-        $params = $request->except('_token');
+        $rules = [
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+        ];
 
-        $cartStore = $this->cartRepository->addToCart($params);
-
-        if ($cartStore) {
-            return response()->json(['status' => 200, 'message' => 'Product added to cart', 'response' => $cartStore]);
-            // return redirect()->back()->with('success', 'Product added to cart');
-        } else {
-            return response()->json(['status' => 400, 'message' => 'Product cannot be added to cart']);
-            // return redirect()->back()->with('failure', 'Something happened');
+        if ($hasVariation) {
+            $rules['variation_id'] = 'required|exists:product_variation,id';
         }
+
+        $request->validate($rules);
+
+        $variation = null;
+        if ($hasVariation) {
+            $variation = ProductVariation::findOrFail($request->variation_id);
+        }
+
+        $existingCart = Cart::where('product_id', $product->id)->where('user_id', auth()->id());
+       // dd($existingCart);
+        
+        if ($variation) {
+            $existingCart = $existingCart->where('product_variation_id', $variation->id);
+        }
+
+        $existingCart = $existingCart->first();
+
+        if ($existingCart) {
+            $existingCart->qty += $request->quantity;
+            $existingCart->save();
+        } else {
+            Cart::create([
+                'user_id' => auth()->id(),
+                'product_id' => $product->id,
+                'product_name' => $product->name,
+                'product_style_no' => $product->style_no,
+                'product_image' => $product->image,
+                'product_slug' => $product->slug,
+                'product_variation_id' => $variation?->id,
+                'price' => $variation?->price ?? $product->price,
+                'offer_price' => $variation?->offer_price ?? $product->offer_price,
+                'qty' => $request->quantity,
+            ]);
+        }
+
+        return back()->with('success', 'Product added to cart!');
     }
 
-    public function index(Request $request)
+
+    // public function index(Request $request)
+    // {
+    //    if(Auth::guard('web')->check()){
+    //        $total_price_excluding = 0;
+    //         $userId =Auth::guard('web')->user()->id;
+    //         $mobile = Auth::guard('web')->user()->mobile;
+    //         $cartProductDetails = Cart::with('productDetails')->latest()->where('user_id',$userId)->get();
+    //         $couponData = Coupon::where('user_mobile', $mobile)->take(5)->where('status', 1)->get();
+    //         if(count($cartProductDetails)){
+    //             foreach($cartProductDetails as $key =>$item){
+    //                  $price = $item->offer_price?$item->offer_price:$item->price;
+    //                  $total_price_excluding += $price;
+    //             }
+    //         }
+    //         return view('front.cartList',compact('cartProductDetails','couponData', 'total_price_excluding'));
+    //    }else{
+    //         return redirect()->route('front.user.login');
+    //    }
+    // }
+
+    public function index(Request $request){
+        $userId = auth()->id(); 
+        //dd(auth()->id());
+        $cartItems = Cart::where('user_id', $userId)->with(['productDetails','variation'])->get();
+        //dd($cartItems);
+        return view('front.cartList', compact('cartItems'));
+    }
+
+   public function updateQuantity(Request $request)
     {
-       if(Auth::guard('web')->check()){
-           $total_price_excluding = 0;
-            $userId =Auth::guard('web')->user()->id;
-            $mobile = Auth::guard('web')->user()->mobile;
-            $cartProductDetails = Cart::with('productDetails')->latest()->where('user_id',$userId)->get();
-            $couponData = Coupon::where('user_mobile', $mobile)->take(5)->where('status', 1)->get();
-            if(count($cartProductDetails)){
-                foreach($cartProductDetails as $key =>$item){
-                     $price = $item->offer_price?$item->offer_price:$item->price;
-                     $total_price_excluding += $price;
+        $cart = Cart::find($request->cart_id);
+
+        if ($cart) {
+            if ($request->type == 'increment') {
+                if ($cart->qty < 10) {
+                    $cart->qty += 1;
+                }
+            } elseif ($request->type == 'decrement') {
+                if ($cart->qty > 1) {
+                    $cart->qty -= 1;
                 }
             }
-            return view('front.cartList',compact('cartProductDetails','couponData', 'total_price_excluding'));
-       }else{
-            return redirect()->route('front.user.login');
-       }
+
+            $cart->save();
+
+            return response()->json([
+                'success' => true,
+                'updated_qty' => $cart->qty
+            ]);
+        }
+
+        return response()->json(['success' => false], 404);
     }
+
+
+    public function removeQuantity(Request $request)
+    {
+        $cart = Cart::find($request->cart_id);
+
+        if (!$cart) {
+            return response()->json(['success' => false, 'message' => 'Cart item not found.']);
+        }
+
+        $cart->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+
     public function add_to_checkoout(Request $request){
         $userId = Auth::guard('web')->user()->id;
         $exist_checkout = DB::table('checkout')->where('user_id', $userId)->first();

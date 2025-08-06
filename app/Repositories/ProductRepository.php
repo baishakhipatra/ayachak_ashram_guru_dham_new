@@ -16,6 +16,7 @@ use App\Models\ProductColor;
 use App\Models\ProductColorSize;
 use App\Models\Wishlist;
 use App\Models\ProductVariationImage;
+use App\Models\ProductVariation;
 use App\Traits\UploadAble;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -111,6 +112,12 @@ class ProductRepository implements ProductInterface
             $query->where('product_id', $productId);
         })->get();
     }
+
+    public function listVariationById($productId)
+    {
+        return ProductVariation::with('images')->where('product_id', $productId)->get();
+    }
+
 
     public function create(array $data)
     {

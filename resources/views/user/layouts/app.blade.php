@@ -153,7 +153,7 @@
 
         <footer>
             <div class="row">
-                <div class="col-12 text-end">Total Comfort 2021-2022</div>
+                <div class="col-12 text-end">Ayachak Ashrama 2025-2026</div>
             </div>
         </footer>
     </main>
