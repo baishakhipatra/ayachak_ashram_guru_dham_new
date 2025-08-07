@@ -100,6 +100,16 @@ Route::name('front.')->group(function () {
         Route::get('/quantity/{id}/{type}', 'Front\CartController@qtyUpdate')->name('cart.quantity');
     });
 
+    // checkout
+    Route::prefix('checkout')->name('checkout.')->group(function () {
+        Route::get('/', 'Front\CheckoutController@index')->name('index');
+        // Route::post('/coupon/check', 'Front\CheckoutController@coupon')->name('coupon.check');
+        Route::post('/store', 'Front\CheckoutController@store')->name('store');
+		Route::get('/payment/{order_id}', 'Front\CheckoutController@payment')->name('payment');
+        Route::post('/payment/store', 'Front\CheckoutController@paymentStore')->name('payment.store');
+        Route::view('/complete', 'front.checkout.complete')->name('complete');
+    });
+
     Route::name('donation.')->group(function () {
         Route::get('/donation', 'Front\DonationController@DonationForm')->name('form');
         Route::post('/store', 'Front\DonationController@store')->name('store');
@@ -154,15 +164,7 @@ Route::name('front.')->group(function () {
 //         Route::get('/quantity/{id}/{type}', 'Front\CartController@qtyUpdate')->name('quantity');
 //     });
 
-//     // checkout
-//     Route::prefix('checkout')->name('checkout.')->group(function () {
-//         Route::get('/', 'Front\CheckoutController@index')->name('index');
-//         // Route::post('/coupon/check', 'Front\CheckoutController@coupon')->name('coupon.check');
-//         Route::post('/store', 'Front\CheckoutController@store')->name('store');
-// 		Route::get('/payment/{order_id}', 'Front\CheckoutController@payment')->name('payment');
-//         Route::post('/payment/store', 'Front\CheckoutController@paymentStore')->name('payment.store');
-//         Route::view('/complete', 'front.checkout.complete')->name('complete');
-//     });
+
 //     Route::prefix('phonepe')->name('phonepe.')->group(function () {
 //         Route::post('/initiate-payment', 'Front\PhonePeController@initiatePayment')->name('payment.initiate')->middleware('throttle:10,1');
 //         Route::post('/payment-callback', 'Front\PhonePeController@confirmPayment')->name('payment.callback');

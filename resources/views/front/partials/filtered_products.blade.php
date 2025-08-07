@@ -9,7 +9,7 @@
                 </figure>
                 <figcaption>
                     <a href="{{ route('front.shop.detail', $product->slug) }}">
-                        <h3>{{ $product->name }}</h3>
+                        <h3>{{ ucwords($product->name) }}</h3>
                     </a>
                     <div class="price-group">
                         @if($product->offer_price > 0 && $product->offer_price < $product->price)

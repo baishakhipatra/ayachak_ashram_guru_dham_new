@@ -34,7 +34,7 @@ class ProductRepository implements ProductInterface
 
     public function categoryList()
     {
-        return Category::all();
+        return Category::where('status',1)->get();
     }
     public function getSearchProducts(string $term)
     {
@@ -139,7 +139,7 @@ class ProductRepository implements ProductInterface
             $newEntry->meta_keyword = $collectedData['meta_keyword'];
             $newEntry->style_no = $collectedData['style_no'];
             $newEntry->pack = $collectedData['pack'];
-            $newEntry->gst = $collectedData['gst'];
+            $newEntry->gst = $collectedData['gst'] ?? 0;
             //$newEntry->brand = $collectedData['brand'];
             //$newEntry->wash_care = $collectedData['wash_care'];
            // $newEntry->pattern = $collectedData['pattern'];

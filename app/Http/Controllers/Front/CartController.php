@@ -100,23 +100,22 @@ class CartController extends Controller
 
         $existingCart = $existingCart->first();
 
+        // If product already exists in cart, don't update quantity — just return warning
         if ($existingCart) {
-            $existingCart->qty += $request->quantity;
-            $existingCart->save();
-        } else {
-            Cart::create([
-                'user_id' => auth()->id(),
-                'product_id' => $product->id,
-                'product_name' => $product->name,
-                'product_style_no' => $product->style_no,
-                'product_image' => $product->image,
-                'product_slug' => $product->slug,
-                'product_variation_id' => $variation?->id,
-                'price' => $variation?->price ?? $product->price,
-                'offer_price' => $variation?->offer_price ?? $product->offer_price,
-                'qty' => $request->quantity,
-            ]);
+            return back()->with('warning', 'Product already in cart!');
         }
+        Cart::create([
+            'user_id' => auth()->id(),
+            'product_id' => $product->id,
+            'product_name' => $product->name,
+            'product_style_no' => $product->style_no,
+            'product_image' => $product->image,
+            'product_slug' => $product->slug,
+            'product_variation_id' => $variation?->id,
+            'price' => $variation?->price ?? $product->price,
+            'offer_price' => $variation?->offer_price ?? $product->offer_price,
+            'qty' => $request->quantity,
+        ]);
 
         return back()->with('success', 'Product added to cart!');
     }

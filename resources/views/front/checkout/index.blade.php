@@ -1,584 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Ayachak Ashram - Checkout</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="./assets/images/favicon.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link href="./assets/css/main.css" rel="stylesheet">
+  <link href="./assets/css/responsive.css" rel="stylesheet">
+</head>
+<body>
 
-@extends('front.layout.app')
-@section('content')
-<style>
-    .button-group {
-        display: flex;
-        align-items: center;
-    }
-    .razorpay_btn, .phonepe_btn {
-        text-align: center;
-        height: 39px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        border-radius: 30px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #000000;
-        margin-top: 15px;
-        border: none;
-        position: relative;
-        margin-right: 15px;
-    }
-    .razorpay_btn input, .phonepe_btn input {
-        margin-right: 5px;
-    }
-</style>
-<section class="cart_page_table">
+<header>
     <div class="container">
-        {{-- <form action="{{route('front.checkout.store')}}" method="POST" class="check_out_from" id="paymentForm"> --}}
-        <form action="{{route('front.payment.createOrder')}}" method="POST" class="check_out_from" id="paymentForm" >
-            <div class="row">
-                <div class="col-lg-8">
-                    @csrf
-                    <div class="row">
-                        <div class="check_out col-md-5 col-12">
-                            <input class="check_out_input" type="text" placeholder="First Name*" name="fname" value="{{$user->fname ?? 'Rajib'}}">
-                            @error('fname')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                        </div>
-                        <div class="check_out col-md-5 col-12">
-                            <input class="check_out_input" type="text" placeholder="Last Name*" name="lname" value="{{$user->lname ?? 'Khan'}}">
-                            @error('lname')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="check_out col-md-5 col-12">
-                            <input class="check_out_input" type="email" placeholder="Email*" name="email" id="email" value="{{$user->email ?? 'rajib@gmail.com'}}">
-                            @error('email')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                        </div>
-                        <div class="check_out col-md-5 col-12">
-                            <input class="check_out_input" type="tel" placeholder="Contact Number*" name="mobile" id="mobile" value="{{$user->mobile ?? '8617207525'}}">
-                            @error('mobile')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                        </div>
-                    </div>
-                    <div class="check_contact mt-4">
-                        <h3>Billing Information2</h3>
-                        <div class="row">
-                            <div class="check_out col-md-5 col-12">
-                                <input class="check_out_input" type="text" placeholder="Address*" name="billing_address" value="{{$user->billing_address ?? 'Kolkata'}}">
-                                @error('billing_address')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                            <div class="check_out col-md-5 col-12">
-                                <input class="check_out_input" type="text" placeholder="Land mark" name="billing_landmark" value="{{$user->billing_landmark ?? ''}}">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="check_out col-md-5 col-12">
-                                <input class="check_out_input" type="text" placeholder="Pincode*" id="billing_pin" name="billing_pin" value="{{$user->billing_pin ?? ''}}">
-                                @error('billing_pin')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                            <div class="check_out col-md-5 col-12" id="shippingCities">
-                                <select class="check_out_input form-control" name="billing_city">
-                                    <option value="" selected hidden>--Select City--</option>
-                                </select>
-                                @error('billing_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                 
-                        </div>
-                        <div class="row">
-                            <div class="check_out col-md-5 col-12">
-                                <input class="check_out_input" type="text" placeholder="State*" name="billing_state" value="">
-                                @error('billing_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                            <div class="check_out col-md-5 col-12">
-                                <input class="check_out_input" type="text" placeholder="Country*" name="billing_country" value="{{$user->billing_country ?? ''}}">
-                                @error('billing_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                        </div>
-                    </div>
-                    <h4>Shipping Information</h4>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group mb-4">
-                                <div class="form-check">
-                                    <input type="hidden" name="shippingSameAsBilling" value="0">
-                                    <input class="form-check-input" name="shippingSameAsBilling" type="checkbox" value="1" id="shippingaddress" checked>
-                                    <label class="form-check-label" for="shippingaddress">
-                                        Same as Billing Address
-                                    </label>
-                                </div>
-                            </div>
-                            @error('shippingSameAsBilling')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                        </div>
-                    </div>
-                    <div id="shipping_address" class="check_contact d-none">
-                        <div class="row">
-                            <div class="check_out col-md-5 col-12">
-                                <input class="check_out_input" type="text" placeholder="Address*" name="shipping_address" value="{{$user->shipping_address ?? ''}}">
-                                @error('shipping_address')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                            <div class="check_out col-md-5 col-12">
-                                <input class="check_out_input" type="text" placeholder="Land mark" name="shipping_landmark" value="{{$user->shipping_landmark ?? ''}}">
-                                @error('shipping_landmark')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="check_out col-md-5 col-12">
-                                <input class="check_out_input" type="text" placeholder="Pincode*" name="shipping_pin" value="{{$user->shipping_pin ?? ''}}">
-                                @error('shipping_pin')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                            <div class="check_out col-md-5 col-12" id="loadCities">
-                                <select class="check_out_input form-control" name="shipping_city">
-                                    <option value="" selected hidden>--Select City--</option>
-                                </select>
-                                @error('shipping_city')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                            
-                        </div>
-                        <div class="row">
-                            <div class="check_out col-md-5 col-12">
-                                <input class="check_out_input" type="text" placeholder="State*" name="shipping_state" value="{{$user->shipping_state ?? ''}}">
-                                @error('shipping_state')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                            <div class="check_out col-md-5 col-12">
-                                <input class="check_out_input" type="text" placeholder="Country*" name="shipping_country" value="{{$user->shipping_country ?? ''}}">
-                                @error('shipping_country')<p class="small text-danger mb-0">{{$message}}</p>@enderror
-                            </div>
-                        </div>
-                    </div>
-                    @if($user_checkout)
-                        <div class="button-group">
-                            <div class="razorpay_btn">
-                                <input type="radio" name="payment_type" id="razorpay_payment_type" value="1" checked>
-                                <label for="razorpay_payment_type">Razorpay</label>
-                            </div>
-                            <div class="phonepe_btn">
-                                <input type="radio" name="payment_type" id="phonepe_payment_type" value="0">
-                                <label for="phonepe_payment_type">Phonepe</label>
-                            </div>
-                        </div>
-                        <div class="check_out_btn">
-                            <input type="hidden" name="shipping_method" value="standard">
-                            <input type="hidden" name="payment_method" value="">
-                            <input type="hidden" name="razorpay_payment_id" value="">
-                            <input type="hidden" name="razorpay_amount" value="">
-                            <input type="hidden" name="razorpay_method" value="">
-                            <input type="hidden" name="razorpay_callback_url" value="">
-                            <button type="submit" class="orderplace razorpay_div" id="orderplace">Place Order</button>
-                            <button type="submit" class="orderplace phonepe_div" id="order_by_phonepe" style="display: none;">Place Order</button>
-                            <a href="{{route('front.cart.index')}}" class="orderreturn">Return to Cart</a>
-                            {{-- <a href="#" class="orderreturn" id="rzp-button1">Online</a> --}}
-                        </div>
-                    @endif
-                </div>
-                <div class="col-lg-4">
-                    @if($user_checkout)
-                        <div class="cart_table_total">
-                            <div class="cart_table_shipping">
-                                <div class="cart_table_total_text">
-                                    <h4>Subtotal <span>Including GST</span></h4>
-                                    <h5>₹ {{number_format($user_checkout->sub_total_amount, 2, '.', '')}}</h5>
-                                    <input type="hidden" name="amount" value="{{$user_checkout->sub_total_amount}}">
-                                </div>
-                            </div>
-                            {{-- <div class="cart_table_shipping">
-                                <div class="cart_table_total_text">
-                                    <h4>Discount</h4>
-                                    <h5 class="apply_coupon">- ₹ {{number_format($user_checkout->discount_amount, 2, '.', '')}}</h5>
-                                </div>
-                            </div> --}}
-                            {{-- <div class="cart_table_shipping">
-                                <div class="cart_table_total_text">
-                                    <h4>Shipping Details</h4>
-                                    <h5>₹ 130</h5>
-                                </div>
-                                <span>Add ₹130 more for FREE Shipping.</span>
-                            </div> --}}
-                            {{-- <div class="cart_table_shipping">
-                                <div class="cart_table_total_text">
-                                    <h4>GST</h4>
-                                    <h5>₹ {{number_format($user_checkout->gst_amount, 2, '.', '')}}</h5> --}}
-                                    <input type="hidden" name="tax_amount" value="{{$user_checkout->gst_amount}}">
-                                {{-- </div> --}}
-                            </div>
-                            <div class="cart_table_shipping">
-                                <div class="cart_table_total_text">
-                                    <h4>Voucher Coupon</h4>
-                                    <h5 class="apply_coupon">- ₹ {{number_format($user_checkout->discount_amount, 2, '.', '')}}</h5>
-                                    <input type="hidden" name="discount_amount" value="{{$user_checkout->discount_amount}}">
-                                </div>
-                            </div>
-                           
-                            {{-- <div class="cart_table_shipping">
-                                <div class="cart_table_total_text">
-                                    <h4>SGST</h4>
-                                    <h5>100</h5>
-                                </div>
-                            </div> --}}
-                            <div class="cart_table_shipping">
-                                <div class="cart_table_total_text">
-                                    <h4>Total</h4>
-                                    <h5>₹ {{number_format($user_checkout->final_amount, 2, '.', '')}}</h5>
-                                    <input type="hidden" name="final_amount" id="final_amount" value="{{$user_checkout->final_amount}}">
-                                    <input type="hidden" name="checkout_id" value="{{$user_checkout->id}}">
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </form>
-    </div>
-</section>
+        <div class="header-inner">
+            <a href="{{route('front.home')}}" class="logo">
+                <img src="./assets/images/logo.png" alt="">
+            </a>
 
-<div class="modal fade seeDetailsModal" id="userOfferModal" tabindex="-1" aria-labelledby="userOfferModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="row justify-content-center text-center" id="offerContent">
-                    <div class="col-12 col-md-10"><h5></h5></div>
-                    <div class="col-12 text-center">
-                        <img src="" alt="">
+            <div class="icon-place">
+                <a href="{{route('front.cart.index')}}" class="cart">
+                    <img src="./assets/images/bag.svg">
+                </a>
+            </div>
+            <!-- <div class="ham">
+                <img src="./assets/images/menu.svg">
+            </div> -->
+        </div>
+    </div>
+    <div class="offcanvas-menu">
+        <div class="canvas-header">
+            <a href="index.html" class="logo">
+                <img src="./assets/images/logo.png" alt="">
+            </a>
+
+            <a href="#" class="cross">
+                <img src="./assets/images/cross.svg">
+            </a>
+        </div>
+        <div class="menu-holder">
+            <ul class="menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Books</a></li>
+                <li><a href="#">Medicines</a></li>
+                <li><a href="#">Water</a></li>
+                <li><a href="#">Photo Frame</a></li>
+            </ul>
+            <a href="#" class="bton btn-fill">Donate Now</a>
+        </div>
+        
+    </div>
+</header>
+
+<section class="main">
+    <div class="container">
+        <div class="checkout-wrap">
+            <div class="row">
+                <div class="col-lg-6 p-0 order-lg-1 order-2">
+                    <div class="cart-form-stack">
+                        <form action="{{ route('front.checkout.store') }}" method="POST">
+                            @csrf
+                            <div class="login-checkout">
+                                <h3 class="checkout-heading">Contact information</h3>
+                                <p>We'll use this email to send you details and updates about your order.</p>
+
+                                <div class="form-group"> 
+                                    <input type="email" class="form-control input-style" placeholder=" " value="{{ auth()->user()->email ?? '' }}" id="email" name="email">
+                                    <label class="placeholder-text">Enter Email</label>
+                                </div>
+                            </div>
+
+                            <div class="billing-place">
+                                <h3 class="checkout-heading mb-4">Billing information</h3>
+                                <div class="form-group">
+                                    <select name="billing_country" class="form-select select-style" required>
+                                        <option value="India" selected>India</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group"> 
+                                            <input type="text" class="form-control input-style" placeholder=" " id="" name="fname" value="{{ explode(' ', auth()->user()->name)[0] ?? '' }}">
+                                            <label class="placeholder-text">First Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group"> 
+                                            <input type="text" class="form-control input-style" placeholder=" " id="" name="lname" value="{{ explode(' ', auth()->user()->name)[1] ?? '' }}">
+                                            <label class="placeholder-text">Last Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group"> 
+                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="billing_address">
+                                    <label class="placeholder-text">Address</label>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group"> 
+                                            <input type="text" class="form-control input-style" placeholder=" " id="" name="billing_city">
+                                            <label class="placeholder-text">City</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group"> 
+                                            <select name="billing_state" class="form-select select-style">
+                                                <option>Select State</option>
+                                                <option>West Bengal</option>
+                                                <option>Andhra Pradesh</option>
+                                                <option>Arunachal Pradesh</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group"> 
+                                            <input type="text" class="form-control input-style" placeholder=" " id="" name="billing_pin">
+                                            <label class="placeholder-text">Pin Code</label>
+                                        </div> 
+                                    </div>
+                                </div>
+
+                                <div class="form-group"> 
+                                    <input type="tel" class="form-control input-style" placeholder=" " id="" name="mobile" value="{{ auth()->user()->mobile ?? '' }}">
+                                    <label class="placeholder-text">Phone Number</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="check2" name="option2" value="something">
+                                    <label class="form-check-label" for="check2">Save this information for next time</label>
+                                </div>
+
+                            </div>
+
+                            <div class="shipping-place">
+                                <h3 class="checkout-heading mb-4">Shipping method</h3>
+
+                                <div class="ship-stack">
+                                    <span>Standard</span>
+                                    <strong>Free</strong>
+                                </div>
+                            </div>
+
+                            <div class="payment-place">
+                                <h3 class="checkout-heading">Shipping method</h3>
+                                <p>All transactions are secure and encrypted.</p>
+                            </div>
+
+                            {{-- <div class="billing-place">
+                                <h3 class="checkout-heading mb-4">Billing address</h3>
+                                <div class="billing-group-place">
+                                    <div class="billing-group">
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input" id="radio1" name="billing_address" value="option1">
+                                            <label class="form-check-label" for="radio1">Same as shipping address</label>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="billing-group">
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input radio-toggle" id="radio2" name="optradio" value="option2">
+                                            <label class="form-check-label" for="radio2">Use a different billing address</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="billing-form">
+                                        <div class="form-group">
+                                            <select class="form-select select-style">
+                                                <option>Select Counter</option>
+                                                <option>India</option>
+                                                <option>Usa</option>
+                                                <option>Canada</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group"> 
+                                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="firstname">
+                                                    <label class="placeholder-text">First Name</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group"> 
+                                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="lastname">
+                                                    <label class="placeholder-text">Last Name</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group"> 
+                                            <input type="text" class="form-control input-style" placeholder=" " id="" name="address">
+                                            <label class="placeholder-text">Address</label>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="form-group"> 
+                                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="firstname">
+                                                    <label class="placeholder-text">City</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group"> 
+                                                    <select class="form-select select-style">
+                                                        <option>Select State</option>
+                                                        <option>West Bengal</option>
+                                                        <option>Andhra Pradesh</option>
+                                                        <option>Arunachal Pradesh</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group"> 
+                                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="lastname">
+                                                    <label class="placeholder-text">Pin Code</label>
+                                                </div> 
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group"> 
+                                            <input type="tel" class="form-control input-style" placeholder=" " id="" name="">
+                                            <label class="placeholder-text">Phone Number</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> --}}
+                            <div class="billing-place">
+                                <h3 class="checkout-heading mb-4">Billing address</h3>
+                                <div class="billing-group-place">
+                                    <div class="billing-group">
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input" id="radio1" name="shippingSameAsBilling" value="1" checked>
+                                            <label class="form-check-label" for="radio1">Same as shipping address</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="billing-group">
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input radio-toggle" id="radio2" name="shippingSameAsBilling" value="0">
+                                            <label class="form-check-label" for="radio2">Use a different billing address</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="billing-form">
+                                        <div class="form-group">
+                                            <select name="shipping_country" class="form-select select-style">
+                                                <option>Select Counter</option>
+                                                <option>India</option>
+                                                <option>Usa</option>
+                                                <option>Canada</option>
+                                            </select>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group"> 
+                                                    <input type="text" class="form-control input-style" name="shipping_fname">
+                                                    <label class="placeholder-text">First Name</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group"> 
+                                                    <input type="text" class="form-control input-style" name="shipping_lname">
+                                                    <label class="placeholder-text">Last Name</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group"> 
+                                            <input type="text" class="form-control input-style" name="shipping_address">
+                                            <label class="placeholder-text">Address</label>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="form-group"> 
+                                                    <input type="text" class="form-control input-style" name="shipping_city">
+                                                    <label class="placeholder-text">City</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group"> 
+                                                    <select name="shipping_state" class="form-select select-style">
+                                                        <option>Select State</option>
+                                                        <option>West Bengal</option>
+                                                        <option>Andhra Pradesh</option>
+                                                        <option>Arunachal Pradesh</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group"> 
+                                                    <input type="text" class="form-control input-style" name="shipping_pin">
+                                                    <label class="placeholder-text">Pin Code</label>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                        <div class="form-group"> 
+                                            <input type="tel" class="form-control input-style" name="shipping_mobile">
+                                            <label class="placeholder-text">Phone Number</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="submit" class="bton btn-full-pink" id="" value="Pay Now">
+
+                            <ul class="legal-list">
+                                <li>
+                                    <a href="#">Privacy Statement</a>
+                                </li>
+                                <li>
+                                    <a href="#">Terms and conditions</a>
+                                </li>
+                                <li>
+                                    <a href="#">Refund and Cancellation Policy</a>
+                                </li>
+                            </ul>
+                        </form>
                     </div>
-                    <div class="col-12">
-                        <button class="btn ok-btn" data-bs-dismiss="modal">close</button>   
+                </div>
+                <div class="col-lg-6 p-0 order-lg-2 order-1">
+                    <div class="cart-right-stack">
+                        <div class="checkut-product-show">
+                            <ul class="cart-item-list">
+                                @foreach($cartItems as $item)
+                                    <li>
+                                        <div class="inner-wrap">
+                                            <figure>
+                                                <img src="{{ asset($item->productDetails->image ?? 'assets/images/placeholder-product.jpg') }}" alt="">
+                                            </figure>
+                                            <figcaption>
+                                                <div class="product-details-cart">
+                                                    <a href="#"><h3>{{ $item->productDetails->name }}</h3></a>
+                                                    <div class="pro-meta">
+                                                        <span>Category:</span> {{ $item->productDetails->category->name ?? '-' }}
+                                                    </div>
+                                                    <div class="pro-meta">
+                                                        <span>Weight:</span> {{ $item->variation->weight ?? '-' }}
+                                                    </div>
+                                                    <div class="pro-meta">
+                                                        <span>Quantity:</span> {{ $item->qty ?? '-' }}
+                                                    </div>
+                                                   @php
+                                                        $itemTotal = $item->price * $item->qty;
+                                                        $gstPercent = $item->productDetails->gst ?? 0;
+                                                        $itemTax = ($itemTotal * $gstPercent) / 100;
+                                                    @endphp
+
+                                                    <div class="pro-meta">
+                                                        <span>GST:</span> {{ $gstPercent }}% (₹{{ number_format($itemTax, 2) }})
+                                                    </div>
+                                                </div>
+                                                <span class="cart-price">₹{{ number_format($item->price * $item->qty, 2) }}</span>
+                                            </figcaption>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <div class="checkut-meta">
+                            <div class="cart-row">
+                                <span>Subtotal</span>
+                                ₹{{ number_format($subtotal, 2) }}
+                            </div>
+                            <div class="cart-row">
+                                <span>Shipping</span>
+                                FREE
+                            </div>
+                            <div class="cart-total">
+                                <span>
+                                    Total
+                                    <p>Including ₹{{ number_format($tax, 2) }} in taxes(GST)</p>
+                                </span>
+                                ₹{{ number_format($total, 2) }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</section>
+
+<!--banner modal-->
+<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+        <div class="video-holder">
+            <div class="off-modal" data-bs-dismiss="modal" aria-label="Close">
+                <img src="./assets/images/cross.svg">
+            </div>
+            <video  controls id="modalVideo">
+                <source src="./assets/images/𝐀𝐲𝐚𝐜𝐡𝐚𝐤𝐀𝐬𝐡𝐫𝐚𝐦𝐚𝐏𝐨𝐝𝐜𝐚𝐬𝐭 - 𝐏𝐚𝐫𝐭 𝟏.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+  </div>
 </div>
-@endsection
 
-@section('script')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    
-    <script>
-        $(document).ready(function() {
-            $('input[name="payment_type"]').change(function() {
-                if (this.value === '1') {
-                    // Show the order place button and hide the PhonePe button
-                    $('#orderplace').show();
-                    $('#order_by_phonepe').hide();
-                    // Change form action to the default payment route
-                    $('#paymentForm').attr('action', "https://www.win.luxcozi.com/OP/payment/order");
-                } else if (this.value === '0') {
-                    // Show the PhonePe button and hide the order place button
-                    $('#order_by_phonepe').show();
-                    $('#orderplace').hide();
-                    // Change form action to the PhonePe payment route
-                    $('#paymentForm').attr('action', "https://www.win.luxcozi.com/OP/phonepe/initiate-payment");
-                }
-            });
-        });
-       $(document).ready(function() {
-            $('#shippingaddress').change(function() {
-                if ($(this).is(':checked')) {
-                    $('#shipping_address').addClass('d-none');
-                    $('#shipping_address input').val('');
-                } else {
-                    $('#shipping_address').removeClass('d-none');
-                }
-            });
-            // Define the validation rules and messages
-            $('#paymentForm').validate({
-                rules: {
-                    fname: {
-                        required: true
-                    },
-                    lname: {
-                        required: true
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    mobile: {
-                        required: true,
-                        digits: true,
-                        minlength: 10,
-                        maxlength: 10
-                    },
-                    billing_address: {
-                        required: true
-                    },
-                    billing_city: {
-                        required: true
-                    },
-                    billing_pin: {
-                        required: true,
-                        digits: true,
-                        minlength: 6,
-                        maxlength: 6
-                    },
-                    billing_state: {
-                        required: true
-                    },
-                    billing_country: {
-                        required: true
-                    },
-                    shipping_address: {
-                        required: function() {
-                            return !$('#shippingaddress').is(':checked');
-                        }
-                    },
-                    shipping_city: {
-                        required: function() {
-                            return !$('#shippingaddress').is(':checked');
-                        }
-                    },
-                    shipping_pin: {
-                        required: function() {
-                            return !$('#shippingaddress').is(':checked');
-                        },
-                        digits: true,
-                        minlength: function() {
-                            return !$('#shippingaddress').is(':checked') ? 6 : 0;
-                        },
-                        maxlength: function() {
-                            return !$('#shippingaddress').is(':checked') ? 6 : 0;
-                        }
-                    },
-                    shipping_state: {
-                        required: function() {
-                            return !$('#shippingaddress').is(':checked');
-                        }
-                    },
-                    shipping_country: {
-                        required: function() {
-                            return !$('#shippingaddress').is(':checked');
-                        }
-                    }
-                },
-                messages: {
-                    fname: {
-                        required: "Please enter your first name"
-                    },
-                    lname: {
-                        required: "Please enter your last name"
-                    },
-                    email: {
-                        required: "Please enter your email",
-                        email: "Please enter a valid email address"
-                    },
-                    mobile: {
-                        required: "Please enter your contact number",
-                        digits: "Please enter only digits",
-                        minlength: "Contact number should be 10 digits",
-                        maxlength: "Contact number should be 10 digits"
-                    },
-                    billing_address: {
-                        required: "Please enter your billing address"
-                    },
-                    billing_city: {
-                        required: "Please enter your billing city"
-                    },
-                    billing_pin: {
-                        required: "Please enter your billing pincode",
-                        digits: "Please enter only digits",
-                        minlength: "Pincode should be 6 digits",
-                        maxlength: "Pincode should be 6 digits"
-                    },
-                    billing_state: {
-                        required: "Please enter your billing state"
-                    },
-                    billing_country: {
-                        required: "Please enter your billing country"
-                    },
-                    shipping_address: {
-                        required: "Please enter your shipping address"
-                    },
-                    shipping_city: {
-                        required: "Please enter your shipping city"
-                    },
-                    shipping_pin: {
-                        required: "Please enter your shipping pincode",
-                        digits: "Please enter only digits",
-                        minlength: "Pincode should be 6 digits",
-                        maxlength: "Pincode should be 6 digits"
-                    },
-                    shipping_state: {
-                        required: "Please enter your shipping state"
-                    },
-                    shipping_country: {
-                        required: "Please enter your shipping country"
-                    }
-                }
-            });
-        });
-        $(document).on('click', '#orderplace', function(e) {
-            e.preventDefault();
-            // razorpay payment options
-            if ($("#paymentForm").valid()) {
-                $('#orderplace').prop('disabled', true);
-                $('#orderplace').text('Please wait..');
-                var paymentOptions = {
-                    // "key": "rzp_test_jIwVtRPfWGhVHO",
-                    "key": "{{env('RAZORPAY_KEY')}}",
-                    "amount":  "{{intval($final_amount*100)}}",
-                    "currency": "INR",
-                    "name": "LUX Industries Limited",
-                    "description": "Online payment",
-                    "image": "{{asset('images/cozi-payment.png')}}",
-                    // "order_id": "{{$order_id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                    "handler": function (response){
-                        $('#orderplace').prop('disabled', false);
-                        $('#orderplace').text('Place Order');
-                        console.log(response);
-                        $('input[name="payment_method"]').val('online_payment');
-                        $('input[name="razorpay_amount"]').val("{{$final_amount}}");
-                        $('input[name="razorpay_payment_id"]').val(response.razorpay_payment_id);
-                        $('#paymentForm').submit();
-                    },
-                    "prefill": {
-                        "email": $('#email').val(),
-                        "contact": $('#mobile').val()
-                    },
-                    "notes": {
-                        "address": "Razorpay Corporate Office"
-                    },
-                    "theme": {
-                        "color": "#050e9e"
-                    }
-                };
-                var rzp1 = new Razorpay(paymentOptions);
+<div class="overlay"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="./assets/js/main.js"></script>
 
-                rzp1.on('payment.failed', function (response){
-                    // alert('OOPS ! something happened');
-                    $('#orderplace').prop('disabled', false);
-                    $('#orderplace').text('Place Order');
-                    toastFire('info', 'Something happened');
-                });
-                rzp1.open();
-            }
-        });
-        $(document).on('click', '#order_by_phonepe', function(e) {
-            if ($("#paymentForm").valid()) {
-                $('#order_by_phonepe').prop('disabled', true);
-                $('#order_by_phonepe').text('Please wait..');
-                $('#paymentForm').submit();
-            }
-        });
-        function fetchEmail() {
-            alert('email>>'+$('#checkoutEmail').val());
-            return $('#checkoutEmail').val();
-        }
-        
+  <script>
+  $( function() {
+        // const rangeInput = document.querySelectorAll(".range-input input"),
+        // priceInput = document.querySelectorAll(".price-input input"),
+        // range = document.querySelector(".slider .progress");
+        // let priceGap = 1000;
 
-        // billing pinode detail fetch
-        $('input[name="billing_pin"]').on('keyup', function() {
-    var pincode = $(this).val();
-    if (pincode.length === 6) {
-        $('input[name="billing_pin"]').css('borderColor', '#4caf50').css('boxShadow', '0 0 0 0.2rem #4caf5057');
-        $.ajax({
-            url: 'https://api.postalpincode.in/pincode/' + pincode,
-            method: 'GET',
-            success: function(result) {
-                if (result[0].Message !== 'No records found') {
-                    if (result[0].PostOffice && result[0].PostOffice.length > 0) {
-                        let postOffices = result[0].PostOffice;
+        // priceInput.forEach((input) => {
+        // input.addEventListener("input", (e) => {
+        //     let minPrice = parseInt(priceInput[0].value),
+        //     maxPrice = parseInt(priceInput[1].value);
 
-                        $('input[name="billing_state"]').val(postOffices[0].State);
-                        $('input[name="billing_country"]').val(postOffices[0].Country);
-
-                        let content = `
-                            <div class="form-group">                       
-                                <select class="form-control readonly_select active mt-4" name="billing_city" readonly>
-                                    <option value="" selected hidden>--Select City--</option>
-                                   `;
-                        
-                        postOffices.forEach(function(postOffice) {
-                            content += `<option value="${postOffice.Name}">${postOffice.Name}</option>`;
-                        });
-
-                        content += `</select>
-                            </div>`;
-
-                        $('#shippingCities').html(content);
-                        // $('.readonly_select.active').select2();
-
-                        // console.log(result);
-                    }
-                } else {
-                    toastFire('warning', 'Enter valid pincode');
-                    $('input[name="billing_pin"]').css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
-                    $('input[name="billing_state"]').val('');
-                    $('input[name="billing_country"]').val('');
-                    $('#loadCities').html('<select class="check_out_input" name="billing_city"><option value="">Select City</option></select>');
-                }
-            },
-            error: function() {
-                toastFire('error', 'An error occurred while fetching pincode data');
-                $('input[name="billing_pin"]').css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
-                $('input[name="billing_state"]').val('');
-                $('input[name="billing_country"]').val('');
-                $('#loadCities').html('<select class="check_out_input" name="billing_city"><option value="">Select City</option></select>');
-            }
-        });
-    } else {
-        $('input[name="billing_pin"]').css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
-        $('input[name="billing_state"]').val('');
-        $('input[name="billing_country"]').val('');
-        $('#loadCities').html('<select class="check_out_input" name="billing_city"><option value="">Select City</option></select>');
-    }
-});
-
-           
-
+        //     if (maxPrice - minPrice >= priceGap && maxPrice <= rangeInput[1].max) {
+        //     if (e.target.className === "input-min") {
+        //         rangeInput[0].value = minPrice;
+        //         range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
+        //     } else {
+        //         rangeInput[1].value = maxPrice;
+        //         range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+        //     }
+        //     }
+        // });
         // });
 
-        // shipping pinode detail fetch
-        $('input[name="shipping_pin"]').on('keyup', function() {
-    var pincode = $(this).val();
-    if (pincode.length === 6) {
-        $('input[name="shipping_pin"]').css('borderColor', '#4caf50').css('boxShadow', '0 0 0 0.2rem #4caf5057');
+        // rangeInput.forEach((input) => {
+        // input.addEventListener("input", (e) => {
+        //     let minVal = parseInt(rangeInput[0].value),
+        //     maxVal = parseInt(rangeInput[1].value);
 
-        $.ajax({
-            url: 'https://api.postalpincode.in/pincode/' + pincode,
-            method: 'GET',
-            success: function(result) {
-                if (result[0].Message !== 'No records found') {
-                    if (result[0].PostOffice && result[0].PostOffice.length > 0) {
-                        let postOffices = result[0].PostOffice;
+        //     if (maxVal - minVal < priceGap) {
+        //     if (e.target.className === "range-min") {
+        //         rangeInput[0].value = maxVal - priceGap;
+        //     } else {
+        //         rangeInput[1].value = minVal + priceGap;
+        //     }
+        //     } else {
+        //     priceInput[0].value = minVal;
+        //     priceInput[1].value = maxVal;
+        //     range.style.left = (minVal / rangeInput[0].max) * 100 + "%";
+        //     range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+        //     }
+        // });
+        // });
 
-                        $('input[name="shipping_state"]').val(postOffices[0].State);
-                        $('input[name="shipping_country"]').val(postOffices[0].Country);
 
-                        let content = `
-                            <div class="form-group">                       
-                                <select class="form-control readonly_select active mt-4" name="shipping_city" readonly>
-                                    <option value="" selected hidden>--Select City--</option>
-                                   `;
-                        
-                        postOffices.forEach(function(postOffice) {
-                            content += `<option value="${postOffice.Name}">${postOffice.Name}</option>`;
-                        });
+    
+  } );
 
-                        content += `</select>
-                            </div>`;
+    // quantity jquery
+    // document.addEventListener("DOMContentLoaded", () => {
+    //     const input = document.getElementById("quantity");
+    //     document.querySelector(".increment").addEventListener("click", (e) => {
+    //         e.preventDefault(); // Prevent form submission
+    //         input.stepUp();
+    //     });
+    //     document.querySelector(".decrement").addEventListener("click", (e) => {
+    //         e.preventDefault(); // Prevent form submission
+    //         input.stepDown();
+    //     });
+    // });
 
-                        $('#loadCities').html(content);
-                        // $('.readonly_select.active').select2();
 
-                        console.log(result);
-                    }
-                } else {
-                    toastFire('warning', 'Enter valid pincode');
-                    $('input[name="shipping_pin"]').css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
-                    $('input[name="shipping_state"]').val('');
-                    $('input[name="shipping_country"]').val('');
-                    $('#loadCities').html('<select class="check_out_input" name="shipping_city"><option value="">Select City</option></select>');
-                }
-            },
-            error: function() {
-                toastFire('error', 'An error occurred while fetching pincode data');
-                $('input[name="shipping_pin"]').css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
-                $('input[name="shipping_state"]').val('');
-                $('input[name="shipping_country"]').val('');
-                $('#loadCities').html('<select class="check_out_input" name="shipping_city"><option value="">Select City</option></select>');
-            }
+document.addEventListener("DOMContentLoaded", () => {
+    // Handle increment buttons
+    document.querySelectorAll(".increment").forEach(button => {
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const input = button.closest('.number-input').querySelector(".quantity");
+            input.stepUp();
         });
-    } else {
-        $('input[name="shipping_pin"]').css('borderColor', 'red').css('boxShadow', '0 0 0 0.2rem #dc34345c');
-        $('input[name="shipping_state"]').val('');
-        $('input[name="shipping_country"]').val('');
-        $('#loadCities').html('<select class="check_out_input" name="shipping_city"><option value="">Select City</option></select>');
-    }
+    });
+
+    // Handle decrement buttons
+    document.querySelectorAll(".decrement").forEach(button => {
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const input = button.closest('.number-input').querySelector(".quantity");
+            input.stepDown();
+        });
+    });
 });
 
-    </script>
-@endsection
+  </script>
+
+</body>
+</html>

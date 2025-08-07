@@ -18,6 +18,9 @@
     <div class="container">
         <div class="shop-wrapper">
             <div class="filter-area">
+                <div class="filter-actions">
+                    <button type="button" id="clear-filters" class="btn btn-primary">Clear Filters</button>
+                </div>
                 <div class="stack">
                     <h4>Category</h4>
                     <ul class="filter-list">
@@ -118,6 +121,12 @@
             e.preventDefault();
             let page = $(this).attr('href').split('page=')[1];
             fetchProducts(page);
+        });
+
+        //  Clear filters
+        $('#clear-filters').on('click', function () {
+            $("input[name='categories[]'], input[name='weights[]']").prop('checked', false);
+            fetchProducts(); // fetch all products
         });
 
         // Initial state

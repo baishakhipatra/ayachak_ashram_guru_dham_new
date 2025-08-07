@@ -31,6 +31,9 @@
                                                 <div class="pro-meta">
                                                     <span>Weight:</span> {{ $item->variation->weight ?? '-' }}
                                                 </div>
+                                                <div class="pro-meta">
+                                                    <span>GST:</span> {{ $item->productDetails->gst ?? 0 }}%
+                                                </div>
                                                 <div class="number-input" data-id="{{ $item->id }}" data-price="{{ $item->price }}">
                                                     <button type="button" class="decrement">-</button>
                                                     <input type="number" class="quantity" name="quantity" min="1" max="10" value="{{ $item->qty }}" step="1">
@@ -64,7 +67,10 @@
                         </div>
                         <div class="cart-row">
                             <span>Subtotal</span>
-                            ₹308.00
+                            @php
+                                $subtotal = $cartItems->sum(fn($item) => $item->qty * $item->price);
+                            @endphp
+                            <span class="subtotal-amount">₹{{ number_format($subtotal, 2) }}</span>
                         </div>
                         <div class="cart-row">
                             <span>Shipping</span>
@@ -72,10 +78,11 @@
                         </div>
                         <div class="cart-total">
                             <span>Total</span>
-                            ₹308.00
+                            <span class="total-amount">₹{{ number_format($subtotal, 2) }}</span>
                         </div>
 
-                        <input type="submit" class="bton btn-full mt-5" id="" value="Proceed to Checkout">
+                        {{-- <input type="submit" class="bton btn-full mt-5" id="" value="Proceed to Checkout"> --}}
+                        <a href="{{ route('front.checkout.index') }}" class="bton btn-full mt-5">Proceed to Checkout</a>
                     </div>
                 </div>
             </div>
@@ -170,6 +177,92 @@
         });
     });
 
+    // $(document).ready(function () {
+    //     function recalculateCartTotals() {
+    //         let subtotal = 0;
+    //         $('.price-amount').each(function () {
+    //             subtotal += parseFloat($(this).text());
+    //         });
+
+    //         // Update subtotal and total in the UI
+    //         $('.cart-row span:contains("Subtotal")').next().text('₹' + subtotal.toFixed(2));
+    //         $('.cart-total span:contains("Total")').next().text('₹' + subtotal.toFixed(2));
+    //     }
+    //     $(document).on('click', '.increment, .decrement', function () {
+    //         let parent = $(this).closest('.number-input');
+    //         let input = parent.find('.quantity');
+    //         let itemId = parent.data('id');
+    //         let unitPrice = parseFloat(parent.data('price'));
+
+    //         let type = $(this).hasClass('increment') ? 'increment' : 'decrement';
+
+    //         $.ajax({
+    //             url: "{{ route('front.cart.update-quantity') }}",
+    //             method: "POST",
+    //             data: {
+    //                 _token: "{{ csrf_token() }}",
+    //                 cart_id: itemId,
+    //                 type: type
+    //             },
+    //             success: function (res) {
+    //                 if (res.success) {
+    //                     input.val(res.updated_qty);
+    //                     let newTotal = unitPrice * res.updated_qty;
+    //                     parent.closest('figcaption').find('.price-amount').text(newTotal.toFixed(2));
+
+    //                     recalculateCartTotals();
+    //                 } else {
+    //                     toastr.warning("Could not update quantity");
+    //                 }
+    //             },
+    //             error: function () {
+    //                 toastr.error("Something went wrong while updating quantity.");
+    //             }
+    //         });
+    //     });
+    // });
+
+
+    // $(document).on('click', '.remove-item', function (e) {
+    //     e.preventDefault();
+
+    //     let cartId = $(this).data('id');
+    //     let $row = $('#cart-item-' + cartId);
+
+    //     $.ajax({
+    //         url: "{{ route('front.cart.remove-quantity') }}",
+    //         method: "POST",
+    //         data: {
+    //             _token: "{{ csrf_token() }}",
+    //             cart_id: cartId
+    //         },
+    //         success: function (res) {
+    //             if (res.success) {
+    //                 $row.remove();
+    //                 toastr.success("Item removed from cart");
+    //                 setTimeout(function () {
+    //                     location.reload();
+    //                 }, 1000); 
+    //                  recalculateCartTotals();
+    //             } else {
+    //                 toastr.warning(res.message || "Failed to remove item");
+    //             }
+    //         },
+    //         error: function () {
+    //             toastr.error("Something went wrong while removing the item");
+    //         }
+    //     });
+    // });
+    function recalculateCartTotals() {
+        let subtotal = 0;
+        $('.price-amount').each(function () {
+            subtotal += parseFloat($(this).text().replace(/,/g, ''));
+        });
+
+        $('.subtotal-amount').text('₹' + subtotal.toFixed(2));
+        $('.total-amount').text('₹' + subtotal.toFixed(2));
+    }
+
     $(document).ready(function () {
         $(document).on('click', '.increment, .decrement', function () {
             let parent = $(this).closest('.number-input');
@@ -192,6 +285,7 @@
                         input.val(res.updated_qty);
                         let newTotal = unitPrice * res.updated_qty;
                         parent.closest('figcaption').find('.price-amount').text(newTotal.toFixed(2));
+                        recalculateCartTotals();
                     } else {
                         toastr.warning("Could not update quantity");
                     }
@@ -201,38 +295,36 @@
                 }
             });
         });
-    });
 
+        $(document).on('click', '.remove-item', function (e) {
+            e.preventDefault();
 
-    $(document).on('click', '.remove-item', function (e) {
-        e.preventDefault();
+            let cartId = $(this).data('id');
+            let $row = $(this).closest('li');
 
-        let cartId = $(this).data('id');
-        let $row = $('#cart-item-' + cartId);
-
-        $.ajax({
-            url: "{{ route('front.cart.remove-quantity') }}",
-            method: "POST",
-            data: {
-                _token: "{{ csrf_token() }}",
-                cart_id: cartId
-            },
-            success: function (res) {
-                if (res.success) {
-                    $row.remove();
-                    toastr.success("Item removed from cart");
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1000); 
-                } else {
-                    toastr.warning(res.message || "Failed to remove item");
+            $.ajax({
+                url: "{{ route('front.cart.remove-quantity') }}",
+                method: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    cart_id: cartId
+                },
+                success: function (res) {
+                    if (res.success) {
+                        $row.remove();
+                        toastr.success("Item removed from cart");
+                        recalculateCartTotals();
+                    } else {
+                        toastr.warning(res.message || "Failed to remove item");
+                    }
+                },
+                error: function () {
+                    toastr.error("Something went wrong while removing the item");
                 }
-            },
-            error: function () {
-                toastr.error("Something went wrong while removing the item");
-            }
+            });
         });
     });
+
 
         
 </script>

@@ -34,6 +34,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         view::composer('*', function($view) {
+            //count cart total
+            $cartCount = auth()->check() ? Cart::where('user_id', auth()->id())->count() : 0;
+            $view->with('cartCount', $cartCount);
+
+
+
+
+
             $ip = $_SERVER['REMOTE_ADDR'];
 
             // categories
