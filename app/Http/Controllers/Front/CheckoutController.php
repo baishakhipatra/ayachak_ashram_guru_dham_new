@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CartOffer;
 use App\Models\Order;
+use App\Models\Cart;
 use DB;
 use Razorpay\Api\Api;
 use Illuminate\Support\Facades\Log;
@@ -21,70 +22,97 @@ class CheckoutController extends Controller
         $this->cartRepository = $cartRepository;
     }
 
-    public function index(Request $request)
-    {
-        // $data = $this->cartRepository->viewByIp();
-        $userId = "";
-        $order_id = "";
+    // public function index(Request $request)
+    // {
+    //     // $data = $this->cartRepository->viewByIp();
+    //     $userId = "";
+    //     $order_id = "";
         
-        if (auth()->guard('web')->check()) {
-            $userId = auth()->guard('web')->user()->id;
-            $user = auth()->guard('web')->user();
-            $user_checkout = DB::table('checkout')->where('user_id', $userId)->first();
-            $final_amount = $user_checkout?$user_checkout->final_amount:0;
-            // $final_amount = 521;
-            // Order ID Generate
-            $razorpayKey = env('RAZORPAY_KEY');
-            $razorpaySecret = env('RAZORPAY_SECRET');
+    //     if (auth()->guard('web')->check()) {
+    //         $userId = auth()->guard('web')->user()->id;
+    //         $user = auth()->guard('web')->user();
+    //         $user_checkout = DB::table('checkout')->where('user_id', $userId)->first();
+    //         $final_amount = $user_checkout?$user_checkout->final_amount:0;
+    //         // $final_amount = 521;
+    //         // Order ID Generate
+    //         $razorpayKey = env('RAZORPAY_KEY');
+    //         $razorpaySecret = env('RAZORPAY_SECRET');
 
-            // Prepare the data for the order
-            $orderData = [
-                'receipt'         => 'rcptid_' . time(),
-                // 'amount'          => $request->input('amount') * 100, // amount in the smallest currency unit
-                'amount'          => $final_amount * 100, // amount in the smallest currency unit
-                'currency'        => 'INR',
-                'payment_capture' => 1 // auto capture
-            ];
+    //         // Prepare the data for the order
+    //         $orderData = [
+    //             'receipt'         => 'rcptid_' . time(),
+    //             // 'amount'          => $request->input('amount') * 100, // amount in the smallest currency unit
+    //             'amount'          => $final_amount * 100, // amount in the smallest currency unit
+    //             'currency'        => 'INR',
+    //             'payment_capture' => 1 // auto capture
+    //         ];
 
-            // Encode the order data
-            $jsonData = json_encode($orderData);
+    //         // Encode the order data
+    //         $jsonData = json_encode($orderData);
             
-            // Initialize cURL
-            $ch = curl_init();
+    //         // Initialize cURL
+    //         $ch = curl_init();
 
-            // Set cURL options
-            curl_setopt($ch, CURLOPT_URL, 'https://api.razorpay.com/v1/orders');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/json',
-                'Authorization: Basic ' . base64_encode("$razorpayKey:$razorpaySecret")
-            ]);
+    //         // Set cURL options
+    //         curl_setopt($ch, CURLOPT_URL, 'https://api.razorpay.com/v1/orders');
+    //         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //         curl_setopt($ch, CURLOPT_POST, true);
+    //         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+    //         curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    //             'Content-Type: application/json',
+    //             'Authorization: Basic ' . base64_encode("$razorpayKey:$razorpaySecret")
+    //         ]);
 
-            // Execute the cURL request
-            $response = curl_exec($ch);
-            // Check for errors
-            if ($response === false) {
-                $errorMessage = curl_error($ch);
-                $order_id = "";
-            }
+    //         // Execute the cURL request
+    //         $response = curl_exec($ch);
+    //         // Check for errors
+    //         if ($response === false) {
+    //             $errorMessage = curl_error($ch);
+    //             $order_id = "";
+    //         }
 
-            // Decode the response
-            $responseData = json_decode($response, true);
+    //         // Decode the response
+    //         $responseData = json_decode($response, true);
 
-            // Check if order creation was successful
-            if (isset($responseData['id'])) {
-                $order_id = $responseData['id'];
-            } else {
-                $order_id = "";
-            }
+    //         // Check if order creation was successful
+    //         if (isset($responseData['id'])) {
+    //             $order_id = $responseData['id'];
+    //         } else {
+    //             $order_id = "";
+    //         }
             
-            return view('front.checkout.index', compact('user_checkout', 'user', 'order_id', 'final_amount'));
-            // $data = $this->cartRepository->viewByUserId(auth()->guard('web')->user()->id);
-        }else{
-            return redirect()->route('front.user.login');
-       }
+    //         return view('front.checkout.index', compact('user_checkout', 'user', 'order_id', 'final_amount'));
+    //         // $data = $this->cartRepository->viewByUserId(auth()->guard('web')->user()->id);
+    //     }else{
+    //         return redirect()->route('front.user.login');
+    //    }
+    // }
+    public function index(Request $request){
+        $userId = auth()->id();
+        $cartItems = Cart::with(['productDetails', 'variation', 'productDetails.category'])
+            ->where('user_id', $userId)
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('front.cart.index')->with('warning', 'Your cart is empty.');
+        }
+        $subtotal = 0;
+        $tax = 0;
+        $total = 0;
+
+        foreach ($cartItems as $item) {
+            $lineSubtotal = $item->price * $item->qty;
+            $subtotal += $lineSubtotal;
+
+            $gstPercent = $item->productDetails->gst ?? 0;
+            $lineTax = ($lineSubtotal * $gstPercent) / 100;
+
+            $tax += $lineTax;
+        }
+
+        $total = $subtotal + $tax;
+
+        return view('front.checkout.index', compact('cartItems', 'subtotal', 'tax', 'total'));
     }
 
     public function coupon(Request $request)
@@ -93,18 +121,62 @@ class CheckoutController extends Controller
         return $couponData;
     }
 
-      public function store(Request $request)
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email|max:255',
+    //         'mobile' => 'required|integer|digits:10',
+    //         'fname' => 'required|string|max:255',
+    //         'lname' => 'required|string|max:255',
+    //        'billing_country' => 'required|string|max:255',
+    //        'billing_address' => 'required|string|max:1000',
+    //        'billing_landmark' => 'nullable|string|max:255',
+    //        'billing_city' => 'required|string|max:255',
+    //        'billing_state' => 'required|string|max:255',
+    //         'billing_pin' => 'required|string|max:255',
+    //         'shippingSameAsBilling' => 'nullable|integer|digits:1',
+    //         'shipping_country' => 'nullable|string|max:255',
+    //         'shipping_address' => 'nullable|string|max:500',
+    //         'shipping_landmark' => 'nullable|string|max:255',
+    //         'shipping_city' => 'nullable|string|max:255',
+    //         'shipping_state' => 'nullable|string|max:255',
+    //         'shipping_pin' => 'nullable|integer|digits:6',
+    //         'shipping_method' => 'nullable|string',
+    //     ], [
+    //         'mobile.*' => 'Please enter valid 10 digit mobile number',
+    //         'billing_pin.*' => 'Please enter valid 6 digit pin',
+    //         'shipping_pin.*' => 'Please enter valid 6 digit pin',
+    //     ]);
+
+    //     // $order_id = $this->checkoutRepository->create($request->except('_token'));
+    //    //dd($request->all());
+    //     if ($order_id) {
+    //         // return redirect()->route('front.checkout.complete')->with('success', 'Order No: '.$order_no);
+    //         //return view('front.checkout.complete', compact('order_no'))->with('success', 'Thank you for you order');
+    //         //return redirect('/checkout/payment/'.$order_no)->with('success', 'Please complete your payment');
+    //         //return view('front.checkout.payment', compact('order_no'))->with('success', 'Please complete your payment');
+    //        return redirect()->route('front.checkout.payment',$order_id)->with('success', 'Please complete your payment');
+    //     } else {
+    //         $request->shippingSameAsBilling = 0;
+    //         session()->flash('success', 'Operation completed successfully.');
+    //         return redirect()->back()->with('failure', 'Something happened. Try again.')->withInput($request->all());
+    //         // return redirect()->back();
+    //     }
+    // }
+
+    public function store(Request $request)
     {
+        //dd($request->all());
         $request->validate([
             'email' => 'required|email|max:255',
             'mobile' => 'required|integer|digits:10',
             'fname' => 'required|string|max:255',
             'lname' => 'required|string|max:255',
-           'billing_country' => 'required|string|max:255',
-           'billing_address' => 'required|string|max:1000',
-           'billing_landmark' => 'nullable|string|max:255',
-           'billing_city' => 'required|string|max:255',
-           'billing_state' => 'required|string|max:255',
+            'billing_country' => 'required|string|max:255',
+            'billing_address' => 'required|string|max:1000',
+            'billing_landmark' => 'nullable|string|max:255',
+            'billing_city' => 'required|string|max:255',
+            'billing_state' => 'required|string|max:255',
             'billing_pin' => 'required|string|max:255',
             'shippingSameAsBilling' => 'nullable|integer|digits:1',
             'shipping_country' => 'nullable|string|max:255',
@@ -120,23 +192,42 @@ class CheckoutController extends Controller
             'shipping_pin.*' => 'Please enter valid 6 digit pin',
         ]);
 
-        // $order_id = $this->checkoutRepository->create($request->except('_token'));
-       dd($request->all());
+        $userId = auth()->id();
+        $cartItems = Cart::with(['productDetails'])->where('user_id', $userId)->get();
+
+        $subtotal = 0;
+        $tax = 0;
+
+        foreach ($cartItems as $item) {
+            $lineSubtotal = $item->qty * $item->price;
+            $subtotal += $lineSubtotal;
+
+            $gstPercent = $item->productDetails->gst ?? 0;
+            $lineTax = ($lineSubtotal * $gstPercent) / 100;
+            $tax += $lineTax;
+        }
+
+        $total = $subtotal + $tax;
+
+        // Merge all into request to pass to repository
+        $checkoutData = $request->except('_token');
+        $checkoutData['subtotal'] = $subtotal;
+        $checkoutData['tax'] = $tax;
+        $checkoutData['total'] = $total;
+        $checkoutData['cart_items'] = $cartItems;
+
+        //  Use repository to store order
+        $order_id = $this->checkoutRepository->create($checkoutData);
+
         if ($order_id) {
-            // return redirect()->route('front.checkout.complete')->with('success', 'Order No: '.$order_no);
-            //return view('front.checkout.complete', compact('order_no'))->with('success', 'Thank you for you order');
-            //return redirect('/checkout/payment/'.$order_no)->with('success', 'Please complete your payment');
-            //return view('front.checkout.payment', compact('order_no'))->with('success', 'Please complete your payment');
-           return redirect()->route('front.checkout.payment',$order_id)->with('success', 'Please complete your payment');
+            return redirect()->route('front.checkout.payment', $order_id)
+                ->with('success', 'Please complete your payment');
         } else {
-            $request->shippingSameAsBilling = 0;
             session()->flash('success', 'Operation completed successfully.');
             return redirect()->back()->with('failure', 'Something happened. Try again.')->withInput($request->all());
-            // return redirect()->back();
         }
     }
 
-   
 
     public function payment(Request $request,$order_id)
     {
@@ -149,8 +240,7 @@ class CheckoutController extends Controller
         }
             if ($data) {
             return view('front.checkout.payment', compact('data'));
-            }
-       
+        }
     }
 
 

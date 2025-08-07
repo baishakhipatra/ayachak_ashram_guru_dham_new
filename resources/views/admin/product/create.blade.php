@@ -151,10 +151,22 @@
                                 </div>
                                 <div class="row mb-2 align-items-center">
                                     <div class="col-3">
-                                        <label for="inputPassword6" class="col-form-label">Gst</label>
+                                        <label class="col-form-label">GST Applicable</label>
                                     </div>
                                     <div class="col-9">
-                                        <input type="number" id="gst" class="form-control" aria-describedby="priceHelpInline" name="gst" value="{{old('gst')}}" step="0.01">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="gstToggle" checked>
+                                            <label class="form-check-label" for="gstToggle">Yes</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2 align-items-center">
+                                    <div class="col-3">
+                                        <label for="inputPassword6" class="col-form-label">Gst(%)</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input type="number" id="gst" name="gst" class="form-control" aria-describedby="priceHelpInline" name="gst" value="{{old('gst')}}" step="0.01">
                                         @error('gst') <p class="small text-danger">{{ $message }}</p> @enderror
                                     </div>
                                 </div>
@@ -315,5 +327,23 @@
 		var thisClickedBtn = $(this);
 		thisClickedBtn.closest('.admin__content').remove();
 	});
+
+    $(document).ready(function () {
+        function toggleGstField() {
+            if ($('#gstToggle').is(':checked')) {
+                $('#gst').prop('disabled', false).prop('required', true);
+            } else {
+                $('#gst').val('').prop('disabled', true).prop('required', false);
+            }
+        }
+
+        // Run on load
+        toggleGstField();
+
+        // Run on toggle change
+        $('#gstToggle').on('change', function () {
+            toggleGstField();
+        });
+    });
 </script>
 @endsection

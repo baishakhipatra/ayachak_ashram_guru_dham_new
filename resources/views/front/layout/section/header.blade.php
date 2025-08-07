@@ -59,7 +59,7 @@
 
                 <a href="{{route('front.cart.index')}}" class="cart">
                     <img src="{{asset('assets/images/bag.svg')}}">
-                    <span>2</span>
+                    <span>{{ $cartCount }}</span>
                 </a>
             </div>
             <div class="ham">

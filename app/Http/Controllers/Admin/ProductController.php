@@ -85,7 +85,7 @@ class ProductController extends Controller
             "meta_keyword" => "nullable",
             "style_no" => "nullable|unique:products",
             "image" => "required|mimes:jpg,jpeg,png,svg,gif,webp|max:10000000",
-            'gst'=>'required|regex:/^[^\+\-\&\%]+$/',
+            'gst'=>'nullable|regex:/^[^\+\-\&\%]+$/',
             "pack" => "nullable|string|max:255",
 
         ]);

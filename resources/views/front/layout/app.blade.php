@@ -33,6 +33,10 @@
         toastr.success("{{ session('success') }}");
       @endif
 
+      @if(session('warning'))
+        toastr.warning("{{ session('warning') }}");
+      @endif
+
       @if(session('failure'))
         toastr.error("{{ session('failure') }}");
       @endif
