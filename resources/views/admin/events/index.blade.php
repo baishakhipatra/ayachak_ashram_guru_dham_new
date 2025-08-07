@@ -55,16 +55,16 @@
                     @forelse($events as $event)
                         <tr>
                             <td width="80">
-                            @php
-                                $firstImagePath = optional($event->eventImage)->image_path;
-                            @endphp
+                                @php
+                                    $firstImagePath = optional($event->eventImage)->image_path;
+                                @endphp
 
-                            @if (!empty($firstImagePath) && file_exists(public_path($firstImagePath)))
-                                <img src="{{ asset($firstImagePath) }}" class="img-fluid rounded" alt="Event Image">
-                            @else
-                                <img src="{{ asset('assets/images/no-image.png') }}" class="img-fluid rounded" alt="Default Image">
-                            @endif
-                        </td>
+                                @if (!empty($firstImagePath) && file_exists(public_path($firstImagePath)))
+                                    <img src="{{ asset($firstImagePath) }}" class="img-fluid rounded" alt="Event Image">
+                                @else
+                                    <img src="{{ asset('assets/images/no-image.png') }}" class="img-fluid rounded" alt="Default Image">
+                                @endif
+                            </td>
                             
                             <td>{{ $event->title }}</td>
                             <td>{{date('d-m-Y h:i A',strtotime($event->start_time))}}</td>

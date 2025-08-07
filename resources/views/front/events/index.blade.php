@@ -15,7 +15,7 @@
 </section>
 
 
-<section class="event-stack">
+{{-- <section class="event-stack">
     <div class="container">
         <div class="search-events">
             <div class="search-stack">
@@ -148,7 +148,62 @@
 
         </div>
     </div>
+</section> --}}
+<section class="event-stack">
+    <div class="container">
+        <div class="search-events">
+            <div class="search-stack">
+                <form action="{{ route('front.event.index') }}" method="GET">
+                    <div class="form-group">
+                        <input type="search" name="term" value="{{ request('term') }}" placeholder=" " class="search-input form-control input-style">
+                        <label class="placeholder-text">Search Events</label>
+                        <span class="search-icon">
+                            <img src="{{ asset('assets/images/search.svg') }}" alt="">
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="event-stack-listing">
+            <ul class="event-list">
+                @forelse ($events as $event)
+                    <li>
+                        <div class="inner-grid">
+                            <a href="{{ route('front.event.details', $event->slug) }}">
+                                <figure>
+                                    @php
+                                        $imagePath = optional($event->eventImage)->image_path;
+                                    @endphp
+
+                                    @if (!empty($imagePath) && file_exists(public_path($imagePath)))
+                                        <img src="{{ asset($imagePath) }}" alt="{{ $event->title }}">
+                                    @else
+                                        <img src="{{ asset('assets/images/no-image.png') }}" alt="Default Image">
+                                    @endif
+                                </figure>
+                                <figcaption>
+                                    <h3>{{ $event->title }}</h3>
+                                    <div class="event-date">
+                                        <img src="{{ asset('assets/images/calender.svg') }}">
+                                        <span>{{ \Carbon\Carbon::parse($event->start_time)->format('M d, Y') }}</span>
+                                    </div>
+                                </figcaption>
+                            </a>
+                        </div>
+                    </li>
+                @empty
+                    <li class="text-muted">No events found.</li>
+                @endforelse
+            </ul>
+
+            <div class="pagination-stack">
+                {{ $events->withQueryString()->links('pagination::bootstrap-5') }}
+            </div>
+        </div>
+    </div>
 </section>
+
 @endsection
 @section('script')
   <script>
