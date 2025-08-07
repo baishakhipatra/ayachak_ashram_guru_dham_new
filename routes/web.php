@@ -104,6 +104,11 @@ Route::name('front.')->group(function () {
         Route::get('/donation', 'Front\DonationController@DonationForm')->name('form');
         Route::post('/store', 'Front\DonationController@store')->name('store');
     });
+
+    Route::prefix('event.')->group(function () {
+        Route::get('/list', 'Front\EventController@list')->name('event.list');
+        Route::post('/details', 'Front\EventController@details')->name('event.details');
+    });
 });
 
 // // category detail

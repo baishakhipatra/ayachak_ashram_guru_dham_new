@@ -8,6 +8,7 @@
                 <ul class="menu">
                     <li><a href="{{route('front.home')}}">Home</a></li>
                     <li><a href="{{route('front.shop.list')}}">Shop</a></li>
+                    <li><a href="{{route('front.event.list')}}">Events</a></li>
                     <li><a href="">About Us</a></li>
                     <li><a href="#">Books</a></li>
                     <li><a href="#">Medicines</a></li>

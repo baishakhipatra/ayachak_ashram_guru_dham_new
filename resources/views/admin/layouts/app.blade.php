@@ -95,6 +95,17 @@
                     </ul>
                 </li>
 
+                <li class="@if(request()->is('admin/events-management*')) active @endif">
+                    <a href="javascript:void(0)"><i class="fi fi-br-cube"></i> <span>Event Management</span></a>
+                    <ul>
+                        <li class="{{ request()->is('admin/admin-event-management*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.events.index') }}">
+                                <i class="fi fi-br-database"></i> <span>Event List</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
 
                 <li class="@if(request()->is('admin/category*') || request()->is('admin/subcategory*') || request()->is('admin/collection*') || request()->is('admin/color*') || request()->is('admin/size*')) { {{'active'}} }  @endif">
                     <a href="javascript: void(0)"><i class="fi fi-br-cube"></i> <span>Master</span></a>

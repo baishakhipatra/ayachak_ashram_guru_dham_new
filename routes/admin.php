@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\{AdminUserManagementController, PageController, MenuController,CSRProjectController, TagController,
-                                DonationController, ProductController};
+                                DonationController, ProductController, EventController};
 
 // admin guard
 use Illuminate\Support\Facades\Route;
@@ -73,6 +73,17 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             Route::get('/create', [DonationController::class, 'create'])->name('donations.create');
             Route::post('/store', [DonationController::class, 'store'])->name('donations.store');
         });
+
+        //events
+          Route::prefix('events')->group(function() {
+            Route::get('/', [EventController::class, 'index'])->name('events.index');
+            Route::get('/create', [EventController::class, 'create'])->name('events.create');
+            Route::post('/store', [EventController::class, 'store'])->name('events.store');
+            Route::get('/status/{id}', [EventController::class, 'status'])->name('events.status');
+            Route::get('/edit', [EventController::class, 'edit'])->name('events.edit');
+            Route::post('/update', [EventController::class, 'update'])->name('events.update');
+        });
+
 
         // category
         Route::prefix('category')->name('category.')->group(function () {
