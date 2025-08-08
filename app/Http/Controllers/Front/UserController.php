@@ -171,6 +171,13 @@ class UserController extends Controller
         $data = $this->userRepository->orderDetails();
         return view('front.order', compact('data'));
     }
+    // public function order($orderId)
+    // {
+    //     $order = Order::with('products')->findOrFail($orderId);
+
+    //     return view('front.order', compact('order'));
+    // }
+
     public function orderDetails($id)
     {
         $data = $this->userRepository->orderViewDetails($id);    

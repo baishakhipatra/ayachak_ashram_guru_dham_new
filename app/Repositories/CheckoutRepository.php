@@ -737,18 +737,37 @@ class CheckoutRepository implements CheckoutInterface
                 'billing_state' => $data['billing_state'],
                 'billing_pin' => $data['billing_pin'],
                 'shipping_same_as_billing' => $data['shippingSameAsBilling'] ?? 1,
-                'shipping_country' => $data['shipping_country'] ?? $data['billing_country'],
-                'shipping_address' => $data['shipping_address'] ?? $data['billing_address'],
-                'shipping_landmark' => $data['shipping_landmark'] ?? $data['billing_landmark'] ?? null,
-                'shipping_city' => $data['shipping_city'] ?? $data['billing_city'],
-                'shipping_state' => $data['shipping_state'] ?? $data['billing_state'],
-                'shipping_pin' => $data['shipping_pin'] ?? $data['billing_pin'],
+                // Only copy billing if "same as billing" is checked
+                'shipping_country' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+                    ? $data['billing_country'] 
+                    : $data['shipping_country'],
+
+                'shipping_address' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+                    ? $data['billing_address'] 
+                    : $data['shipping_address'],
+
+                'shipping_landmark' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+                    ? ($data['billing_landmark'] ?? null) 
+                    : ($data['shipping_landmark'] ?? null),
+
+                'shipping_city' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+                    ? $data['billing_city'] 
+                    : $data['shipping_city'],
+
+                'shipping_state' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+                    ? $data['billing_state'] 
+                    : $data['shipping_state'],
+
+                'shipping_pin' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+                    ? $data['billing_pin'] 
+                    : $data['shipping_pin'],
+
                 'shipping_method' => $data['shipping_method'] ?? 'standard',
                 'status' => 1,
                 'total_amount' => 0,
                 'gst' => 0,
             ]);
-            //dd($order);
+            dd($order);
 
             $grandTotal = 0;
             $totalGstAmount = 0;

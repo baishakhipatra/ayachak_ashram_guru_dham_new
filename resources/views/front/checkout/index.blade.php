@@ -61,7 +61,7 @@
             <div class="row">
                 <div class="col-lg-6 p-0 order-lg-1 order-2">
                     <div class="cart-form-stack">
-                        <form action="{{ route('front.checkout.store') }}" method="POST">
+                        <form id="checkoutForm" action="{{ route('front.checkout.store') }}" method="POST">
                             @csrf
                             <div class="login-checkout">
                                 <h3 class="checkout-heading">Contact information</h3>
@@ -150,27 +150,94 @@
                                 <p>All transactions are secure and encrypted.</p>
                             </div>
 
-                            {{-- <div class="billing-place">
+                            <div class="billing-place">
                                 <h3 class="checkout-heading mb-4">Billing address</h3>
                                 <div class="billing-group-place">
-                                    <div class="billing-group">
+                                    {{-- <div class="billing-group">
                                         <div class="form-check">
                                             <input type="radio" class="form-check-input" id="radio1" name="billing_address" value="option1">
+                                            <label class="form-check-label" for="radio1">Same as shipping address</label>
+                                        </div>
+                                    </div> --}}
+                                    <div class="billing-group">
+                                        <div class="form-check">
+                                            <input type="radio" class="form-check-input" id="radio1" name="shippingSameAsBilling" value="1" checked>
                                             <label class="form-check-label" for="radio1">Same as shipping address</label>
                                         </div>
                                     </div>
                                 
                                     <div class="billing-group">
                                         <div class="form-check">
-                                            <input type="radio" class="form-check-input radio-toggle" id="radio2" name="optradio" value="option2">
+                                            <input type="radio" class="form-check-input" id="radio2" name="shippingSameAsBilling" value="0">
                                             <label class="form-check-label" for="radio2">Use a different billing address</label>
                                         </div>
                                     </div>
 
-                                    <div class="billing-form">
+                                    <div class="billing-form" style="display:none;">
+                                        <div class="form-group">
+                                            <select class="form-select select-style" name="alt_country">
+                                            <option value="">Select Country</option>
+                                            <option>India</option>
+                                            <option>USA</option>
+                                            <option>Canada</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-style" name="alt_fname" placeholder=" ">
+                                                <label class="placeholder-text">First Name</label>
+                                            </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-style" name="alt_lname" placeholder=" ">
+                                                <label class="placeholder-text">Last Name</label>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control input-style" name="alt_address" placeholder=" ">
+                                            <label class="placeholder-text">Address</label>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-style" name="alt_city" placeholder=" ">
+                                                <label class="placeholder-text">City</label>
+                                            </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <select class="form-select select-style" name="alt_state">
+                                                <option value="">Select State</option>
+                                                <option>West Bengal</option>
+                                                <option>Andhra Pradesh</option>
+                                                <option>Arunachal Pradesh</option>
+                                                </select>
+                                            </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-style" name="alt_pin" placeholder=" ">
+                                                <label class="placeholder-text">Pin Code</label>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="tel" class="form-control input-style" name="alt_phone" placeholder=" ">
+                                            <label class="placeholder-text">Phone Number</label>
+                                        </div>
+                                    </div>
+
+                                    {{-- <div class="billing-form">
                                         <div class="form-group">
                                             <select class="form-select select-style">
-                                                <option>Select Counter</option>
+                                                <option>Select Country</option>
                                                 <option>India</option>
                                                 <option>Usa</option>
                                                 <option>Canada</option>
@@ -226,84 +293,10 @@
                                             <input type="tel" class="form-control input-style" placeholder=" " id="" name="">
                                             <label class="placeholder-text">Phone Number</label>
                                         </div>
-                                    </div>
-                                </div>
-                            </div> --}}
-                            <div class="billing-place">
-                                <h3 class="checkout-heading mb-4">Billing address</h3>
-                                <div class="billing-group-place">
-                                    <div class="billing-group">
-                                        <div class="form-check">
-                                            <input type="radio" class="form-check-input" id="radio1" name="shippingSameAsBilling" value="1" checked>
-                                            <label class="form-check-label" for="radio1">Same as shipping address</label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="billing-group">
-                                        <div class="form-check">
-                                            <input type="radio" class="form-check-input radio-toggle" id="radio2" name="shippingSameAsBilling" value="0">
-                                            <label class="form-check-label" for="radio2">Use a different billing address</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="billing-form">
-                                        <div class="form-group">
-                                            <select name="shipping_country" class="form-select select-style">
-                                                <option>Select Counter</option>
-                                                <option>India</option>
-                                                <option>Usa</option>
-                                                <option>Canada</option>
-                                            </select>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group"> 
-                                                    <input type="text" class="form-control input-style" name="shipping_fname">
-                                                    <label class="placeholder-text">First Name</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group"> 
-                                                    <input type="text" class="form-control input-style" name="shipping_lname">
-                                                    <label class="placeholder-text">Last Name</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group"> 
-                                            <input type="text" class="form-control input-style" name="shipping_address">
-                                            <label class="placeholder-text">Address</label>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <div class="form-group"> 
-                                                    <input type="text" class="form-control input-style" name="shipping_city">
-                                                    <label class="placeholder-text">City</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="form-group"> 
-                                                    <select name="shipping_state" class="form-select select-style">
-                                                        <option>Select State</option>
-                                                        <option>West Bengal</option>
-                                                        <option>Andhra Pradesh</option>
-                                                        <option>Arunachal Pradesh</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="form-group"> 
-                                                    <input type="text" class="form-control input-style" name="shipping_pin">
-                                                    <label class="placeholder-text">Pin Code</label>
-                                                </div> 
-                                            </div>
-                                        </div>
-                                        <div class="form-group"> 
-                                            <input type="tel" class="form-control input-style" name="shipping_mobile">
-                                            <label class="placeholder-text">Phone Number</label>
-                                        </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
+                            
 
                             <input type="submit" class="bton btn-full-pink" id="" value="Pay Now">
 
@@ -344,7 +337,7 @@
                                                         <span>Quantity:</span> {{ $item->qty ?? '-' }}
                                                     </div>
                                                    @php
-                                                        $itemTotal = $item->price * $item->qty;
+                                                        $itemTotal = $item->offer_price * $item->qty;
                                                         $gstPercent = $item->productDetails->gst ?? 0;
                                                         $itemTax = ($itemTotal * $gstPercent) / 100;
                                                     @endphp
@@ -353,7 +346,7 @@
                                                         <span>GST:</span> {{ $gstPercent }}% (₹{{ number_format($itemTax, 2) }})
                                                     </div>
                                                 </div>
-                                                <span class="cart-price">₹{{ number_format($item->price * $item->qty, 2) }}</span>
+                                                <span class="cart-price">₹{{ number_format($item->offer_price * $item->qty, 2) }}</span>
                                             </figcaption>
                                         </div>
                                     </li>
@@ -369,11 +362,12 @@
                                 <span>Shipping</span>
                                 FREE
                             </div>
+                            <div class="cart-row">
+                                <span>GST</span>
+                                ₹{{ number_format($tax, 2) }}
+                            </div>
                             <div class="cart-total">
-                                <span>
-                                    Total
-                                    <p>Including ₹{{ number_format($tax, 2) }} in taxes(GST)</p>
-                                </span>
+                                <span>Total</span>
                                 ₹{{ number_format($total, 2) }}
                             </div>
                         </div>
@@ -407,6 +401,187 @@
 <script src="./assets/js/main.js"></script>
 
   <script>
+
+    $(document).ready(function () {
+
+         // --- Helper: Copy shipping -> alt billing ---
+        function copyShippingToAlt() {
+            $('input[name="alt_fname"]').val($('input[name="fname"]').val());
+            $('input[name="alt_lname"]').val($('input[name="lname"]').val());
+            $('input[name="alt_address"]').val($('input[name="billing_address"]').val());
+            $('input[name="alt_city"]').val($('input[name="billing_city"]').val());
+            $('select[name="alt_state"]').val($('select[name="billing_state"]').val());
+            $('input[name="alt_pin"]').val($('input[name="billing_pin"]').val());
+            $('input[name="alt_phone"]').val($('input[name="mobile"]').val());
+        }
+
+        // --- Show/hide alt billing based on radio ---
+        function setBillingOption(isSame) {
+            if (isSame) {
+                $('.billing-form').slideUp(150);
+                $('.billing-form').find('input,select,textarea').prop('disabled', true)
+                    .removeClass('is-invalid').next('.error-message').remove();
+                copyShippingToAlt();
+            } else {
+                $('.billing-form').slideDown(150);
+                $('.billing-form').find('input,select,textarea').prop('disabled', false);
+            }
+        }
+
+        // Init toggle
+        setBillingOption($('input[name="billing_option"]:checked').val() === 'same');
+
+        // // Radio change listener
+        // $('input[name="billing_option"]').on('change', function () {
+        //     setBillingOption($(this).val() === 'same');
+        // });
+        $('input[name="shippingSameAsBilling"]').on('change', function() {
+            if ($(this).val() === '1') {
+                $('.billing-fields').hide();
+            } else {
+                $('.billing-fields').show();
+            }
+        });
+
+
+        // Keep alt synced when "same" is selected
+        const shippingFieldsSelector = 'input[name="fname"], input[name="lname"], input[name="billing_address"], input[name="billing_city"], select[name="billing_state"], input[name="billing_pin"], input[name="mobile"]';
+        $(shippingFieldsSelector).on('input change', function () {
+            if ($('input[name="billing_option"]:checked').val() === 'same') {
+                copyShippingToAlt();
+            }
+        });
+
+        $('#checkoutForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let isValid = true;
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            // Remove previous errors
+            $('.form-control, .form-select').removeClass('is-invalid');
+            $('.error-message').remove();
+
+            // Email
+            let email = $('input[name="email"]').val().trim();
+            if (!email || !emailPattern.test(email)) {
+                $('input[name="email"]').addClass('is-invalid')
+                    .after('<span class="error-message text-danger">Please enter a valid email.</span>');
+                isValid = false;
+            }
+
+            // Shipping First Name
+            let fname = $('input[name="fname"]').val().trim();
+            if (!fname) {
+                $('input[name="fname"]').addClass('is-invalid')
+                    .after('<span class="error-message text-danger">First name is required.</span>');
+                isValid = false;
+            }
+
+            // Shipping Last Name
+            let lname = $('input[name="lname"]').val().trim();
+            if (!lname) {
+                $('input[name="lname"]').addClass('is-invalid')
+                    .after('<span class="error-message text-danger">Last name is required.</span>');
+                isValid = false;
+            }
+
+            // Shipping Address
+            let address = $('input[name="billing_address"]').val().trim();
+            if (!address) {
+                $('input[name="billing_address"]').addClass('is-invalid')
+                    .after('<span class="error-message text-danger">Address is required.</span>');
+                isValid = false;
+            }
+
+            // Shipping City
+            let city = $('input[name="billing_city"]').val().trim();
+            if (!city) {
+                $('input[name="billing_city"]').addClass('is-invalid')
+                    .after('<span class="error-message text-danger">City is required.</span>');
+                isValid = false;
+            }
+
+            // Shipping State
+            let state = $('select[name="billing_state"]').val();
+            if (!state || state === 'Select State') {
+                $('select[name="billing_state"]').addClass('is-invalid')
+                    .after('<span class="error-message text-danger">Please select a state.</span>');
+                isValid = false;
+            }
+
+            // Shipping Pin
+            let pin = $('input[name="billing_pin"]').val().trim();
+            if (!pin || !/^\d{6}$/.test(pin)) {
+                $('input[name="billing_pin"]').addClass('is-invalid')
+                    .after('<span class="error-message text-danger">Please enter a valid 6-digit pin code.</span>');
+                isValid = false;
+            }
+
+            // Shipping Mobile
+            let mobile = $('input[name="mobile"]').val().trim();
+            if (!mobile || !/^\d{10}$/.test(mobile)) {
+                $('input[name="mobile"]').addClass('is-invalid')
+                    .after('<span class="error-message text-danger">Please enter a valid 10-digit phone number.</span>');
+                isValid = false;
+            }
+
+            // --- Validate alt billing only if "different" is selected ---
+            if ($('input[name="billing_option"]:checked').val() === 'different') {
+                let altFirst = $('input[name="alt_fname"]').val().trim();
+                let altLast = $('input[name="alt_lname"]').val().trim();
+                let altAddress = $('input[name="alt_address"]').val().trim();
+                let altCity = $('input[name="alt_city"]').val().trim();
+                let altState = $('select[name="alt_state"]').val();
+                let altPin = $('input[name="alt_pin"]').val().trim();
+                let altPhone = $('input[name="alt_phone"]').val().trim();
+
+                if (!altFirst) {
+                    $('input[name="alt_fname"]').addClass('is-invalid')
+                        .after('<span class="error-message text-danger">First name is required.</span>');
+                    isValid = false;
+                }
+                if (!altLast) {
+                    $('input[name="alt_lname"]').addClass('is-invalid')
+                        .after('<span class="error-message text-danger">Last name is required.</span>');
+                    isValid = false;
+                }
+                if (!altAddress) {
+                    $('input[name="alt_address"]').addClass('is-invalid')
+                        .after('<span class="error-message text-danger">Address is required.</span>');
+                    isValid = false;
+                }
+                if (!altCity) {
+                    $('input[name="alt_city"]').addClass('is-invalid')
+                        .after('<span class="error-message text-danger">City is required.</span>');
+                    isValid = false;
+                }
+                if (!altState || altState === 'Select State') {
+                    $('select[name="alt_state"]').addClass('is-invalid')
+                        .after('<span class="error-message text-danger">Please select a state.</span>');
+                    isValid = false;
+                }
+                if (!altPin || !/^\d{6}$/.test(altPin)) {
+                    $('input[name="alt_pin"]').addClass('is-invalid')
+                        .after('<span class="error-message text-danger">Please enter a valid 6-digit pin code.</span>');
+                    isValid = false;
+                }
+                if (!altPhone || !/^\d{10}$/.test(altPhone)) {
+                    $('input[name="alt_phone"]').addClass('is-invalid')
+                        .after('<span class="error-message text-danger">Please enter a valid 10-digit phone number.</span>');
+                    isValid = false;
+                }
+            }
+
+            // Final submit
+            if (isValid) {
+                this.submit();
+            }
+        });
+
+    });
+
+
   $( function() {
         // const rangeInput = document.querySelectorAll(".range-input input"),
         // priceInput = document.querySelectorAll(".price-input input"),
@@ -467,26 +642,6 @@
     //     });
     // });
 
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Handle increment buttons
-    document.querySelectorAll(".increment").forEach(button => {
-        button.addEventListener("click", (e) => {
-            e.preventDefault();
-            const input = button.closest('.number-input').querySelector(".quantity");
-            input.stepUp();
-        });
-    });
-
-    // Handle decrement buttons
-    document.querySelectorAll(".decrement").forEach(button => {
-        button.addEventListener("click", (e) => {
-            e.preventDefault();
-            const input = button.closest('.number-input').querySelector(".quantity");
-            input.stepDown();
-        });
-    });
-});
 
   </script>
 

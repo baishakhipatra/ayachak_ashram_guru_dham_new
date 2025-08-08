@@ -65,9 +65,6 @@ class Product extends Model
         // print_r($id);
         // exit;
         // dd($id);
-
-
-
     }
 
     public static function insertProductData($data, $successCount){

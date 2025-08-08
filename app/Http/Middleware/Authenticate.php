@@ -22,7 +22,13 @@ class Authenticate extends Middleware
                 return route('admin.login'); // your admin login route
             }
 
-            return route('login'); // default user login route
+             // User routes (auth:web)
+            if ($request->is('profile') || $request->is('wishlist/*') || $request->is('checkout') || $request->is('cart/*')) {
+                return route('front.login'); // your normal user login route
+            }
+
+            // Fallback to default login page
+            return route('front.login');
         }
     }
 }

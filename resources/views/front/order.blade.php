@@ -83,6 +83,36 @@
                                 </div>
                             </div>
                         </div>
+                        {{-- <div class="row">
+                            <div class="col-lg-6">
+                                <div class="summery-list">
+                                    <ul class="cart-item-list">
+                                        @foreach($order->products as $product)
+                                            <li>
+                                                <div class="inner-wrap">
+                                                    <figure>
+                                                        <img src="{{ $product->image ?? asset('assets/images/placeholder-product.jpg') }}" alt="">
+                                                    </figure>
+                                                    <figcaption>
+                                                        <div class="product-details-cart">
+                                                            <a href="#"><h3>{{ $product->name }}</h3></a>
+                                                            <div class="pro-meta">
+                                                                <span>Category:</span> {{ $product->category }}
+                                                            </div>
+                                                            <div class="pro-meta">
+                                                                <span>Weight:</span> {{ $product->weight }}
+                                                            </div>
+                                                        </div>
+                                                        <span class="cart-price">₹{{ number_format($product->price, 2) }}</span>
+                                                    </figcaption>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div> --}}
+
 
                         <div class="row mb-2">
                             <div class="col-lg-9">

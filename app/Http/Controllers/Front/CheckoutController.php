@@ -87,6 +87,8 @@ class CheckoutController extends Controller
     //         return redirect()->route('front.user.login');
     //    }
     // }
+
+
     public function index(Request $request){
         $userId = auth()->id();
         $cartItems = Cart::with(['productDetails', 'variation', 'productDetails.category'])
@@ -101,7 +103,7 @@ class CheckoutController extends Controller
         $total = 0;
 
         foreach ($cartItems as $item) {
-            $lineSubtotal = $item->price * $item->qty;
+            $lineSubtotal = $item->offer_price * $item->qty;
             $subtotal += $lineSubtotal;
 
             $gstPercent = $item->productDetails->gst ?? 0;
@@ -199,7 +201,7 @@ class CheckoutController extends Controller
         $tax = 0;
 
         foreach ($cartItems as $item) {
-            $lineSubtotal = $item->qty * $item->price;
+            $lineSubtotal = $item->qty * $item->offer_price;
             $subtotal += $lineSubtotal;
 
             $gstPercent = $item->productDetails->gst ?? 0;
@@ -246,7 +248,7 @@ class CheckoutController extends Controller
 
     public function paymentStore(Request $request)
     {
-         //dd($request->all());
+        //dd($request->all());
 
         $request->validate([
            

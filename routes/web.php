@@ -64,55 +64,59 @@ Route::name('front.')->group(function () {
             Route::post('address/add', 'Front\UserController@addressCreate')->name('address.create');
             Route::get('wishlist', 'Front\UserController@wishlist')->name('wishlist');
         //});
-    });
 
-    // wishlist
-    Route::prefix('wishlist')->name('wishlist.')->group(function () {
-        Route::get('/', 'Front\WishlistController@viewByUserId')->name('index');
-        Route::get('/add/{id}', 'Front\WishlistController@add')->name('add');
-        Route::post('/remove', 'Front\WishlistController@remove')->name('remove');
-        Route::get('/delete/{id}', 'Front\WishlistController@delete')->name('delete');
-    });
+            // wishlist
+            Route::prefix('wishlist')->name('wishlist.')->group(function () {
+                Route::get('/', 'Front\WishlistController@viewByUserId')->name('index');
+                Route::get('/add/{id}', 'Front\WishlistController@add')->name('add');
+                Route::post('/remove', 'Front\WishlistController@remove')->name('remove');
+                Route::get('/delete/{id}', 'Front\WishlistController@delete')->name('delete');
+            });
 
+            // cart
+            Route::prefix('cart')->group(function () {
+                Route::get('/details', 'Front\CartController@index')->name('cart.index');
+                Route::post('/update-quantity', 'Front\CartController@updateQuantity')->name('cart.update-quantity');
+                Route::post('/remove-quantity', 'Front\CartController@removeQuantity')->name('cart.remove-quantity');
+                Route::post('/add-to-checkoout', 'Front\CartController@add_to_checkoout')->name('cart.add_to_checkoout');
+                Route::post('/coupon/check', 'Front\CartController@couponCheck')->name('cart.coupon.check');
+                Route::post('/coupon/remove', 'Front\CartController@couponRemove')->name('cart.coupon.remove');
+                Route::post('/add', 'Front\CartController@add')->name('cart.add');
+                Route::get('/delete/{id}', 'Front\CartController@delete')->name('cart.delete');
+                Route::get('/quantity/{id}/{type}', 'Front\CartController@qtyUpdate')->name('cart.quantity');
+            });
+
+        // checkout
+        Route::prefix('checkout')->name('checkout.')->group(function () {
+            Route::get('/', 'Front\CheckoutController@index')->name('index');
+            // Route::post('/coupon/check', 'Front\CheckoutController@coupon')->name('coupon.check');
+            Route::post('/store', 'Front\CheckoutController@store')->name('store');
+            Route::get('/payment/{order_id}', 'Front\CheckoutController@payment')->name('payment');
+            Route::post('/payment/store', 'Front\CheckoutController@paymentStore')->name('payment.store');
+            Route::view('/complete', 'front.checkout.complete')->name('complete');
+        });
+    });
     // product detail
-    Route::prefix('shop')->group(function () {
-        Route::get('/', 'Front\ProductController@shop')->name('shop.list');
-        Route::get('/filter', 'Front\ProductController@ajaxFilter')->name('shop.filter');
-        Route::post('/get-variation-images', 'Front\ProductController@getVariationImages')->name('shop.variation-images');
-        Route::get('/{slug}', 'Front\ProductController@detail')->name('shop.detail');
-        Route::get('/search', 'Front\ProductController@ProductSearch')->name('shop.search');
-        Route::post('/add-to-cart', 'Front\ProductController@AddToCart')->name('shop.add.to.cart');
-        Route::get('/details/{slug}', 'Front\ProductController@details')->name('shop.details');
-        Route::get('/color-wise-size', 'Front\ProductController@colorWiseSize')->name('shop.color.wise.size');
-        Route::get('/size', 'Front\ProductController@size')->name('shop.size');
-    });
-
-        // cart
-    Route::prefix('cart')->group(function () {
-        Route::get('/details', 'Front\CartController@index')->name('cart.index');
-        Route::post('/update-quantity', 'Front\CartController@updateQuantity')->name('cart.update-quantity');
-        Route::post('/remove-quantity', 'Front\CartController@removeQuantity')->name('cart.remove-quantity');
-        Route::post('/add-to-checkoout', 'Front\CartController@add_to_checkoout')->name('cart.add_to_checkoout');
-        Route::post('/coupon/check', 'Front\CartController@couponCheck')->name('cart.coupon.check');
-        Route::post('/coupon/remove', 'Front\CartController@couponRemove')->name('cart.coupon.remove');
-        Route::post('/add', 'Front\CartController@add')->name('cart.add');
-        Route::get('/delete/{id}', 'Front\CartController@delete')->name('cart.delete');
-        Route::get('/quantity/{id}/{type}', 'Front\CartController@qtyUpdate')->name('cart.quantity');
-    });
-
-    // checkout
-    Route::prefix('checkout')->name('checkout.')->group(function () {
-        Route::get('/', 'Front\CheckoutController@index')->name('index');
-        // Route::post('/coupon/check', 'Front\CheckoutController@coupon')->name('coupon.check');
-        Route::post('/store', 'Front\CheckoutController@store')->name('store');
-		Route::get('/payment/{order_id}', 'Front\CheckoutController@payment')->name('payment');
-        Route::post('/payment/store', 'Front\CheckoutController@paymentStore')->name('payment.store');
-        Route::view('/complete', 'front.checkout.complete')->name('complete');
-    });
+        Route::prefix('shop')->group(function () {
+            Route::get('/', 'Front\ProductController@shop')->name('shop.list');
+            Route::get('/filter', 'Front\ProductController@ajaxFilter')->name('shop.filter');
+            Route::post('/get-variation-images', 'Front\ProductController@getVariationImages')->name('shop.variation-images');
+            Route::get('/{slug}', 'Front\ProductController@detail')->name('shop.detail');
+            Route::get('/search', 'Front\ProductController@ProductSearch')->name('shop.search');
+            Route::post('/add-to-cart', 'Front\ProductController@AddToCart')->name('shop.add.to.cart');
+            Route::get('/details/{slug}', 'Front\ProductController@details')->name('shop.details');
+            Route::get('/color-wise-size', 'Front\ProductController@colorWiseSize')->name('shop.color.wise.size');
+            Route::get('/size', 'Front\ProductController@size')->name('shop.size');
+        });
 
     Route::name('donation.')->group(function () {
         Route::get('/donation', 'Front\DonationController@DonationForm')->name('form');
         Route::post('/store', 'Front\DonationController@store')->name('store');
+    });
+
+    Route::prefix('event.')->group(function () {
+        Route::get('/list', 'Front\EventController@index')->name('event.index');
+        Route::post('/details', 'Front\EventController@details')->name('event.details');
     });
 });
 

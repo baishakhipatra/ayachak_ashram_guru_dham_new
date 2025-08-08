@@ -23,3 +23,18 @@ $('.main__nav a').filter(function(){
     return this.href==url;
 }).parent().addClass('active');
 
+
+//toggle status
+function statusToggle(route) {
+    $.ajax({
+        url: route,
+        success: function(resp) {
+            if (resp.status == 200) {
+                toastFire('success', resp.message);
+            } else {
+                toastFire('error', resp.message);
+            }
+        }
+    });
+}
+

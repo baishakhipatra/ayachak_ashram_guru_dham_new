@@ -1,5 +1,5 @@
 @extends('front.layout.app')
-@section('page-title', 'Profile')
+@section('page-title', 'Account Details')
 @section('content')
 
 <section class="main">

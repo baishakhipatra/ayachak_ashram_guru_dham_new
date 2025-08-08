@@ -34,7 +34,7 @@
                                                 <div class="pro-meta">
                                                     <span>GST:</span> {{ $item->productDetails->gst ?? 0 }}%
                                                 </div>
-                                                <div class="number-input" data-id="{{ $item->id }}" data-price="{{ $item->price }}">
+                                                <div class="number-input" data-id="{{ $item->id }}" data-price="{{ $item->offer_price }}">
                                                     <button type="button" class="decrement">-</button>
                                                     <input type="number" class="quantity" name="quantity" min="1" max="10" value="{{ $item->qty }}" step="1">
                                                     <button type="button" class="increment">+</button>
@@ -46,7 +46,7 @@
                                                 </a>
                                                 {{-- <a href="{{ route('cart.remove', $item->id) }}" class="remove">Remove</a> --}}
                                             </div>
-                                            <span class="cart-price">₹<span class="price-amount">{{ number_format($item->price * $item->qty, 2) }}</span></span>
+                                            <span class="cart-price">₹<span class="price-amount">{{ number_format($item->offer_price* $item->qty, 2) }}</span></span>
                                         </figcaption>
                                     </div>
                                 </li>
@@ -68,7 +68,7 @@
                         <div class="cart-row">
                             <span>Subtotal</span>
                             @php
-                                $subtotal = $cartItems->sum(fn($item) => $item->qty * $item->price);
+                                $subtotal = $cartItems->sum(fn($item) => $item->qty * $item->offer_price);
                             @endphp
                             <span class="subtotal-amount">₹{{ number_format($subtotal, 2) }}</span>
                         </div>
@@ -81,8 +81,11 @@
                             <span class="total-amount">₹{{ number_format($subtotal, 2) }}</span>
                         </div>
 
-                        {{-- <input type="submit" class="bton btn-full mt-5" id="" value="Proceed to Checkout"> --}}
-                        <a href="{{ route('front.checkout.index') }}" class="bton btn-full mt-5">Proceed to Checkout</a>
+                        {{-- <a href="{{ route('front.checkout.index') }}" class="bton btn-full mt-5">Proceed to Checkout</a> --}}
+                        <form action="{{ route('front.cart.add_to_checkoout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="bton btn-full mt-5">Proceed to Checkout</button>
+                        </form>
                     </div>
                 </div>
             </div>

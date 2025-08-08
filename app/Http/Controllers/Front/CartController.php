@@ -9,6 +9,8 @@ use Illuminate\Http\Response;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use App\Models\Cart;
+use App\Models\Checkout;
+use App\Models\CheckoutProduct;
 use App\Models\CartOffer;
 use App\Models\ProductColorSize;
 use App\Models\Coupon;
@@ -190,77 +192,340 @@ class CartController extends Controller
     }
 
 
-    public function add_to_checkoout(Request $request){
-        $userId = Auth::guard('web')->user()->id;
-        $exist_checkout = DB::table('checkout')->where('user_id', $userId)->first();
-        if ($exist_checkout) {
-            DB::table('checkout')->where('user_id', $userId)->delete();
-            DB::table('checkout_products')->where('user_id', $userId)->delete();
-        }
-        $data = DB::table('checkout')->insert([
-            'user_id' => $userId,
-            'sub_total_amount' => $request->input('final_sub_total'), // Assuming you have a 'product_id' in your request
-            'discount_amount' => $request->input('final_coupon_amount'), // Assuming you have a 'quantity' in your request
-            'gst_amount' => $request->input('final_gst_amount'), // Assuming you have a 'total_amount' in your request
-            'final_amount' => $request->input('final_total_amount')
-        ]);
-        if($data){
-            $checkout = DB::table('checkout')->where('user_id', $userId)->first();
-            $sub_total_amount = 0;
-            $total_discount_amount = 0;
-            $total_gst_amount = 0;
-            $total_final_amount = 0;
-            $count = 0;
-            foreach($request->variation as $key =>$item){
-                $ProductColorSize = ProductColorSize::where('id', $item)->first();
-                if($ProductColorSize){
-                    $price = $ProductColorSize->offer_price?$ProductColorSize->offer_price:$ProductColorSize->price;
-                    $gst = $ProductColorSize->productDetails?$ProductColorSize->productDetails->gst:0;
-                    // Calculate GST amount
-                    $gst_amount = ($price * $gst) / 100;
-                    // Accumulate GST amount for all items
-                    $total_gst_amount += $gst_amount;
-                    // Calculate price excluding GST for the current item
-                    // $price_excluding_gst = $price - $gst_amount;
-                    // Accumulate price excluding GST for all items
-                    // $total_price_excluding_gst += $price_excluding_gst;
-                    $sub_total_amount += $price;
-                    $discount_amount =$request->coupons[$key]?100:0;
-                    $total_discount_amount += $discount_amount;
-                    $final_amount = $price-$discount_amount;
-                    $total_final_amount +=$final_amount;
+    // public function add_to_checkoout(Request $request){
+    //     $userId = Auth::guard('web')->user()->id;
+    //     $exist_checkout = DB::table('checkout')->where('user_id', $userId)->first();
+    //     if ($exist_checkout) {
+    //         DB::table('checkout')->where('user_id', $userId)->delete();
+    //         DB::table('checkout_products')->where('user_id', $userId)->delete();
+    //     }
+    //     $data = DB::table('checkout')->insert([
+    //         'user_id' => $userId,
+    //         'sub_total_amount' => $request->input('final_sub_total'), // Assuming you have a 'product_id' in your request
+    //         'discount_amount' => $request->input('final_coupon_amount'), // Assuming you have a 'quantity' in your request
+    //         'gst_amount' => $request->input('final_gst_amount'), // Assuming you have a 'total_amount' in your request
+    //         'final_amount' => $request->input('final_total_amount')
+    //     ]);
+    //     if($data){
+    //         $checkout = DB::table('checkout')->where('user_id', $userId)->first();
+    //         $sub_total_amount = 0;
+    //         $total_discount_amount = 0;
+    //         $total_gst_amount = 0;
+    //         $total_final_amount = 0;
+    //         $count = 0;
+    //         foreach($request->variation as $key =>$item){
+    //             $ProductColorSize = ProductColorSize::where('id', $item)->first();
+    //             if($ProductColorSize){
+    //                 $price = $ProductColorSize->offer_price?$ProductColorSize->offer_price:$ProductColorSize->price;
+    //                 $gst = $ProductColorSize->productDetails?$ProductColorSize->productDetails->gst:0;
+    //                 // Calculate GST amount
+    //                 $gst_amount = ($price * $gst) / 100;
+    //                 // Accumulate GST amount for all items
+    //                 $total_gst_amount += $gst_amount;
+    //                 // Calculate price excluding GST for the current item
+    //                 // $price_excluding_gst = $price - $gst_amount;
+    //                 // Accumulate price excluding GST for all items
+    //                 // $total_price_excluding_gst += $price_excluding_gst;
+    //                 $sub_total_amount += $price;
+    //                 $discount_amount =$request->coupons[$key]?100:0;
+    //                 $total_discount_amount += $discount_amount;
+    //                 $final_amount = $price-$discount_amount;
+    //                 $total_final_amount +=$final_amount;
 
-                    $data = DB::table('checkout_products')->insert([
-                        'user_id' => $userId,
-                        'checkout_id' => $checkout->id, 
-                        'product_id' => $ProductColorSize->product_id, 
-                        'product_name' => $ProductColorSize->productDetails?$ProductColorSize->productDetails->name:"", 
-                        'product_image' => $request->images[$key], 
-                        'product_slug' => $ProductColorSize->productDetails?$ProductColorSize->productDetails->slug:"", 
-                        'product_variation_id' => $item, 
-                        'colour_name' => $ProductColorSize->color_name, 
-                        'size_name' => $ProductColorSize->color_name, 
-                        'sku_code' => $ProductColorSize->code,
-                        'coupon_code' => $request->coupons[$key], 
-                        'price' => $ProductColorSize->price,
-                        'offer_price' => $ProductColorSize->offer_price,
-                        'gst' => $gst_amount, 
-                        'qty' => 1, 
-                    ]);
-                    $count += 1;
-                }
+    //                 $data = DB::table('checkout_products')->insert([
+    //                     'user_id' => $userId,
+    //                     'checkout_id' => $checkout->id, 
+    //                     'product_id' => $ProductColorSize->product_id, 
+    //                     'product_name' => $ProductColorSize->productDetails?$ProductColorSize->productDetails->name:"", 
+    //                     'product_image' => $request->images[$key], 
+    //                     'product_slug' => $ProductColorSize->productDetails?$ProductColorSize->productDetails->slug:"", 
+    //                     'product_variation_id' => $item, 
+    //                     'colour_name' => $ProductColorSize->color_name, 
+    //                     'size_name' => $ProductColorSize->color_name, 
+    //                     'sku_code' => $ProductColorSize->code,
+    //                     'coupon_code' => $request->coupons[$key], 
+    //                     'price' => $ProductColorSize->price,
+    //                     'offer_price' => $ProductColorSize->offer_price,
+    //                     'gst' => $gst_amount, 
+    //                     'qty' => 1, 
+    //                 ]);
+    //                 $count += 1;
+    //             }
+    //         }
+    //         DB::table('checkout')
+    //         ->where('user_id', $userId) // Assuming $checkoutId is the ID of the record you want to update
+    //         ->update([
+    //             'sub_total_amount' => $sub_total_amount,
+    //             'discount_amount' => $total_discount_amount,
+    //             'gst_amount' => $total_gst_amount,
+    //             'final_amount' => $total_final_amount
+    //         ]);
+    //         return redirect()->route('front.checkout.index')->with('success', ''.$count.' items successfully added');
+    //     }
+    // }
+    // public function add_to_checkoout(Request $request){
+    //     $userId = Auth::guard('web')->user()->id;
+
+    //     DB::beginTransaction();
+
+    //     try {
+    //         Checkout::where('user_id', $userId)->delete();
+    //         CheckoutProduct::where('user_id', $userId)->delete();
+
+    //         $cartItems = Cart::with(['productDetails', 'variation'])
+    //             ->where('user_id', $userId)
+    //             ->get();
+
+    //         //dd($cartItems);
+
+    //         if ($cartItems->isEmpty()) {
+    //             return back()->with('error', 'Your cart is empty.');
+    //         }
+
+    //         $subTotal = 0;
+    //         $totalDiscount = 0;
+    //         $totalGst = 0;
+    //         $finalTotal = 0;
+
+    //         $checkout = Checkout::create([
+    //             'user_id' => $userId,
+    //             'sub_total_amount' => 0,
+    //             'discount_amount' => 0,
+    //             'gst_amount' => 0,
+    //             'final_amount' => 0,
+    //         ]);
+
+         
+    //         foreach ($cartItems as $item) {
+    //             $variation = $item->variation;
+
+    //             if (!$variation) {
+    //                 continue;
+    //             }
+
+    //             $price = $variation->offer_price ?: $variation->price;
+    //             $gstPercent = $item->productDetails->gst ?? 0;
+    //             $gstAmount = ($price * $gstPercent) / 100;
+
+    //             $discount = 0; // Replace with actual coupon logic if needed
+    //             $finalPrice = ($price - $discount) + $gstAmount;
+
+    //             $subTotal += $price * $item->qty;
+    //             $totalDiscount += $discount;
+    //             $totalGst += $gstAmount * $item->qty;
+    //             $finalTotal += $finalPrice * $item->qty;
+
+    //             CheckoutProduct::create([
+    //                 'checkout_id' => $checkout->id,
+    //                 'product_id' => $variation->product_id,
+    //                 'user_id' => $userId,
+    //                 'product_name' => $item->productDetails->name ?? '',
+    //                 'product_image' => $item->productDetails->image ?? null,
+    //                 'product_slug' => $item->productDetails->slug ?? '',
+    //                 'product_variation_id' => $variation->id,
+    //                 'colour_name' => $variation->color_name,
+    //                 'size_name' => $variation->size_name,
+    //                 'sku_code' => $variation->code,
+    //                 'coupon_code' => null, // Replace if coupon logic exists
+    //                 'price' => $variation->price,
+    //                 'offer_price' => $variation->offer_price,
+    //                 'gst' => $gstAmount,
+    //                 'qty' => $item->qty,
+    //             ]);
+    //         }
+
+    //         $checkout->update([
+    //             'sub_total_amount' => $subTotal,
+    //             'discount_amount' => $totalDiscount,
+    //             'gst_amount' => $totalGst,
+    //             'final_amount' => $finalTotal,
+    //         ]);
+
+    //         DB::commit();
+
+    //         return redirect()->route('front.checkout.index')->with('success', 'items successfully added.');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return back()->with('error', 'Something went wrong: ' . $e->getMessage());
+    //     }
+    // }
+
+    // public function add_to_checkoout(Request $request)
+    // {
+    //     $userId = Auth::guard('web')->id();
+
+    //     DB::beginTransaction();
+
+    //     try {
+    //         $cartItems = Cart::with(['productDetails', 'variation'])
+    //             ->where('user_id', $userId)
+    //             ->get();
+
+    //         if ($cartItems->isEmpty()) {
+    //             return back()->with('error', 'Your cart is empty.');
+    //         }
+
+    //         $subTotal = 0;
+    //         $totalDiscount = 0;
+    //         $totalGst = 0;
+    //         $finalTotal = 0;
+
+    //         // Create checkout entry once
+    //         $checkout = Checkout::create([
+    //             'user_id' => $userId,
+    //             'sub_total_amount' => 0,
+    //             'discount_amount' => 0,
+    //             'gst_amount' => 0,
+    //             'final_amount' => 0,
+    //         ]);
+
+    //         foreach ($cartItems as $item) {
+    //             $variation = $item->variation;
+
+    //             if (!$variation) {
+    //                 continue;
+    //             }
+
+    //             $price = $variation->offer_price ?: $variation->offer_price;
+    //             $gstPercent = $item->productDetails->gst ?? 0;
+    //             $gstAmount = ($price * $gstPercent) / 100;
+
+    //             $discount = 0; 
+    //             $finalPrice = ($price - $discount) + $gstAmount;
+
+    //             $subTotal += $price * $item->qty;
+    //             $totalDiscount += $discount;
+    //             $totalGst += $gstAmount * $item->qty;
+    //             $finalTotal += $finalPrice * $item->qty;
+
+    //             // Insert each product row
+    //             CheckoutProduct::create([
+    //                 'checkout_id' => $checkout->id,
+    //                 'product_id' => $variation->product_id,
+    //                 'user_id' => $userId,
+    //                 'product_name' => $item->productDetails->name ?? '',
+    //                 'product_image' => $item->productDetails->image ?? null,
+    //                 'product_slug' => $item->productDetails->slug ?? '',
+    //                 'product_variation_id' => $variation->id,
+    //                 'colour_name' => $variation->color_name,
+    //                 'size_name' => $variation->size_name,
+    //                 'sku_code' => $variation->code,
+    //                 'coupon_code' => null,
+    //                 'price' => $variation->price,
+    //                 'offer_price' => $variation->offer_price,
+    //                 'gst' => $gstAmount,
+    //                 'qty' => $item->qty,
+    //             ]);
+    //         }
+
+    //         // Update totals after loop
+    //         $checkout->update([
+    //             'sub_total_amount' => $subTotal,
+    //             'discount_amount' => $totalDiscount,
+    //             'gst_amount' => $totalGst,
+    //             'final_amount' => $finalTotal,
+    //         ]);
+
+    //         DB::commit();
+
+    //         return redirect()->route('front.checkout.index')
+    //             ->with('success', 'Items successfully added.');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return back()->with('error', 'Something went wrong: ' . $e->getMessage());
+    //     }
+    // }
+
+    public function add_to_checkoout(Request $request)
+    {
+        $userId = Auth::guard('web')->id();
+
+        DB::beginTransaction();
+
+        try {
+            $cartItems = Cart::with(['productDetails', 'variation'])
+                ->where('user_id', $userId)
+                ->get();
+
+            if ($cartItems->isEmpty()) {
+                return back()->with('error', 'Your cart is empty.');
             }
-            DB::table('checkout')
-            ->where('user_id', $userId) // Assuming $checkoutId is the ID of the record you want to update
-            ->update([
-                'sub_total_amount' => $sub_total_amount,
-                'discount_amount' => $total_discount_amount,
-                'gst_amount' => $total_gst_amount,
-                'final_amount' => $total_final_amount
+
+            $subTotal = 0;
+            $totalDiscount = 0;
+            $totalGst = 0;
+            $finalTotal = 0;
+
+            // Create checkout entry once
+            $checkout = Checkout::create([
+                'user_id' => $userId,
+                'sub_total_amount' => 0,
+                'discount_amount' => 0,
+                'gst_amount' => 0,
+                'final_amount' => 0,
             ]);
-            return redirect()->route('front.checkout.index')->with('success', ''.$count.' items successfully added');
+
+            foreach ($cartItems as $item) {
+                $variation = $item->variation;
+                $product = $item->productDetails;
+
+                // Use variation price if exists, else product base price
+                $price = $variation->offer_price
+                    ?? $variation->price
+                    ?? $product->offer_price
+                    ?? $product->price
+                    ?? 0;
+
+                // GST from product details if available
+                $gstPercent = $product->gst ?? 0;
+                $gstAmount = ($price * $gstPercent) / 100;
+
+                $discount = 0;
+                $finalPrice = ($price - $discount) + $gstAmount;
+
+                $subTotal += $price * $item->qty;
+                $totalDiscount += $discount;
+                $totalGst += $gstAmount * $item->qty;
+                $finalTotal += $finalPrice * $item->qty;
+
+                CheckoutProduct::create([
+                    'checkout_id' => $checkout->id,
+                    'product_id' => $variation->product_id ?? $product->id,
+                    'user_id' => $userId,
+                    'product_name' => $product->name ?? '',
+                    'product_image' => $product->image ?? null,
+                    'product_slug' => $product->slug ?? '',
+                    'product_variation_id' => $variation->id ?? null,
+                    'colour_name' => $variation->color_name ?? null,
+                    'size_name' => $variation->size_name ?? null,
+                    'sku_code' => $variation->code ?? null,
+                    'coupon_code' => null,
+                    'price' => $variation->price ?? $product->price ?? 0,
+                    'offer_price' => $variation->offer_price ?? $product->offer_price ?? 0,
+                    'gst' => $gstAmount,
+                    'qty' => $item->qty,
+                ]);
+            }
+
+            // Update totals after loop
+            $checkout->update([
+                'sub_total_amount' => $subTotal,
+                'discount_amount' => $totalDiscount,
+                'gst_amount' => $totalGst,
+                'final_amount' => $finalTotal,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('front.checkout.index')
+                ->with('success', 'Items successfully added.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
+
+
 
     /*
     public function viewByIp(Request $request)
