@@ -24,4 +24,12 @@ class EventController extends Controller
 
         return view('front.events.index', compact('events'));
     }
+
+    public function details($slug){
+        $event = Event::with(['eventImage', 'relatedEventDetails.eventImage'])
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        return view('front.events.details', compact('event'));
+    }
 }

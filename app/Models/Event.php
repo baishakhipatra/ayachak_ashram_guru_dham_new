@@ -22,4 +22,14 @@ class Event extends Model
     {
         return $this->hasMany(RelatedEvent::class, 'event_id');
     }
+
+    public function relatedEventDetails()
+    {
+        return $this->belongsToMany(
+            Event::class,
+            'related_events',
+            'event_id',         // Foreign key in pivot pointing to this event
+            'related_event_id'  // Foreign key pointing to the related event
+        );
+    }
 }

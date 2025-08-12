@@ -80,8 +80,9 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             Route::get('/create', [EventController::class, 'create'])->name('events.create');
             Route::post('/store', [EventController::class, 'store'])->name('events.store');
             Route::get('/status/{id}', [EventController::class, 'status'])->name('events.status');
-            Route::get('/edit', [EventController::class, 'edit'])->name('events.edit');
+            Route::get('/edit/{id}', [EventController::class, 'edit'])->name('events.edit');
             Route::post('/update', [EventController::class, 'update'])->name('events.update');
+            Route::post('/delete', [EventController::class, 'delete'])->name('events.delete');
         });
 
 

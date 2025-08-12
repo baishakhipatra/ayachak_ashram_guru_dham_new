@@ -103,7 +103,7 @@
                                 <i class="fi fi-br-database"></i> <span>Event List</span>
                             </a>
                         </li>
-                    </ul>
+                    </ul>   
                 </li>
 
 

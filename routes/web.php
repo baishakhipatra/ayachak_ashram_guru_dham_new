@@ -117,7 +117,7 @@ Route::name('front.')->group(function () {
 
     Route::prefix('event.')->group(function () {
         Route::get('/list', 'Front\EventController@index')->name('event.index');
-        Route::post('/details', 'Front\EventController@details')->name('event.details');
+        Route::post('/details/{slug}', 'Front\EventController@details')->name('event.details');
     });
 });
 
