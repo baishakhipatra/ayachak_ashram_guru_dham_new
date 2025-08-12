@@ -401,7 +401,6 @@
 <script src="./assets/js/main.js"></script>
 
   <script>
-
     $(document).ready(function () {
 
          // --- Helper: Copy shipping -> alt billing ---
