@@ -767,7 +767,7 @@ class CheckoutRepository implements CheckoutInterface
                 'total_amount' => 0,
                 'gst' => 0,
             ]);
-            dd($order);
+            //dd($order);
 
             $grandTotal = 0;
             $totalGstAmount = 0;

@@ -10,10 +10,10 @@
                     <li><a href="{{route('front.shop.list')}}">Shop</a></li>
                     <li><a href="{{route('front.event.index')}}">Events</a></li>
                     <li><a href="">About Us</a></li>
-                    <li><a href="#">Books</a></li>
-                    <li><a href="#">Medicines</a></li>
-                    <li><a href="#">Water</a></li>
-                    <li><a href="#">Photo Frame</a></li>
+                    <li><a href="{{ route('front.shop.list', ['category' => 'Book']) }}">Books</a></li>
+                    <li><a href="{{ route('front.shop.list', ['category' => 'Medicine']) }}">Medicines</a></li>
+                    <li><a href="{{ route('front.shop.list', ['category' => 'water']) }}">Water</a></li>
+                    <li><a href="{{ route('front.shop.list', ['category' => 'photo-frame']) }}">Photo Frame</a></li>
                 </ul>
             </div>
             <a href="{{route('front.donation.form')}}" class="bton btn-fill">Donate Now</a>

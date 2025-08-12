@@ -99,21 +99,47 @@ class ProductController extends Controller
 
     //     return view('front.hotDealList',compact('data','categories','categoryIds','weights'));
     // }
-    public function shop()
-    {
-        $categories = Category::where('status', 1)->orderBy('name', 'ASC')->get();
-        $data = Product::where('status', 1)->orderBy('id', 'DESC')->paginate(12);
+    // public function shop()
+    // {
+    //     $categories = Category::where('status', 1)->orderBy('name', 'ASC')->get();
+    //     $data = Product::where('status', 1)->orderBy('id', 'DESC')->paginate(12);
 
        
+    //     $weights = ProductVariation::whereNotNull('weight')
+    //         ->select('weight')
+    //         ->distinct()
+    //         ->pluck('weight');
+        
+    //     $categoryIds = $categories->pluck('id')->toArray(); 
+
+    //     return view('front.hotDealList', compact('data', 'categories', 'weights', 'categoryIds'));
+    // }
+    public function shop(Request $request)
+    {
+        $categories = Category::where('status', 1)->orderBy('name', 'ASC')->get();
+        $query = Product::where('status', 1);
+
+        // If category filter is present
+        if ($request->filled('category')) {
+            $category = Category::where('slug', $request->category)->first();
+
+            if ($category) {
+                $query->where('cat_id', $category->id);
+            }
+        }
+
+        $data = $query->orderBy('id', 'DESC')->paginate(12);
+
         $weights = ProductVariation::whereNotNull('weight')
             ->select('weight')
             ->distinct()
             ->pluck('weight');
-        
+
         $categoryIds = $categories->pluck('id')->toArray(); 
 
         return view('front.hotDealList', compact('data', 'categories', 'weights', 'categoryIds'));
     }
+
 
    public function ajaxFilter(Request $request)
     {

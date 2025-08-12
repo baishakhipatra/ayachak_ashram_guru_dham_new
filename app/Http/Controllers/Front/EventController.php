@@ -20,7 +20,7 @@ class EventController extends Controller
                   ->orWhere('venue', 'like', "%{$search}%");
         }
 
-        $events = $query->paginate(6); // paginate for frontend
+        $events = $query->paginate(6);
 
         return view('front.events.index', compact('events'));
     }

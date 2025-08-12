@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Cart;
+use App\Models\CheckoutProduct;
+use App\Models\Checkout;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -168,8 +170,23 @@ class UserController extends Controller
 
     public function order(Request $request)
     {
-        $data = $this->userRepository->orderDetails();
-        return view('front.order', compact('data'));
+        $userId = Auth::id();
+
+        $checkout = Checkout::where('user_id', $userId)
+            ->latest()
+            ->first();
+
+        if (!$checkout) {
+            abort(404, 'No checkout found for this user');
+        }
+
+        // Fetch only products from that checkout
+        $checkoutProducts = CheckoutProduct::with(['product.category', 'product.variations'])
+            ->where('checkout_id', $checkout->id)
+            ->get();
+            
+
+        return view('front.order', compact('checkout','checkoutProducts'));
     }
     // public function order($orderId)
     // {

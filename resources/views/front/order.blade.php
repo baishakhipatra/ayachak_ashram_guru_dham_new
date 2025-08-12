@@ -16,7 +16,7 @@
                             <a href="#" class="bton btn-fill">Download Invoice</a>
                         </div>
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-lg-6">
                                 <div class="summery-list">
                                     <ul class="cart-item-list">
@@ -82,28 +82,45 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-                        {{-- <div class="row">
+                        </div> --}}
+                        <div class="row">
                             <div class="col-lg-6">
                                 <div class="summery-list">
                                     <ul class="cart-item-list">
-                                        @foreach($order->products as $product)
+                                        @foreach($checkoutProducts as $item)
                                             <li>
                                                 <div class="inner-wrap">
                                                     <figure>
-                                                        <img src="{{ $product->image ?? asset('assets/images/placeholder-product.jpg') }}" alt="">
+                                                        <img src="{{ $item->product->image 
+                                                                    ? asset($item->product->image) 
+                                                                    : asset('assets/images/placeholder-product.jpg') }}" 
+                                                            alt="{{ $item->product->name }}">
                                                     </figure>
                                                     <figcaption>
                                                         <div class="product-details-cart">
-                                                            <a href="#"><h3>{{ $product->name }}</h3></a>
+                                                            <a href="#">
+                                                                <h3>{{ ucwords($item->product->name) }}</h3>
+                                                            </a>
                                                             <div class="pro-meta">
-                                                                <span>Category:</span> {{ $product->category }}
+                                                                <span>Category:</span> 
+                                                                {{ $item->product->category->name ?? 'N/A' }}
                                                             </div>
+
                                                             <div class="pro-meta">
-                                                                <span>Weight:</span> {{ $product->weight }}
+                                                                <span>Quantity:</span> 
+                                                                {{ $item->qty ?? 'N/A' }}
                                                             </div>
+
+                                                            @if(!empty($item->product->variation->weight))
+                                                                <div class="pro-meta">
+                                                                    <span>Weight:</span> 
+                                                                    {{ $item->product->variation->weight }}
+                                                                </div>
+                                                            @endif
                                                         </div>
-                                                        <span class="cart-price">₹{{ number_format($product->price, 2) }}</span>
+                                                        <span class="cart-price">
+                                                            ₹{{ number_format($item->offer_price * $item->qty, 2) }}
+                                                        </span>
                                                     </figcaption>
                                                 </div>
                                             </li>
@@ -111,27 +128,40 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div> --}}
-
+                        </div>
 
                         <div class="row mb-2">
                             <div class="col-lg-9">
                                 <div class="detail-summery">
                                     <h3 class="mb-5">Billing Details</h3>
+
                                     <div class="cart-row">
                                         <span>Subtotal</span>
-                                        ₹308.00
+                                        ₹{{ number_format($checkout->sub_total_amount, 2) }}
                                     </div>
+
+                                    @if($checkout->discount_amount > 0)
+                                        <div class="cart-row">
+                                            <span>Discount</span>
+                                            - ₹{{ number_format($checkout->discount_amount, 2) }}
+                                        </div>
+                                    @endif
+
                                     <div class="cart-row">
                                         <span>Shipping</span>
                                         FREE
                                     </div>
+
+                                    <div class="cart-row">
+                                        <span>GST</span>
+                                        ₹{{ number_format($checkout->gst_amount, 2) }}
+                                    </div>
+
                                     <div class="cart-total">
                                         <span>
                                             Total
-                                            <p>Including ₹90.29 in taxes</p>
                                         </span>
-                                        ₹308.00
+                                        ₹{{ number_format($checkout->final_amount, 2) }}
                                     </div>
                                 </div>
                             </div>

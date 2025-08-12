@@ -15,4 +15,15 @@ class CheckoutProduct extends Model
         'offer_price', 'gst', 'qty', 'status', 'return_reason_type', 'return_reason_comment', 
         'admin_return_approval_status', 'expected_return_delivery'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    // Variation relationship (if needed)
+    public function variation()
+    {
+        return $this->belongsTo(ProductVariation::class, 'product_variation_id');
+    }
 }
