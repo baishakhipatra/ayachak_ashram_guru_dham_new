@@ -42,6 +42,7 @@ function SendMail($data)
     });
 }
 
+
 // multi-dimensional in_array
 function in_array_r($needle, $haystack, $strict = false) {
     foreach ($haystack as $item) {
@@ -538,6 +539,7 @@ function getLocation($ip){
     // dd($result);
     return $payment_det;
 }
+
 function active_wishhList($product_id){
     $user_id = "";
     if (Auth::guard('web')->check()) {
@@ -545,3 +547,4 @@ function active_wishhList($product_id){
     }
     return Wishlist::where('product_id', $product_id)->where('user_id', $user_id)->first();
 }
+

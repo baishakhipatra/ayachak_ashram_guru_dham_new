@@ -23,8 +23,6 @@ $('.main__nav a').filter(function(){
     return this.href==url;
 }).parent().addClass('active');
 
-
-//toggle status
 function statusToggle(route) {
     $.ajax({
         url: route,

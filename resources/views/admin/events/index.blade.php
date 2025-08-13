@@ -66,7 +66,11 @@
                                 @endif
                             </td>
                             
+<<<<<<< HEAD
                             <td>{{ $event->title }}</td>
+=======
+                            <td>{{ ucwords($event->title) }}</td>
+>>>>>>> a14c673d6eefebc466d5eb106d40bc872cc8a5c1
                             <td>{{date('d-m-Y h:i A',strtotime($event->start_time))}}</td>
                             <td> 
                                 <div class="form-check form-switch" data-bs-toggle="tooltip" title="Toggle status">
@@ -78,6 +82,18 @@
                             <td>
                                 {{-- <a href="{{ route('front.event.details', $event->slug) }}" class="btn btn-sm btn-primary">View</a> --}}
                                 <!-- You can add Edit/Delete here for admin -->
+                                <div>
+                                    <a href="{{ route('admin.events.edit', $event->id) }}" class="btn btn-sm btn-icon btn-outline-dark"                     
+                                        data-bs-toggle="tooltip"  title="Edit">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <div>
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-icon btn-outline-danger" onclick="deleteEvent({{ $event->id }})"     
+                                            data-bs-toggle="tooltip" title="Delete">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div> 
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -99,5 +115,41 @@
 @endsection
 
 @section('script')
+<<<<<<< HEAD
 
+=======
+<script>
+     function deleteEvent(userId) {
+    Swal.fire({
+        icon: 'warning',
+        title: "Are you sure you want to delete this?",
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "{{ route('admin.events.delete')}}",
+                type: 'POST',
+                data: {
+                    "id": userId,
+                    "_token": '{{ csrf_token() }}',
+                },
+                success: function (data){
+                    if (data.status != 200) {
+                        toastFire('error', data.message);
+                    } else {
+                        toastFire('success', data.message);
+                        location.reload();
+                    }
+                }
+            });
+        }
+    });
+  }
+</script>
+>>>>>>> a14c673d6eefebc466d5eb106d40bc872cc8a5c1
 @endsection

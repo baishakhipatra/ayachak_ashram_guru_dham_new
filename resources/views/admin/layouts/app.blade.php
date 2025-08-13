@@ -103,8 +103,9 @@
                                 <i class="fi fi-br-database"></i> <span>Event List</span>
                             </a>
                         </li>
-                    </ul>
+                    </ul>   
                 </li>
+
 
                 <li class="@if(request()->is('admin/category*') || request()->is('admin/subcategory*') || request()->is('admin/collection*') || request()->is('admin/color*') || request()->is('admin/size*')) { {{'active'}} }  @endif">
                     <a href="javascript: void(0)"><i class="fi fi-br-cube"></i> <span>Master</span></a>
