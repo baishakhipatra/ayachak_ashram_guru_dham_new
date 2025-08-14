@@ -60,10 +60,12 @@
                     <div class="cart-value-wrap">
                         <h3>Cart Total</h3>
                         <div class="coupon-area">
-                            <form>
-                                <label>Add a Coupon</label>
-                                <input type="text" class="">
-                            </form>
+                            <label>Add a Coupon</label>
+                            <div class="input-group">
+                                <input type="text" id="coupon_code" class="form-control" placeholder="Enter coupon">
+                                <button type="button" id="apply_coupon" class="btn btn-primary">Apply</button>
+                            </div>
+                            <small id="coupon_message" class="text-success"></small>
                         </div>
                         <div class="cart-row">
                             <span>Subtotal</span>
@@ -80,10 +82,22 @@
                             <span>Shipping</span>
                             FREE
                         </div>
+                        <div class="cart-row" id="discount_row" style="display: none;">
+                            <span>Discount
+                                <a href="javascript:void(0)" id="remove_coupon" class="text-success" style="font-size: 12px; margin-left: 8px;">
+                                    Remove
+                                </a>
+                            </span>
+                            <span class="discount-amount">- ₹0.00</span>
+                        </div>
                         <div class="cart-total">
                             <span>Total</span>
                             <span class="total-amount">₹{{ number_format($subtotal, 2) }}</span>
                         </div>
+
+                        <input type="hidden" id="applied_coupon_amount" value="0">
+                        <input type="hidden" id="applied_coupon_id" value="">
+
 
                         {{-- <a href="{{ route('front.checkout.index') }}" class="bton btn-full mt-5">Proceed to Checkout</a> --}}
                         <form action="{{ route('front.cart.add_to_checkoout') }}" method="POST">
@@ -185,14 +199,36 @@
     });
 
 
+    // function recalculateCartTotals() {
+    //     let subtotal = 0;
+    //     $('.price-amount').each(function () {
+    //         subtotal += parseFloat($(this).text().replace(/,/g, ''));
+    //     });
+
+    //     $('.subtotal-amount').text('₹' + subtotal.toFixed(2));
+    //     $('.total-amount').text('₹' + subtotal.toFixed(2));
+    // }
+
     function recalculateCartTotals() {
         let subtotal = 0;
         $('.price-amount').each(function () {
-            subtotal += parseFloat($(this).text().replace(/,/g, ''));
+            subtotal += parseFloat($(this).text().replace(/,/g, '')) || 0;
         });
 
+        const discount = parseFloat($('#applied_coupon_amount').val()) || 0;
+
         $('.subtotal-amount').text('₹' + subtotal.toFixed(2));
-        $('.total-amount').text('₹' + subtotal.toFixed(2));
+
+        if (discount > 0) {
+            $('#discount_row').show();
+            $('.discount-amount').text('- ₹' + discount.toFixed(2));
+        } else {
+            $('#discount_row').hide();
+            $('.discount-amount').text('- ₹0.00');
+        }
+
+        const total = Math.max(subtotal - discount, 0);
+        $('.total-amount').text('₹' + total.toFixed(2));
     }
 
     $(document).ready(function () {
@@ -256,6 +292,136 @@
             });
         });
     });
+
+    // $(document).on('click', '#apply_coupon', function () {
+    //     let code = $('#coupon_code').val().trim();
+    //     if (!code) {
+    //         $('#coupon_message').html('<span class="text-danger">Please enter a coupon code</span>');
+    //         return;
+    //     }
+
+    //     $.ajax({
+    //         url: "{{ route('front.cart.coupon.check') }}", 
+    //         type: "POST",
+    //         data: {
+    //             _token: "{{ csrf_token() }}",
+    //             code: code
+    //         },
+    //         success: function(res){
+    //             if(res.type === 'success') {
+    //                 $('#coupon_message').html('<span class="text-success">'+res.message+'</span>');
+
+    //                 let subtotal = parseFloat($('.subtotal-amount').text().replace(/[₹,]/g, ''));
+    //                 let discount = parseFloat(res.coupon_discount);
+
+    //                 $('.discount-amount').text('- ₹' + discount.toFixed(2));
+    //                 $('#discount_row').show();
+
+    //                 let newTotal = subtotal - discount;
+    //                 $('.total-amount').text('₹' + newTotal.toFixed(2));
+
+    //             } else {
+    //                 $('#coupon_message').html('<span class="text-danger">'+res.message+'</span>');
+    //             }
+    //         },
+    //         error: function(){
+    //             $('#coupon_message').html('<span class="text-danger">Something went wrong</span>');
+    //         }
+    //     });
+    // });
+
+    // $(document).on('click', '#remove_coupon', function () {
+    //     $.ajax({
+    //         url: "{{ route('front.cart.coupon.remove') }}", // backend remove route
+    //         type: "POST",
+    //         data: {
+    //             _token: "{{ csrf_token() }}"
+    //         },
+    //         success: function(res){
+    //             if(res.type === 'success') {
+    //                 $('#coupon_message').html('<span class="text-success">'+res.message+'</span>');
+
+    //                 // Reset discount
+    //                 $('.discount-amount').text('- ₹0.00');
+    //                 $('#discount_row').hide();
+
+    //                 // Reset total back to subtotal
+    //                 let subtotal = parseFloat($('.subtotal-amount').text().replace(/[₹,]/g, ''));
+    //                 $('.total-amount').text('₹' + subtotal.toFixed(2));
+
+    //                 // Clear input
+    //                 $('#coupon_code').val('');
+    //             } else {
+    //                 $('#coupon_message').html('<span class="text-danger">'+res.message+'</span>');
+    //             }
+    //         },
+    //         error: function(){
+    //             $('#coupon_message').html('<span class="text-danger">Something went wrong</span>');
+    //         }
+    //     });
+    // });
+
+    $(document).on('click', '#apply_coupon', function () {
+        let code = $('#coupon_code').val().trim();
+        if (!code) {
+            $('#coupon_message').html('<span class="text-danger">Please enter a coupon code</span>');
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('front.cart.coupon.check') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                code: code
+            },
+            success: function(res){
+                if (res && res.type === 'success') {
+                    $('#coupon_message').html('<span class="text-success">'+res.message+'</span>');
+
+                    const discount = parseFloat(res.coupon_discount) || 0;
+                    $('#applied_coupon_amount').val(discount);
+                    $('#applied_coupon_id').val(res.id || '');
+
+                    recalculateCartTotals();
+                } else {
+                    $('#coupon_message').html('<span class="text-danger">'+(res?.message || 'Unable to apply coupon')+'</span>');
+                }
+            },
+            error: function(xhr){
+                const msg = xhr.status === 419 ? 'Session expired. Refresh and try again.' : 'Something went wrong';
+                $('#coupon_message').html('<span class="text-danger">'+msg+'</span>');
+            }
+        });
+    });
+
+    $(document).on('click', '#remove_coupon', function () {
+        $.ajax({
+            url: "{{ route('front.cart.coupon.remove') }}",
+            type: "POST",
+            data: { _token: "{{ csrf_token() }}" },
+            success: function(res){
+                if (res && res.type === 'success') {
+                    $('#coupon_message').html('<span class="text-success">'+res.message+'</span>');
+
+                    // reset discount locally
+                    $('#applied_coupon_amount').val(0);
+                    $('#applied_coupon_id').val('');
+
+                    recalculateCartTotals();
+                    $('#coupon_code').val('');
+                } else {
+                    $('#coupon_message').html('<span class="text-danger">'+(res?.message || 'Failed to remove coupon')+'</span>');
+                }
+            },
+            error: function(xhr){
+                const msg = xhr.status === 419 ? 'Session expired. Refresh and try again.' : 'Something went wrong';
+                $('#coupon_message').html('<span class="text-danger">'+msg+'</span>');
+            }
+        });
+    });
+
+
 
 
         

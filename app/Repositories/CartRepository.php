@@ -73,6 +73,7 @@ class CartRepository implements CartInterface
     public function couponRemove()
     {
         $cartData = Cart::where('ip', $this->ip)->update(['coupon_code_id' => null]);
+        Session::forget('couponCodeId');
         return response()->json(['resp' => 200, 'type' => 'success', 'message' => 'Coupon removed']);
     }
 

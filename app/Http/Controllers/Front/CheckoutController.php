@@ -89,7 +89,36 @@ class CheckoutController extends Controller
     // }
 
 
-    public function index(Request $request){
+    // public function index(Request $request){
+    //     $userId = auth()->id();
+    //     $cartItems = Cart::with(['productDetails', 'variation', 'productDetails.category'])
+    //         ->where('user_id', $userId)
+    //         ->get();
+
+    //     if ($cartItems->isEmpty()) {
+    //         return redirect()->route('front.cart.index')->with('warning', 'Your cart is empty.');
+    //     }
+    //     $subtotal = 0;
+    //     $tax = 0;
+    //     $total = 0;
+
+    //     foreach ($cartItems as $item) {
+    //         $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
+    //         $lineSubtotal = $item->qty * $price;
+    //         $subtotal += $lineSubtotal;
+
+    //         $gstPercent = $item->productDetails->gst ?? 0;
+    //         $lineTax = ($lineSubtotal * $gstPercent) / 100;
+    //         $tax += $lineTax;
+    //     }
+
+    //     $total = $subtotal + $tax;
+
+    //     return view('front.checkout.index', compact('cartItems', 'subtotal', 'tax', 'total'));
+    // }
+
+    public function index(Request $request)
+    {
         $userId = auth()->id();
         $cartItems = Cart::with(['productDetails', 'variation', 'productDetails.category'])
             ->where('user_id', $userId)
@@ -98,9 +127,9 @@ class CheckoutController extends Controller
         if ($cartItems->isEmpty()) {
             return redirect()->route('front.cart.index')->with('warning', 'Your cart is empty.');
         }
+
         $subtotal = 0;
         $tax = 0;
-        $total = 0;
 
         foreach ($cartItems as $item) {
             $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
@@ -112,10 +141,28 @@ class CheckoutController extends Controller
             $tax += $lineTax;
         }
 
-        $total = $subtotal + $tax;
+        // Default discount
+        $discount = 0;
 
-        return view('front.checkout.index', compact('cartItems', 'subtotal', 'tax', 'total'));
+        // Check if a coupon is stored in the session
+        if (session()->has('couponCodeId')) {
+            $coupon = \App\Models\Coupon::find(session('couponCodeId'));
+
+            if ($coupon) {
+                // If your coupon is a fixed amount
+                $discount = $coupon->amount;
+
+                // Or if your coupon is percentage based:
+                // $discount = ($subtotal * $coupon->discount_percentage) / 100;
+            }
+        }
+
+        // Calculate total after discount
+        $total = $subtotal + $tax - $discount;
+
+        return view('front.checkout.index', compact('cartItems', 'subtotal', 'tax', 'discount', 'total'));
     }
+
 
     public function coupon(Request $request)
     {
@@ -210,12 +257,24 @@ class CheckoutController extends Controller
             $tax += $lineTax;
         }
 
-        $total = $subtotal + $tax;
+        $discount = 0;
+
+        if (session()->has('couponCodeId')) {
+            $coupon = \App\Models\Coupon::find(session('couponCodeId'));
+            if ($coupon) {
+                
+                $discount = $coupon->amount;
+            }
+        }
+
+
+        $total = $subtotal + $tax - $discount;
 
         // Merge all into request to pass to repository
         $checkoutData = $request->except('_token');
         $checkoutData['subtotal'] = $subtotal;
         $checkoutData['tax'] = $tax;
+        $checkoutData['discount_amount'] = $discount;
         $checkoutData['total'] = $total;
         $checkoutData['cart_items'] = $cartItems;
 

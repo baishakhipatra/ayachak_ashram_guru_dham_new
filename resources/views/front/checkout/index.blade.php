@@ -306,6 +306,12 @@
                                 <span>GST</span>
                                 ₹{{ number_format($tax, 2) }}
                             </div>
+                            @if($discount > 0)
+                            <div class="cart-row">
+                                <span>Discount</span>
+                                - ₹{{ number_format($discount, 2) }}
+                            </div>
+                            @endif
                             <div class="cart-total">
                                 <span>Total</span>
                                 ₹{{ number_format($total, 2) }}

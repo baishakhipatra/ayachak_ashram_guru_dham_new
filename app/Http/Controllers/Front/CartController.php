@@ -211,6 +211,18 @@ class CartController extends Controller
             $totalDiscount = 0;
             $totalGst = 0;
             $finalTotal = 0;
+            $totalDiscount = 0;
+
+            if (session()->has('couponCodeId')) {
+                $coupon = Coupon::find(session('couponCodeId'));
+                if ($coupon) {
+                    // If your coupon type is 'fixed amount'
+                    $totalDiscount = $coupon->amount;
+
+                    // If your coupon type is percentage:
+                    // $totalDiscount = ($subTotal * $coupon->amount) / 100;
+                }
+            }
 
             // Create checkout entry once
             $checkout = Checkout::create([
@@ -262,6 +274,15 @@ class CartController extends Controller
                     'qty' => $item->qty,
                 ]);
             }
+
+            $finalTotal = ($subTotal + $totalGst) - $totalDiscount;
+
+            $checkout->update([
+                'sub_total_amount' => $subTotal,
+                'discount_amount' => $totalDiscount,
+                'gst_amount' => $totalGst,
+                'final_amount' => $finalTotal,
+            ]);
 
             // Update totals after loop
             $checkout->update([
