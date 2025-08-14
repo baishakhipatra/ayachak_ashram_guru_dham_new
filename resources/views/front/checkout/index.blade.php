@@ -233,67 +233,6 @@
                                             <label class="placeholder-text">Phone Number</label>
                                         </div>
                                     </div>
-
-                                    {{-- <div class="billing-form">
-                                        <div class="form-group">
-                                            <select class="form-select select-style">
-                                                <option>Select Country</option>
-                                                <option>India</option>
-                                                <option>Usa</option>
-                                                <option>Canada</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group"> 
-                                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="firstname">
-                                                    <label class="placeholder-text">First Name</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group"> 
-                                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="lastname">
-                                                    <label class="placeholder-text">Last Name</label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group"> 
-                                            <input type="text" class="form-control input-style" placeholder=" " id="" name="address">
-                                            <label class="placeholder-text">Address</label>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <div class="form-group"> 
-                                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="firstname">
-                                                    <label class="placeholder-text">City</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="form-group"> 
-                                                    <select class="form-select select-style">
-                                                        <option>Select State</option>
-                                                        <option>West Bengal</option>
-                                                        <option>Andhra Pradesh</option>
-                                                        <option>Arunachal Pradesh</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="form-group"> 
-                                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="lastname">
-                                                    <label class="placeholder-text">Pin Code</label>
-                                                </div> 
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group"> 
-                                            <input type="tel" class="form-control input-style" placeholder=" " id="" name="">
-                                            <label class="placeholder-text">Phone Number</label>
-                                        </div>
-                                    </div> --}}
                                 </div>
                             </div>
                             
@@ -337,7 +276,8 @@
                                                         <span>Quantity:</span> {{ $item->qty ?? '-' }}
                                                     </div>
                                                    @php
-                                                        $itemTotal = $item->offer_price * $item->qty;
+                                                        $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
+                                                        $itemTotal = $price * $item->qty;
                                                         $gstPercent = $item->productDetails->gst ?? 0;
                                                         $itemTax = ($itemTotal * $gstPercent) / 100;
                                                     @endphp
@@ -346,7 +286,7 @@
                                                         <span>GST:</span> {{ $gstPercent }}% (₹{{ number_format($itemTax, 2) }})
                                                     </div>
                                                 </div>
-                                                <span class="cart-price">₹{{ number_format($item->offer_price * $item->qty, 2) }}</span>
+                                                <span class="cart-price">₹{{ number_format($itemTotal, 2) }}</span>
                                             </figcaption>
                                         </div>
                                     </li>

@@ -448,47 +448,30 @@
    </ul>
 </section>
 
+{{-- shop by category section --}}
 <section class="cat-section">
     <div class="container">
         <div class="heading-group">
             <h2 class="section-heading">Shop by Category</h2>
         </div>
         <ul class="cat-list">
-            <li>
-                <a href="#">
-                    <figure>
-                        <img src="{{asset('assets/images/books.svg')}}" alt="">
-                    </figure>
-                    <h4>Books</h4>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <figure>
-                        <img src="{{asset('assets/images/medicine.svg')}}" alt="">
-                    </figure>
-                    <h4>Medicine</h4>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <figure>
-                        <img src="{{asset('assets/images/water.svg')}}" alt="">
-                    </figure>
-                    <h4>Water</h4>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <figure>
-                        <img src="{{asset('assets/images/water.svg')}}" alt="">
-                    </figure>
-                    <h4>Photo Frame</h4>
-                </a>
-            </li>
+            @foreach($categories as $category)
+                <li>
+                    <a href="{{ route('front.shop.list', ['category' => $category->slug ?? $category->name]) }}">
+                        <figure>
+                            <img src="{{ $category->icon_path 
+                                        ? asset($category->icon_path) 
+                                        : asset('assets/images/placeholder-category.png') }}" 
+                                 alt="{{ $category->name }}">
+                        </figure>
+                        <h4>{{ ucwords($category->name) }}</h4>
+                    </a>
+                </li>
+            @endforeach
         </ul>
     </div>
 </section>
+
 
 <section class="product-section">
     <div class="container">
@@ -497,73 +480,31 @@
         </div>
 
         <ul class="product-list">
-            <li>
-                <div class="pro-inner">
-                    <figure>
-                        <a href="">
-                            <img src="{{asset('assets/images/placeholder-product.jpg')}}" alt="">
-                        </a>
-                    </figure>
-                    <figcaption>
-                        <a href="#">
-                            <h3>A Virgins Chestity</h3>
-                        </a>
-                        <div class="price-group">
-                            <span class="original-price">₹20</span>
-                        </div>
-                        <a href="#" class="bton btn-fill">Shop Now</a>
-                    </figcaption>
-                </div>
-            </li>
-
-            <li>
-                <div class="pro-inner">
-                    <figure>
-                        <a href="">
-                            <img src="{{asset('assets/images/placeholder-product.jpg')}}" alt="">
-                        </a>
-                    </figure>
-                    <figcaption>
-                        <a href="#">
-                            <h3>Adarsha Chhatra Jibon</h3>
-                        </a>
-                        <div class="price-group">
-                            <span class="original-price strike">₹25</span>
-                            <span class="sale-price">₹18</span>
-                            <div class="sale-persentage">28% save</div>
-                        </div>
-                        <div class="sale-badge">Sale</div>
-
-                        <a href="#" class="bton btn-fill">Shop Now</a>
-                    </figcaption>
-                </div>
-            </li>
-
-            <li>
-                <div class="pro-inner">
-                    <figure>
-                        <a href="">
-                            <img src="{{asset('assets/images/placeholder-product.jpg')}}" alt="">
-                        </a>
-                    </figure>
-                    <figcaption>
-                        <a href="#">
-                            <h3>Akhanda Achar Samhita</h3>
-                        </a>
-                        <div class="price-group">
-                            <span class="original-price strike">₹40</span>
-                            <span class="sale-price">₹30</span>
-                            <div class="sale-persentage">25% save</div>
-                        </div>
-                        <div class="sale-badge">Sale</div>
-
-                        <a href="#" class="bton btn-fill">Shop Now</a>
-                    </figcaption>
-                </div>
-            </li>
+            @forelse($featuredProducts as $product)
+                <li>
+                    <div class="pro-inner">
+                        <figure>
+                            <a href="{{ route('front.shop.details', $product->slug) }}">
+                                <img src="{{ asset($product->image ?? 'assets/images/placeholder-product.jpg') }}" alt="{{ $product->name }}">
+                            </a>
+                        </figure>
+                        <figcaption>
+                            <a href="{{ route('front.shop.details', $product->slug) }}">
+                                <h3>{{ $product->name }}</h3>
+                            </a>
+                            <div class="price-group">
+                                <span class="original-price">₹{{ number_format($product->price, 2) }}</span>
+                            </div>
+                            <a href="{{ route('front.shop.details', $product->slug) }}" class="bton btn-fill">Shop Now</a>
+                            
+                        </figcaption>
+                    </div>
+                </li>
+            @empty
+                <li>No featured products found.</li>
+            @endforelse
         </ul>
-
-        <a href="#" class="bton btn-fill">View More</a>
+        <a href="{{route('front.shop.list')}}" class="bton btn-fill">View More</a>
     </div>
     <div class="overlay-pattern"></div>
 </section>
@@ -574,58 +515,31 @@
             <h2 class="section-heading">Latest Events</h2>
         </div>
         <ul class="event-list">
+            @foreach($latestEvents as $event)
             <li>
                 <div class="inner-grid">
-                    <a href="#">
+                    <a href="{{route('front.event.details', $event->slug)}}">
                         <figure>
-                            <img src="{{asset('assets/images/image5.jpg')}}" alt="">
+                            @if($event->eventImage->count() > 0)
+                                <img src="{{ asset($event->eventImage->image_path) }}" alt="">
+                            @else
+                                <img src="{{ asset('assets/images/default-event.jpg') }}" alt="No Image">
+                            @endif
                         </figure>
                         <figcaption>
-                            <h3>How to train yourself to meditate regularly?</h3>
+                            <h3>{{ ucwords($event->title) }}</h3>
+                            <h6>{{ ucwords($event->venue )}}</h6>
                             <div class="event-date">
-                                <img src="{{asset('assets/images/calender.svg')}}">
-                                <span>Mar 31, 2022</span>
+                                <img src="{{ asset('assets/images/calender.svg') }}">
+                                <span>{{ \Carbon\Carbon::parse($event->start_time)->format('M d, Y') }}</span>
                             </div>
                         </figcaption>
                     </a>
                 </div>
             </li>
-
-            <li>
-                <div class="inner-grid">
-                    <a href="#">
-                        <figure>
-                            <img src="{{asset('assets/images/image6.jpg')}}" alt="">
-                        </figure>
-                        <figcaption>
-                            <h3>The most unusual spiritual practices</h3>
-                            <div class="event-date">
-                                <img src="{{asset('assets/images/calender.svg')}}">
-                                <span>Mar 31, 2022</span>
-                            </div>
-                        </figcaption>
-                    </a>
-                </div>
-            </li>
-
-            <li>
-                <div class="inner-grid">
-                    <a href="#">
-                        <figure>
-                            <img src="{{asset('assets/images/image8.jpg')}}" alt="">
-                        </figure>
-                        <figcaption>
-                            <h3>Bhakti yoga for beginners: exercises and postures</h3>
-                            <div class="event-date">
-                                <img src="{{asset('assets/images/calender.svg')}}">
-                                <span>Mar 31, 2022</span>
-                            </div>
-                        </figcaption>
-                    </a>
-                </div>
-            </li>
+            @endforeach
         </ul>
-        <a href="#" class="bton btn-fill">View More</a>
+        <a href="{{route('front.event.index')}}" class="bton btn-fill">View More</a>
     </div>
 </section>
 @endsection

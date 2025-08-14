@@ -34,9 +34,9 @@
                                                 <div class="pro-meta">
                                                     <span>GST:</span> {{ $item->productDetails->gst ?? 0 }}%
                                                 </div>
-                                                <div class="number-input" data-id="{{ $item->id }}" data-price="{{ $item->offer_price }}">
+                                                <div class="number-input" data-id="{{ $item->id }}" data-price="{{ $item->offer_price > 0 ? $item->offer_price : $item->price }}">
                                                     <button type="button" class="decrement">-</button>
-                                                    <input type="number" class="quantity" name="quantity" min="1" max="10" value="{{ $item->qty }}" step="1">
+                                                    <input type="number" class="quantity" name="quantity" min="1" max="10" value="{{ $item->qty }}" step="1" readonly>
                                                     <button type="button" class="increment">+</button>
                                                 </div>
                                                 <a href="javascript:void(0);" 
@@ -46,7 +46,7 @@
                                                 </a>
                                                 {{-- <a href="{{ route('cart.remove', $item->id) }}" class="remove">Remove</a> --}}
                                             </div>
-                                            <span class="cart-price">₹<span class="price-amount">{{ number_format($item->offer_price* $item->qty, 2) }}</span></span>
+                                            <span class="cart-price">₹<span class="price-amount">{{ number_format(($item->offer_price > 0 ? $item->offer_price : $item->price) * $item->qty, 2) }}</span></span>
                                         </figcaption>
                                     </div>
                                 </li>
@@ -68,7 +68,11 @@
                         <div class="cart-row">
                             <span>Subtotal</span>
                             @php
-                                $subtotal = $cartItems->sum(fn($item) => $item->qty * $item->offer_price);
+                               // $subtotal = $cartItems->sum(fn($item) => $item->qty * $item->offer_price);
+                                $subtotal = $cartItems->sum(function($item) {
+                                    $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
+                                    return $item->qty * $price;
+                                });
                             @endphp
                             <span class="subtotal-amount">₹{{ number_format($subtotal, 2) }}</span>
                         </div>
@@ -180,82 +184,7 @@
         });
     });
 
-    // $(document).ready(function () {
-    //     function recalculateCartTotals() {
-    //         let subtotal = 0;
-    //         $('.price-amount').each(function () {
-    //             subtotal += parseFloat($(this).text());
-    //         });
 
-    //         // Update subtotal and total in the UI
-    //         $('.cart-row span:contains("Subtotal")').next().text('₹' + subtotal.toFixed(2));
-    //         $('.cart-total span:contains("Total")').next().text('₹' + subtotal.toFixed(2));
-    //     }
-    //     $(document).on('click', '.increment, .decrement', function () {
-    //         let parent = $(this).closest('.number-input');
-    //         let input = parent.find('.quantity');
-    //         let itemId = parent.data('id');
-    //         let unitPrice = parseFloat(parent.data('price'));
-
-    //         let type = $(this).hasClass('increment') ? 'increment' : 'decrement';
-
-    //         $.ajax({
-    //             url: "{{ route('front.cart.update-quantity') }}",
-    //             method: "POST",
-    //             data: {
-    //                 _token: "{{ csrf_token() }}",
-    //                 cart_id: itemId,
-    //                 type: type
-    //             },
-    //             success: function (res) {
-    //                 if (res.success) {
-    //                     input.val(res.updated_qty);
-    //                     let newTotal = unitPrice * res.updated_qty;
-    //                     parent.closest('figcaption').find('.price-amount').text(newTotal.toFixed(2));
-
-    //                     recalculateCartTotals();
-    //                 } else {
-    //                     toastr.warning("Could not update quantity");
-    //                 }
-    //             },
-    //             error: function () {
-    //                 toastr.error("Something went wrong while updating quantity.");
-    //             }
-    //         });
-    //     });
-    // });
-
-
-    // $(document).on('click', '.remove-item', function (e) {
-    //     e.preventDefault();
-
-    //     let cartId = $(this).data('id');
-    //     let $row = $('#cart-item-' + cartId);
-
-    //     $.ajax({
-    //         url: "{{ route('front.cart.remove-quantity') }}",
-    //         method: "POST",
-    //         data: {
-    //             _token: "{{ csrf_token() }}",
-    //             cart_id: cartId
-    //         },
-    //         success: function (res) {
-    //             if (res.success) {
-    //                 $row.remove();
-    //                 toastr.success("Item removed from cart");
-    //                 setTimeout(function () {
-    //                     location.reload();
-    //                 }, 1000); 
-    //                  recalculateCartTotals();
-    //             } else {
-    //                 toastr.warning(res.message || "Failed to remove item");
-    //             }
-    //         },
-    //         error: function () {
-    //             toastr.error("Something went wrong while removing the item");
-    //         }
-    //     });
-    // });
     function recalculateCartTotals() {
         let subtotal = 0;
         $('.price-amount').each(function () {

@@ -66,11 +66,7 @@
                                 @endif
                             </td>
                             
-<<<<<<< HEAD
-                            <td>{{ $event->title }}</td>
-=======
                             <td>{{ ucwords($event->title) }}</td>
->>>>>>> a14c673d6eefebc466d5eb106d40bc872cc8a5c1
                             <td>{{date('d-m-Y h:i A',strtotime($event->start_time))}}</td>
                             <td> 
                                 <div class="form-check form-switch" data-bs-toggle="tooltip" title="Toggle status">
@@ -115,9 +111,6 @@
 @endsection
 
 @section('script')
-<<<<<<< HEAD
-
-=======
 <script>
      function deleteEvent(userId) {
     Swal.fire({
@@ -151,5 +144,4 @@
     });
   }
 </script>
->>>>>>> a14c673d6eefebc466d5eb106d40bc872cc8a5c1
 @endsection

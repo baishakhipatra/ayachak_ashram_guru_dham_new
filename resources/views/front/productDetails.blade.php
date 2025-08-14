@@ -11,217 +11,6 @@
         font-weight: bold;
     }
 </style>
-{{-- <section class="main">
-    <div class="container">
-        <ul class="breadcrumb breadcrumb-white mt-4">
-            <li><a href="{{route('front.home')}}">Home</a></li>
-            <li>Chyawanprash</li>
-        </ul>
-    </div>
-</section>
-
-<section class="details-body">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 mb-4 mb-md-5 mb-lg-0">
-                <div class="gallery-place">
-
-                    <div class="slider-big swiper">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="single-image-big">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-image-big">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-image-big">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-image-big">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div thumbsSlider="" class="slider-thumb swiper">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="single-image-thumb">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-image-thumb">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-image-thumb">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="single-image-thumb">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </div>
-                            </div>
-                        </div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="details-conetnt">
-                    <h1>Chyawanprash</h1>
-                    <div class="description">
-                        <p>
-                            This anti-aging medicine has been applying to rejuvenate people from the ancient period. It is specially used for tuburculosis, heart-disease, diabetes, seminal discharge, ejaculation, urinal difficulty etc. It can be taken in childhood, young or old age. Our speciality is to make it with pure ingredients.
-
-                        </p>
-                        <h3>Intake method</h3>
-                        <p>
-                            6 to 12 gram Chayawanprash with 30 drops of honey will be sucked like a logence keeping inside the mouth in empty stomach. After that milk or hot water may be taken. For children only two ounces and for infants only one ounce is applicable. For the severity of the disease it can be taken in the morning and the evening.
-                        </p>
-                    </div>
-                    <form action="">
-                        <div class="price">₹224.00</div>
-
-                        <div class="variation-list">
-                            <label>
-                                500 Gms
-                                <input type="radio" id="weight-500" name="weight" value="500" checked>
-                                <span></span>
-                            </label>
-                            <label>
-                                300 Gms
-                                <input type="radio" id="weight-300" name="weight" value="300">
-                                <span></span>
-                            </label>
-                        </div>
-
-                        <div class="quantity-group">
-                            <div class="number-input">
-                                <button class="decrement">-</button>
-                                <input type="number" id="quantity" min="1" max="10" value="1" step="1">
-                                <button class="increment">+</button>
-                            </div>
-                            <input type="submit" class="bton btn-fill" id="" value="Add to Cart">
-                        </div>
-
-
-                    </form>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="related-product-stack">
-            <div class="heading-group">
-                <h2 class="section-heading">Related Product</h2>
-
-                <div class="navi-slide">
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                </div>
-            </div>
-
-
-            <div class="relared-pro-stack swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="pro-inner">
-                            <figure>
-                                <a href="">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </a>
-                            </figure>
-                            <figcaption>
-                                <a href="#">
-                                    <h3>A Virgins Chestity</h3>
-                                </a>
-                                <div class="price-group">
-                                    <span class="original-price">₹20</span>
-                                </div>
-                                <a href="#" class="bton btn-fill">Shop Now</a>
-                            </figcaption>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="pro-inner">
-                            <figure>
-                                <a href="">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </a>
-                            </figure>
-                            <figcaption>
-                                <a href="#">
-                                    <h3>Adarsha Chhatra Jibon</h3>
-                                </a>
-                                <div class="price-group">
-                                    <span class="original-price strike">₹25</span>
-                                    <span class="sale-price">₹18</span>
-                                    <div class="sale-persentage">28% save</div>
-                                </div>
-                                <div class="sale-badge">Sale</div>
-
-                                <a href="#" class="bton btn-fill">Shop Now</a>
-                            </figcaption>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="pro-inner">
-                            <figure>
-                                <a href="">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </a>
-                            </figure>
-                            <figcaption>
-                                <a href="#">
-                                    <h3>Akhanda Achar Samhita</h3>
-                                </a>
-                                <div class="price-group">
-                                    <span class="original-price strike">₹40</span>
-                                    <span class="sale-price">₹30</span>
-                                    <div class="sale-persentage">25% save</div>
-                                </div>
-                                <div class="sale-badge">Sale</div>
-
-                                <a href="#" class="bton btn-fill">Shop Now</a>
-                            </figcaption>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="pro-inner">
-                            <figure>
-                                <a href="">
-                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                </a>
-                            </figure>
-                            <figcaption>
-                                <a href="#">
-                                    <h3>Brihat Ashwgandharista</h3>
-                                </a>
-                                <div class="price-group">
-                                    <span class="original-price">₹119.86</span>
-                                </div>
-                                <a href="#" class="bton btn-fill">Shop Now</a>
-                            </figcaption>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> --}}
 
 <section class="main">
     <div class="container">
@@ -326,7 +115,7 @@
                         </div>
 
                       
-                        <div class="variation-list">
+                        {{-- <div class="variation-list">
                             @foreach ($productVariations as $key => $variation)
                                 <label>
                                     {{ $variation->weight }}
@@ -340,8 +129,25 @@
                                     <span></span>
                                 </label>
                             @endforeach
-                        </div>
+                        </div> --}}
 
+                        @if(isset($productVariations) && $productVariations->count() > 0)
+                            <div class="variation-list">
+                                @foreach ($productVariations as $key => $variation)
+                                    <label>
+                                        {{ $variation->weight }}
+                                        <input type="radio"
+                                            name="variation"
+                                            value="{{ $variation->id }}"
+                                            data-price="{{ $variation->price }}"
+                                            data-offer-price="{{ $variation->offer_price }}"
+                                            data-images="@json($variation->images)"
+                                            {{ $key == 0 ? 'checked' : '' }}>
+                                        <span></span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        @endif
 
                         <div class="quantity-group">
                             <div class="number-input">
@@ -357,7 +163,7 @@
         </div>
 
         {{-- Related Products --}}
-        @if($relatedProducts && $relatedProducts->count())
+        @if(isset($relatedProducts) && $relatedProducts->count())
             <div class="related-product-stack">
                 <div class="heading-group">
                     <h2 class="section-heading">Related Products</h2>

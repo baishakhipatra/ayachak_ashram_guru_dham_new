@@ -10,25 +10,18 @@ class Event extends Model
 {
     use HasFactory;
     use softDeletes;
-<<<<<<< HEAD
-    protected $table = "events";
-    protected $fillable = ['title', 'slug', 'status','description', 'venue', 'start_time', 'end_time', 'has_registartion', 'deleted_at'];
-=======
 
     protected $table = "events";
     protected $fillable = ['title','slug', 'status', 'description', 'venue', 'start_time', 'end_time', 'has_registartion', 'deleted_at'];
->>>>>>> a14c673d6eefebc466d5eb106d40bc872cc8a5c1
 
     public function eventImage() {
-        return $this->hasOne(EventImage::class,'event_id');
+        return $this->hasOne(EventImage::class,'event_id','id');
     }
 
     public function relatedEvents()
     {
         return $this->hasMany(RelatedEvent::class, 'event_id');
     }
-<<<<<<< HEAD
-=======
 
     public function relatedEventDetails()
     {
@@ -39,5 +32,4 @@ class Event extends Model
             'related_event_id'  // Foreign key pointing to the related event
         );
     }
->>>>>>> a14c673d6eefebc466d5eb106d40bc872cc8a5c1
 }

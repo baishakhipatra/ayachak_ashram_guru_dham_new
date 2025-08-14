@@ -16,73 +16,6 @@
                             <a href="#" class="bton btn-fill">Download Invoice</a>
                         </div>
 
-                        {{-- <div class="row">
-                            <div class="col-lg-6">
-                                <div class="summery-list">
-                                    <ul class="cart-item-list">
-                                        <li>
-                                            <div class="inner-wrap">
-                                                <figure>
-                                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                                </figure>
-                                                <figcaption>
-                                                    <div class="product-details-cart">
-                                                        <a href="#"><h3>Chyawanprash</h3></a>
-                                                        <div class="pro-meta">
-                                                            <span>Categry:</span> Medicines
-                                                        </div>
-                                                        <div class="pro-meta">
-                                                            <span>Weight:</span> 500Gms
-                                                        </div>
-                                                    </div>
-                                                    <span class="cart-price">₹224.00</span>
-                                                </figcaption>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="inner-wrap">
-                                                <figure>
-                                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                                </figure>
-                                                <figcaption>
-                                                    <div class="product-details-cart">
-                                                        <a href="#"><h3>Amritarista</h3></a>
-                                                        <div class="pro-meta">
-                                                            <span>Categry:</span> Medicines
-                                                        </div>
-                                                        <div class="pro-meta">
-                                                            <span>Weight:</span> 500Gms
-                                                        </div>
-                                                    </div>
-                                                    <span class="cart-price">₹84.78</span>
-                                                </figcaption>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="inner-wrap">
-                                                <figure>
-                                                    <img src="./assets/images/placeholder-product.jpg" alt="">
-                                                </figure>
-                                                <figcaption>
-                                                    <div class="product-details-cart">
-                                                        <a href="#"><h3>Sitopladi Churna</h3></a>
-                                                        <div class="pro-meta">
-                                                            <span>Categry:</span> Medicines
-                                                        </div>
-                                                        <div class="pro-meta">
-                                                            <span>Weight:</span> 50Gms
-                                                        </div>
-                                                    </div>
-                                                    <span class="cart-price">₹112.00</span>
-                                                </figcaption>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div> --}}
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="summery-list">
@@ -118,8 +51,13 @@
                                                                 </div>
                                                             @endif
                                                         </div>
-                                                        <span class="cart-price">
+                                                        {{-- <span class="cart-price">
                                                             ₹{{ number_format($item->offer_price * $item->qty, 2) }}
+                                                        </span> --}}
+                                                        <span class="cart-price">
+                                                            ₹{{ number_format((!empty($item->offer_price) && $item->offer_price > 0 
+                                                                ? $item->offer_price 
+                                                                : $item->price) * $item->qty, 2) }}
                                                         </span>
                                                     </figcaption>
                                                 </div>

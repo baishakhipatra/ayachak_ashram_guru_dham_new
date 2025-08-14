@@ -79,7 +79,7 @@ class ProductController extends Controller
             "short_desc" => "nullable",
             "desc" => "nullable",
             "price" => "required|integer",
-            "offer_price" => "required|integer",
+            "offer_price" => "nullable|integer",
             "meta_title" => "nullable",
             "meta_desc" => "nullable",
             "meta_keyword" => "nullable",

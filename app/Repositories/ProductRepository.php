@@ -133,7 +133,7 @@ class ProductRepository implements ProductInterface
             $newEntry->short_desc = $collectedData['short_desc'];
             $newEntry->desc = $collectedData['desc'] ?? '';
             $newEntry->price = $collectedData['price'];
-            $newEntry->offer_price = $collectedData['offer_price'];
+            $newEntry->offer_price = $collectedData['offer_price'] ?? 0;
             $newEntry->meta_title = $collectedData['meta_title'];
             $newEntry->meta_desc = $collectedData['meta_desc'];
             $newEntry->meta_keyword = $collectedData['meta_keyword'];

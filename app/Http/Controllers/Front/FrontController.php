@@ -11,6 +11,7 @@ use App\Models\Collection;
 use App\Models\Product;
 use App\Models\Gallery;
 use App\Models\Banner;
+use App\Models\Event;
 use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
@@ -21,8 +22,21 @@ class FrontController extends Controller
     }
     public function index(Request $request)
     {
-        return view('front.index');
+        $categories = Category::where('status',1)->get();
+        $featuredProducts = Product::where('is_feature',1)
+            ->inRandomOrder()
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        $latestEvents = Event::with('eventImage')
+        ->where('status',1)
+        ->orderBy('created_at','desc')
+        ->take(3)
+        ->get();
+        return view('front.index',compact('categories','featuredProducts','latestEvents'));
     }
+    
     // public function index(Request $request)
     // {
     //     // $category = Category::latest('id')->get();

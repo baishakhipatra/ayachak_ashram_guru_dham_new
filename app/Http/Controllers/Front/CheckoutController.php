@@ -103,12 +103,12 @@ class CheckoutController extends Controller
         $total = 0;
 
         foreach ($cartItems as $item) {
-            $lineSubtotal = $item->offer_price * $item->qty;
+            $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
+            $lineSubtotal = $item->qty * $price;
             $subtotal += $lineSubtotal;
 
             $gstPercent = $item->productDetails->gst ?? 0;
             $lineTax = ($lineSubtotal * $gstPercent) / 100;
-
             $tax += $lineTax;
         }
 
@@ -201,7 +201,8 @@ class CheckoutController extends Controller
         $tax = 0;
 
         foreach ($cartItems as $item) {
-            $lineSubtotal = $item->qty * $item->offer_price;
+            $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
+            $lineSubtotal = $item->qty * $price;
             $subtotal += $lineSubtotal;
 
             $gstPercent = $item->productDetails->gst ?? 0;

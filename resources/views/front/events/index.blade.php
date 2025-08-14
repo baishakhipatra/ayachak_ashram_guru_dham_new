@@ -7,11 +7,7 @@
         <div class="inner-heading-group">
             <h2>Latest Events</h2>
             <ul class="breadcrumb">
-<<<<<<< HEAD
-                <li><a href="{{ route('front.home')}}">Home</a></li>
-=======
                 <li><a href="#">Home</a></li>
->>>>>>> a14c673d6eefebc466d5eb106d40bc872cc8a5c1
                 <li>Events</li>
             </ul>
         </div>

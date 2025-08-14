@@ -97,26 +97,26 @@ Route::name('front.')->group(function () {
         });
     });
     // product detail
-        Route::prefix('shop')->group(function () {
-            Route::get('/', 'Front\ProductController@shop')->name('shop.list');
-            Route::get('/filter', 'Front\ProductController@ajaxFilter')->name('shop.filter');
-            Route::post('/get-variation-images', 'Front\ProductController@getVariationImages')->name('shop.variation-images');
-            Route::get('/{slug}', 'Front\ProductController@detail')->name('shop.detail');
-            Route::get('/search', 'Front\ProductController@ProductSearch')->name('shop.search');
-            Route::post('/add-to-cart', 'Front\ProductController@AddToCart')->name('shop.add.to.cart');
-            Route::get('/details/{slug}', 'Front\ProductController@details')->name('shop.details');
-            Route::get('/color-wise-size', 'Front\ProductController@colorWiseSize')->name('shop.color.wise.size');
-            Route::get('/size', 'Front\ProductController@size')->name('shop.size');
-        });
+    Route::prefix('shop')->group(function () {
+        Route::get('/', 'Front\ProductController@shop')->name('shop.list');
+        Route::get('/filter', 'Front\ProductController@ajaxFilter')->name('shop.filter');
+        Route::post('/get-variation-images', 'Front\ProductController@getVariationImages')->name('shop.variation-images');
+        Route::get('/{slug}', 'Front\ProductController@detail')->name('shop.detail');
+        Route::get('/search', 'Front\ProductController@ProductSearch')->name('shop.search');
+        Route::post('/add-to-cart', 'Front\ProductController@AddToCart')->name('shop.add.to.cart');
+        Route::get('/details/{slug}', 'Front\ProductController@details')->name('shop.details');
+        Route::get('/color-wise-size', 'Front\ProductController@colorWiseSize')->name('shop.color.wise.size');
+        Route::get('/size', 'Front\ProductController@size')->name('shop.size');
+    });
 
     Route::name('donation.')->group(function () {
         Route::get('/donation', 'Front\DonationController@DonationForm')->name('form');
         Route::post('/store', 'Front\DonationController@store')->name('store');
     });
 
-    Route::prefix('event.')->group(function () {
+    Route::prefix('event')->group(function () {
         Route::get('/list', 'Front\EventController@index')->name('event.index');
-        Route::post('/details/{slug}', 'Front\EventController@details')->name('event.details');
+        Route::get('/details/{slug}', 'Front\EventController@details')->name('event.details');
     });
 });
 

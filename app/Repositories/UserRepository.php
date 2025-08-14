@@ -44,9 +44,8 @@ class UserRepository implements UserInterface
 
     public function create(array $data)
     {
-        // DB::beginTransaction();
 
-        // try {
+        
         $collectedData = collect($data);
 
         $full_name = '';
