@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\CartOffer;
 use App\Models\Order;
 use App\Models\Cart;
+use App\Models\Coupon; 
+use Illuminate\Support\Facades\Validator;
 use DB;
 use Razorpay\Api\Api;
 use Illuminate\Support\Facades\Log;
@@ -21,101 +23,6 @@ class CheckoutController extends Controller
         $this->checkoutRepository = $checkoutRepository;
         $this->cartRepository = $cartRepository;
     }
-
-    // public function index(Request $request)
-    // {
-    //     // $data = $this->cartRepository->viewByIp();
-    //     $userId = "";
-    //     $order_id = "";
-        
-    //     if (auth()->guard('web')->check()) {
-    //         $userId = auth()->guard('web')->user()->id;
-    //         $user = auth()->guard('web')->user();
-    //         $user_checkout = DB::table('checkout')->where('user_id', $userId)->first();
-    //         $final_amount = $user_checkout?$user_checkout->final_amount:0;
-    //         // $final_amount = 521;
-    //         // Order ID Generate
-    //         $razorpayKey = env('RAZORPAY_KEY');
-    //         $razorpaySecret = env('RAZORPAY_SECRET');
-
-    //         // Prepare the data for the order
-    //         $orderData = [
-    //             'receipt'         => 'rcptid_' . time(),
-    //             // 'amount'          => $request->input('amount') * 100, // amount in the smallest currency unit
-    //             'amount'          => $final_amount * 100, // amount in the smallest currency unit
-    //             'currency'        => 'INR',
-    //             'payment_capture' => 1 // auto capture
-    //         ];
-
-    //         // Encode the order data
-    //         $jsonData = json_encode($orderData);
-            
-    //         // Initialize cURL
-    //         $ch = curl_init();
-
-    //         // Set cURL options
-    //         curl_setopt($ch, CURLOPT_URL, 'https://api.razorpay.com/v1/orders');
-    //         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //         curl_setopt($ch, CURLOPT_POST, true);
-    //         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-    //         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    //             'Content-Type: application/json',
-    //             'Authorization: Basic ' . base64_encode("$razorpayKey:$razorpaySecret")
-    //         ]);
-
-    //         // Execute the cURL request
-    //         $response = curl_exec($ch);
-    //         // Check for errors
-    //         if ($response === false) {
-    //             $errorMessage = curl_error($ch);
-    //             $order_id = "";
-    //         }
-
-    //         // Decode the response
-    //         $responseData = json_decode($response, true);
-
-    //         // Check if order creation was successful
-    //         if (isset($responseData['id'])) {
-    //             $order_id = $responseData['id'];
-    //         } else {
-    //             $order_id = "";
-    //         }
-            
-    //         return view('front.checkout.index', compact('user_checkout', 'user', 'order_id', 'final_amount'));
-    //         // $data = $this->cartRepository->viewByUserId(auth()->guard('web')->user()->id);
-    //     }else{
-    //         return redirect()->route('front.user.login');
-    //    }
-    // }
-
-
-    // public function index(Request $request){
-    //     $userId = auth()->id();
-    //     $cartItems = Cart::with(['productDetails', 'variation', 'productDetails.category'])
-    //         ->where('user_id', $userId)
-    //         ->get();
-
-    //     if ($cartItems->isEmpty()) {
-    //         return redirect()->route('front.cart.index')->with('warning', 'Your cart is empty.');
-    //     }
-    //     $subtotal = 0;
-    //     $tax = 0;
-    //     $total = 0;
-
-    //     foreach ($cartItems as $item) {
-    //         $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
-    //         $lineSubtotal = $item->qty * $price;
-    //         $subtotal += $lineSubtotal;
-
-    //         $gstPercent = $item->productDetails->gst ?? 0;
-    //         $lineTax = ($lineSubtotal * $gstPercent) / 100;
-    //         $tax += $lineTax;
-    //     }
-
-    //     $total = $subtotal + $tax;
-
-    //     return view('front.checkout.index', compact('cartItems', 'subtotal', 'tax', 'total'));
-    // }
 
     public function index(Request $request)
     {
@@ -146,7 +53,7 @@ class CheckoutController extends Controller
 
         // Check if a coupon is stored in the session
         if (session()->has('couponCodeId')) {
-            $coupon = \App\Models\Coupon::find(session('couponCodeId'));
+            $coupon = Coupon::find(session('couponCodeId'));
 
             if ($coupon) {
                 // If your coupon is a fixed amount
@@ -170,80 +77,56 @@ class CheckoutController extends Controller
         return $couponData;
     }
 
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'email' => 'required|email|max:255',
-    //         'mobile' => 'required|integer|digits:10',
-    //         'fname' => 'required|string|max:255',
-    //         'lname' => 'required|string|max:255',
-    //        'billing_country' => 'required|string|max:255',
-    //        'billing_address' => 'required|string|max:1000',
-    //        'billing_landmark' => 'nullable|string|max:255',
-    //        'billing_city' => 'required|string|max:255',
-    //        'billing_state' => 'required|string|max:255',
-    //         'billing_pin' => 'required|string|max:255',
-    //         'shippingSameAsBilling' => 'nullable|integer|digits:1',
-    //         'shipping_country' => 'nullable|string|max:255',
-    //         'shipping_address' => 'nullable|string|max:500',
-    //         'shipping_landmark' => 'nullable|string|max:255',
-    //         'shipping_city' => 'nullable|string|max:255',
-    //         'shipping_state' => 'nullable|string|max:255',
-    //         'shipping_pin' => 'nullable|integer|digits:6',
-    //         'shipping_method' => 'nullable|string',
-    //     ], [
-    //         'mobile.*' => 'Please enter valid 10 digit mobile number',
-    //         'billing_pin.*' => 'Please enter valid 6 digit pin',
-    //         'shipping_pin.*' => 'Please enter valid 6 digit pin',
-    //     ]);
-
-    //     // $order_id = $this->checkoutRepository->create($request->except('_token'));
-    //    //dd($request->all());
-    //     if ($order_id) {
-    //         // return redirect()->route('front.checkout.complete')->with('success', 'Order No: '.$order_no);
-    //         //return view('front.checkout.complete', compact('order_no'))->with('success', 'Thank you for you order');
-    //         //return redirect('/checkout/payment/'.$order_no)->with('success', 'Please complete your payment');
-    //         //return view('front.checkout.payment', compact('order_no'))->with('success', 'Please complete your payment');
-    //        return redirect()->route('front.checkout.payment',$order_id)->with('success', 'Please complete your payment');
-    //     } else {
-    //         $request->shippingSameAsBilling = 0;
-    //         session()->flash('success', 'Operation completed successfully.');
-    //         return redirect()->back()->with('failure', 'Something happened. Try again.')->withInput($request->all());
-    //         // return redirect()->back();
-    //     }
-    // }
-
     public function store(Request $request)
     {
-        //dd($request->all());
-        $request->validate([
+        // Validation rules based on your form
+        $rules = [
             'email' => 'required|email|max:255',
-            'mobile' => 'required|integer|digits:10',
-            'fname' => 'required|string|max:255',
-            'lname' => 'required|string|max:255',
+            'mobile' => 'required|digits:10',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'billing_country' => 'required|string|max:255',
             'billing_address' => 'required|string|max:1000',
-            'billing_landmark' => 'nullable|string|max:255',
             'billing_city' => 'required|string|max:255',
             'billing_state' => 'required|string|max:255',
-            'billing_pin' => 'required|string|max:255',
-            'shippingSameAsBilling' => 'nullable|integer|digits:1',
+            'billing_pin' => 'required|string|max:6',
+
+            'address_option' => 'required|in:same,different',
             'shipping_country' => 'nullable|string|max:255',
+            'shipping_first_name' => 'nullable|string|max:255',
+            'shipping_last_name' => 'nullable|string|max:255',
             'shipping_address' => 'nullable|string|max:500',
-            'shipping_landmark' => 'nullable|string|max:255',
             'shipping_city' => 'nullable|string|max:255',
             'shipping_state' => 'nullable|string|max:255',
-            'shipping_pin' => 'nullable|integer|digits:6',
-            'shipping_method' => 'nullable|string',
-        ], [
-            'mobile.*' => 'Please enter valid 10 digit mobile number',
-            'billing_pin.*' => 'Please enter valid 6 digit pin',
-            'shipping_pin.*' => 'Please enter valid 6 digit pin',
-        ]);
+            'shipping_pin' => 'nullable|string|max:6',
+            'shipping_mobile' => 'nullable|digits:10',
+        ];
+
+        $messages = [
+            'mobile.*' => 'Please enter a valid 10 digit mobile number',
+            'billing_pin.*' => 'Please enter a valid 6 digit pin',
+            'shipping_pin.*' => 'Please enter a valid 6 digit pin',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $userId = auth()->id();
         $cartItems = Cart::with(['productDetails'])->where('user_id', $userId)->get();
 
+        if ($cartItems->isEmpty()) {
+            return response()->json(['error' => 'Cart is empty'], 422);
+        }
+
+        // Calculate totals
         $subtotal = 0;
         $tax = 0;
 
@@ -260,7 +143,7 @@ class CheckoutController extends Controller
         $discount = 0;
 
         if (session()->has('couponCodeId')) {
-            $coupon = \App\Models\Coupon::find(session('couponCodeId'));
+            $coupon = Coupon::find(session('couponCodeId'));
             if ($coupon) {
                 
                 $discount = $coupon->amount;
@@ -270,7 +153,7 @@ class CheckoutController extends Controller
 
         $total = $subtotal + $tax - $discount;
 
-        // Merge all into request to pass to repository
+        // Prepare checkout data
         $checkoutData = $request->except('_token');
         $checkoutData['subtotal'] = $subtotal;
         $checkoutData['tax'] = $tax;
@@ -278,17 +161,22 @@ class CheckoutController extends Controller
         $checkoutData['total'] = $total;
         $checkoutData['cart_items'] = $cartItems;
 
-        //  Use repository to store order
+        // Save order
         $order_id = $this->checkoutRepository->create($checkoutData);
 
         if ($order_id) {
-            return redirect()->route('front.checkout.payment', $order_id)
-                ->with('success', 'Please complete your payment');
+            return response()->json([
+                'success' => true,
+                'redirect_url' => route('front.checkout.payment', $order_id)
+            ]);
         } else {
-            session()->flash('success', 'Operation completed successfully.');
-            return redirect()->back()->with('failure', 'Something happened. Try again.')->withInput($request->all());
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong, please try again.'
+            ], 500);
         }
     }
+
 
 
     public function payment(Request $request,$order_id)

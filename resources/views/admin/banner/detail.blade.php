@@ -1,96 +1,87 @@
 @extends('admin.layouts.app')
 
-@section('page', 'Banner detail')
+@section('page', 'Banner Detail')
 
 @section('content')
 <section>
     <div class="row">
+        <!-- Preview Section -->
         <div class="col-sm-8">
             <div class="card">    
                 <div class="card-body">
-                     <h4 class="page__subtitle">Desktop Banner</h4>
-                    <div class="row">
+                    <h4 class="page__subtitle">Current Banner Preview</h4>
+                    
+                    <div class="row mb-3">
                         <div class="col-md-12">
-                            @if ($data->type == 'video')
-                                <video id="onn-video" style="width: 100%" autoplay muted loop controls playsinline>
-                                    <source src="{{ asset($data->file_path) }}" type="video/mp4">
+                            @if ($data->banner_videos)
+                                <video style="width: 100%" autoplay muted loop controls playsinline>
+                                    <source src="{{ asset($data->banner_videos) }}" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
+                            @elseif ($data->banner_image)
+                                <img src="{{ asset($data->banner_image) }}" class="w-100"/>
                             @else
-                                <img src="{{ asset($data->file_path) }}" class="w-100"/>
+                                <p class="text-muted">No banner uploaded yet.</p>
                             @endif
                         </div>
                     </div>  
-                     <h4 class="page__subtitle">Mobile Banner</h4>
-                    <div class="row">
-                        <div class="col-md-12">
-                            @if ($data->type == 'video')
-                                <video id="onn-video" style="width: 100%" autoplay muted loop controls playsinline>
-                                    <source src="{{ asset($data->file_path) }}" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                            @else
-                                <img src="{{ asset($data->mobile_image_path) }}" class="w-100"/>
-                            @endif
-                        </div>
-                    </div> 
+
+                    <h5>Title: </h5>
+                    <p>{{ $data->title }}</p>
+
+                    <h5>Sub Title: </h5>
+                    <p>{{ $data->sub_title }}</p>
+
+                    <h5>Description: </h5>
+                    <p>{{ $data->description }}</p>
+
                 </div>
             </div>
         </div>
 
+        <!-- Edit Section -->
         <div class="col-sm-4">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.banner.update', $data->id) }}" enctype="multipart/form-data">@csrf
-                        <h4 class="page__subtitle">Edit</h4>
-                        <div class="row">
-                            <div class="col-md-12 card">
-                                <div class="card-header p-0 mb-3">Desktop Image <span class="text-danger">*</span></div>
-                                <div class="card-body p-0">
-                                    <div class="w-100 product__thumb">
-                                        <label for="icon"><img id="iconOutput" src="{{ asset('admin/images/placeholder-image.jpg') }}" /></label>
-                                    </div>
-                                    <input type="file" name="image" id="icon" accept="image/*" onchange="loadIcon(event)" class="d-none">
-                                    <p class="small text-muted">Click here to browse image</p>
+                    <form method="POST" action="{{ route('admin.banner.update', $data->id) }}" enctype="multipart/form-data">
+                        @csrf
 
-                                    <script>
-                                        let loadIcon = function(event) {
-                                            let iconOutput = document.getElementById('iconOutput');
-                                            iconOutput.src = URL.createObjectURL(event.target.files[0]);
-                                            iconOutput.onload = function() {
-                                                URL.revokeObjectURL(iconOutput.src) // free memory
-                                            }
-                                        };
-                                    </script>
-                                </div>
-                                @error('image') <p class="small text-danger">{{ $message }}</p> @enderror
-                            </div>
-                            <div class="col-md-12 card">
-                                <div class="card-header p-0 mb-3">Mobile Image <span class="text-danger">*</span></div>
-                                <div class="card-body p-0">
-                                    <div class="w-100 product__thumb">
-                                        <label for="mobile_icon"><img id="mobileiconOutput" src="{{ asset('admin/images/placeholder-image.jpg') }}" /></label>
-                                    </div>
-                                    <input type="file" name="mobile_image" id="mobile_icon" accept="image/*" onchange="mobileloadIcon(event)" class="d-none">
-                                    <p class="small text-muted">Click here to browse image</p>
+                        <h4 class="page__subtitle">Edit Banner</h4>
 
-                                    <script>
-                                        let mobileloadIcon = function(event) {
-                                            let mobileiconOutput = document.getElementById('mobileiconOutput');
-                                            mobileiconOutput.src = URL.createObjectURL(event.target.files[0]);
-                                            mobileiconOutput.onload = function() {
-                                                URL.revokeObjectURL(mobileiconOutput.src) // free memory
-                                            }
-                                        };
-                                    </script>
-                                </div>
-                                @error('mobile_image') <p class="small text-danger">{{ $message }}</p> @enderror
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Title <span class="text-danger">*</span></label>
+                            <input type="text" name="title" class="form-control" value="{{ old('title', $data->title) }}">
+                            @error('title') <p class="small text-danger">{{ $message }}</p> @enderror
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-sm btn-danger">Update</button>
-                            </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Sub Title</label>
+                            <input type="text" name="sub_title" class="form-control" value="{{ old('sub_title', $data->sub_title) }}">
+                            @error('sub_title') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" rows="3" class="form-control">{{ old('description', $data->description) }}</textarea>
+                            @error('description') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Banner Image (Desktop/Mobile)</label>
+                            <input type="file" name="banner_image" accept="image/*" class="form-control">
+                            <small class="text-muted">Leave blank if you don’t want to change</small>
+                            @error('banner_image') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Banner Video</label>
+                            <input type="file" name="banner_videos" accept="video/*" class="form-control">
+                            <small class="text-muted">Leave blank if you don’t want to change</small>
+                            @error('banner_videos') <p class="small text-danger">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-sm btn-danger">Update</button>
                         </div>
                     </form>
                 </div>
@@ -98,4 +89,5 @@
         </div>
     </div>
 </section>
+
 @endsection

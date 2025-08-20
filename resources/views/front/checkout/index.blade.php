@@ -61,7 +61,7 @@
             <div class="row">
                 <div class="col-lg-6 p-0 order-lg-1 order-2">
                     <div class="cart-form-stack">
-                        <form id="checkoutForm" action="{{ route('front.checkout.store') }}" method="POST">
+                        {{-- <form id="checkoutForm" action="{{ route('front.checkout.store') }}" method="POST">
                             @csrf
                             <div class="login-checkout">
                                 <h3 class="checkout-heading">Contact information</h3>
@@ -76,21 +76,23 @@
                             <div class="billing-place">
                                 <h3 class="checkout-heading mb-4">Billing information</h3>
                                 <div class="form-group">
-                                    <select name="billing_country" class="form-select select-style" required>
+                                    <select name="billing_country" class="form-select select-style">
+                                        <option value="">Select Country</option>
                                         <option value="India" selected>India</option>
                                     </select>
+                                    <span class="text-danger error-text billing_country_error"></span>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <div class="form-group"> 
-                                            <input type="text" class="form-control input-style" placeholder=" " id="" name="fname" value="{{ explode(' ', auth()->user()->name)[0] ?? '' }}">
-                                            <label class="placeholder-text">First Name</label>
+                                        <div class="form-group">
+                                            <input type="text" name="first_name" class="form-control" placeholder="" value="{{ explode(' ', auth()->user()->name)[0] ?? '' }}">
+                                            <span class="text-danger error-text first_name_error"></span>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group"> 
-                                            <input type="text" class="form-control input-style" placeholder=" " id="" name="lname" value="{{ explode(' ', auth()->user()->name)[1] ?? '' }}">
-                                            <label class="placeholder-text">Last Name</label>
+                                            <input type="text" name="last_name" class="form-control" placeholder="" value="{{ explode(' ', auth()->user()->name)[1] ?? '' }}">
+                                            <span class="text-danger error-text last_name_error"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -153,12 +155,6 @@
                             <div class="billing-place">
                                 <h3 class="checkout-heading mb-4">Billing address</h3>
                                 <div class="billing-group-place">
-                                    {{-- <div class="billing-group">
-                                        <div class="form-check">
-                                            <input type="radio" class="form-check-input" id="radio1" name="billing_address" value="option1">
-                                            <label class="form-check-label" for="radio1">Same as shipping address</label>
-                                        </div>
-                                    </div> --}}
                                     <div class="billing-group">
                                         <div class="form-check">
                                             <input type="radio" class="form-check-input" id="radio1" name="shippingSameAsBilling" value="1" checked>
@@ -250,7 +246,195 @@
                                     <a href="#">Refund and Cancellation Policy</a>
                                 </li>
                             </ul>
+                        </form> --}}
+                        <form id="checkoutForm" action="{{ route('front.checkout.store') }}" method="POST">
+                            @csrf
+                            <div class="login-checkout">
+                                <h3 class="checkout-heading">Contact information</h3>
+                                <p>We'll use this email to send you details and updates about your order.</p>
+
+                                <div class="form-group"> 
+                                    <input type="email" class="form-control input-style" 
+                                        value="{{ auth()->user()->email ?? '' }}" 
+                                        name="email">
+                                    <label class="placeholder-text">Enter Email</label>
+                                </div>
+                            </div>
+
+                            <!-- Billing Address -->
+                            <div class="billing-place">
+                                <h3 class="checkout-heading mb-4">Billing information</h3>
+                                <div class="form-group">
+                                    <select name="billing_country" class="form-select select-style">
+                                        <option value="">Select Country</option>
+                                        <option value="India" selected>India</option>
+                                    </select>
+                                    <span class="text-danger error-text billing_country_error"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <input type="text" name="first_name" class="form-control" 
+                                                value="{{ explode(' ', auth()->user()->name)[0] ?? '' }}">
+                                            <span class="text-danger error-text first_name_error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group"> 
+                                            <input type="text" name="last_name" class="form-control" 
+                                                value="{{ explode(' ', auth()->user()->name)[1] ?? '' }}">
+                                            <span class="text-danger error-text last_name_error"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group"> 
+                                    <input type="text" class="form-control input-style" name="billing_address">
+                                    <label class="placeholder-text">Address</label>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group"> 
+                                            <input type="text" class="form-control input-style" name="billing_city">
+                                            <label class="placeholder-text">City</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group"> 
+                                            <select name="billing_state" class="form-select select-style">
+                                                <option>Select State</option>
+                                                <option>West Bengal</option>
+                                                <option>Andhra Pradesh</option>
+                                                <option>Arunachal Pradesh</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group"> 
+                                            <input type="text" class="form-control input-style" name="billing_pin">
+                                            <label class="placeholder-text">Pin Code</label>
+                                        </div> 
+                                    </div>
+                                </div>
+
+                                <div class="form-group"> 
+                                    <input type="tel" class="form-control input-style" name="mobile" value="{{ auth()->user()->mobile ?? '' }}">
+                                    <label class="placeholder-text">Phone Number</label>
+                                </div>
+                            </div>
+
+                            
+                            <div class="shipping-place">
+                                <h3 class="checkout-heading mb-4">Shipping method</h3>
+
+                                <div class="ship-stack">
+                                    <span>Standard</span>
+                                    <strong>Free</strong>
+                                </div>
+                            </div>
+
+                            <div class="payment-place">
+                                <h3 class="checkout-heading">Shipping method</h3>
+                                <p>All transactions are secure and encrypted.</p>
+                            </div>
+
+                            <!-- Radio Buttons -->
+                            <div class="address-choice my-4">
+                                <h3 class="checkout-heading mb-3">Shipping Address</h3>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="address_option" id="sameAddress" value="same" checked>
+                                    <label class="form-check-label" for="sameAddress">
+                                        Same as billing address
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="address_option" id="differentAddress" value="different">
+                                    <label class="form-check-label" for="differentAddress">
+                                        Use a different shipping address
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Shipping Form (Hidden by Default) -->
+                            <div id="shippingAddressForm" style="display:none;">
+                                <h3 class="checkout-heading mb-4">Shipping information</h3>
+
+                                <div class="form-group">
+                                    <select name="shipping_country" class="form-select select-style">
+                                        <option value="">Select Country</option>
+                                        <option value="India">India</option>
+                                    </select>
+                                    <span class="text-danger error-text shipping_country_error"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <input type="text" name="shipping_first_name" class="form-control" placeholder="First Name">
+                                            <span class="text-danger error-text shipping_first_name_error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group"> 
+                                            <input type="text" name="shipping_last_name" class="form-control" placeholder="Last Name">
+                                            <span class="text-danger error-text shipping_last_name_error"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group"> 
+                                    <input type="text" class="form-control input-style" name="shipping_address">
+                                    <label class="placeholder-text">Address</label>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group"> 
+                                            <input type="text" class="form-control input-style" name="shipping_city">
+                                            <label class="placeholder-text">City</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group"> 
+                                            <select name="shipping_state" class="form-select select-style">
+                                                <option>Select State</option>
+                                                <option>West Bengal</option>
+                                                <option>Andhra Pradesh</option>
+                                                <option>Arunachal Pradesh</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group"> 
+                                            <input type="text" class="form-control input-style" name="shipping_pin">
+                                            <label class="placeholder-text">Pin Code</label>
+                                        </div> 
+                                    </div>
+                                </div>
+
+                                <div class="form-group"> 
+                                    <input type="tel" class="form-control input-style" name="shipping_mobile">
+                                    <label class="placeholder-text">Phone Number</label>
+                                </div>
+                            </div>
+
+                            <!-- Submit -->
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                            <ul class="legal-list">
+                                <li>
+                                    <a href="#">Privacy Statement</a>
+                                </li>
+                                <li>
+                                    <a href="#">Terms and conditions</a>
+                                </li>
+                                <li>
+                                    <a href="#">Refund and Cancellation Policy</a>
+                                </li>
+                            </ul>
                         </form>
+
                     </div>
                 </div>
                 <div class="col-lg-6 p-0 order-lg-2 order-1">
@@ -349,54 +533,6 @@
   <script>
     $(document).ready(function () {
 
-         // --- Helper: Copy shipping -> alt billing ---
-        function copyShippingToAlt() {
-            $('input[name="alt_fname"]').val($('input[name="fname"]').val());
-            $('input[name="alt_lname"]').val($('input[name="lname"]').val());
-            $('input[name="alt_address"]').val($('input[name="billing_address"]').val());
-            $('input[name="alt_city"]').val($('input[name="billing_city"]').val());
-            $('select[name="alt_state"]').val($('select[name="billing_state"]').val());
-            $('input[name="alt_pin"]').val($('input[name="billing_pin"]').val());
-            $('input[name="alt_phone"]').val($('input[name="mobile"]').val());
-        }
-
-        // --- Show/hide alt billing based on radio ---
-        function setBillingOption(isSame) {
-            if (isSame) {
-                $('.billing-form').slideUp(150);
-                $('.billing-form').find('input,select,textarea').prop('disabled', true)
-                    .removeClass('is-invalid').next('.error-message').remove();
-                copyShippingToAlt();
-            } else {
-                $('.billing-form').slideDown(150);
-                $('.billing-form').find('input,select,textarea').prop('disabled', false);
-            }
-        }
-
-        // Init toggle
-        setBillingOption($('input[name="billing_option"]:checked').val() === 'same');
-
-        // // Radio change listener
-        // $('input[name="billing_option"]').on('change', function () {
-        //     setBillingOption($(this).val() === 'same');
-        // });
-        $('input[name="shippingSameAsBilling"]').on('change', function() {
-            if ($(this).val() === '1') {
-                $('.billing-fields').hide();
-            } else {
-                $('.billing-fields').show();
-            }
-        });
-
-
-        // Keep alt synced when "same" is selected
-        const shippingFieldsSelector = 'input[name="fname"], input[name="lname"], input[name="billing_address"], input[name="billing_city"], select[name="billing_state"], input[name="billing_pin"], input[name="mobile"]';
-        $(shippingFieldsSelector).on('input change', function () {
-            if ($('input[name="billing_option"]:checked').val() === 'same') {
-                copyShippingToAlt();
-            }
-        });
-
         $('#checkoutForm').on('submit', function (e) {
             e.preventDefault();
 
@@ -407,6 +543,8 @@
             $('.form-control, .form-select').removeClass('is-invalid');
             $('.error-message').remove();
 
+            // ---------------- BILLING VALIDATION ----------------
+            
             // Email
             let email = $('input[name="email"]').val().trim();
             if (!email || !emailPattern.test(email)) {
@@ -415,23 +553,23 @@
                 isValid = false;
             }
 
-            // Shipping First Name
-            let fname = $('input[name="fname"]').val().trim();
+            // First Name
+            let fname = $('input[name="first_name"]').val().trim();
             if (!fname) {
-                $('input[name="fname"]').addClass('is-invalid')
+                $('input[name="first_name"]').addClass('is-invalid')
                     .after('<span class="error-message text-danger">First name is required.</span>');
                 isValid = false;
             }
 
-            // Shipping Last Name
-            let lname = $('input[name="lname"]').val().trim();
+            // Last Name
+            let lname = $('input[name="last_name"]').val().trim();
             if (!lname) {
-                $('input[name="lname"]').addClass('is-invalid')
+                $('input[name="last_name"]').addClass('is-invalid')
                     .after('<span class="error-message text-danger">Last name is required.</span>');
                 isValid = false;
             }
 
-            // Shipping Address
+            // Address
             let address = $('input[name="billing_address"]').val().trim();
             if (!address) {
                 $('input[name="billing_address"]').addClass('is-invalid')
@@ -439,7 +577,7 @@
                 isValid = false;
             }
 
-            // Shipping City
+            // City
             let city = $('input[name="billing_city"]').val().trim();
             if (!city) {
                 $('input[name="billing_city"]').addClass('is-invalid')
@@ -447,7 +585,7 @@
                 isValid = false;
             }
 
-            // Shipping State
+            // State
             let state = $('select[name="billing_state"]').val();
             if (!state || state === 'Select State') {
                 $('select[name="billing_state"]').addClass('is-invalid')
@@ -455,7 +593,7 @@
                 isValid = false;
             }
 
-            // Shipping Pin
+            // Pin Code
             let pin = $('input[name="billing_pin"]').val().trim();
             if (!pin || !/^\d{6}$/.test(pin)) {
                 $('input[name="billing_pin"]').addClass('is-invalid')
@@ -463,7 +601,7 @@
                 isValid = false;
             }
 
-            // Shipping Mobile
+            // Mobile
             let mobile = $('input[name="mobile"]').val().trim();
             if (!mobile || !/^\d{10}$/.test(mobile)) {
                 $('input[name="mobile"]').addClass('is-invalid')
@@ -471,60 +609,85 @@
                 isValid = false;
             }
 
-            // --- Validate alt billing only if "different" is selected ---
-            if ($('input[name="billing_option"]:checked').val() === 'different') {
-                let altFirst = $('input[name="alt_fname"]').val().trim();
-                let altLast = $('input[name="alt_lname"]').val().trim();
-                let altAddress = $('input[name="alt_address"]').val().trim();
-                let altCity = $('input[name="alt_city"]').val().trim();
-                let altState = $('select[name="alt_state"]').val();
-                let altPin = $('input[name="alt_pin"]').val().trim();
-                let altPhone = $('input[name="alt_phone"]').val().trim();
+            // ---------------- SHIPPING VALIDATION ----------------
+            if ($('input[name="address_option"]:checked').val() === 'different') {
+                
+                let sFname = $('input[name="shipping_first_name"]').val().trim();
+                let sLname = $('input[name="shipping_last_name"]').val().trim();
+                let sAddress = $('input[name="shipping_address"]').val().trim();
+                let sCity = $('input[name="shipping_city"]').val().trim();
+                let sState = $('select[name="shipping_state"]').val();
+                let sPin = $('input[name="shipping_pin"]').val().trim();
+                let sPhone = $('input[name="shipping_mobile"]').val().trim();
 
-                if (!altFirst) {
-                    $('input[name="alt_fname"]').addClass('is-invalid')
+                if (!sFname) {
+                    $('input[name="shipping_first_name"]').addClass('is-invalid')
                         .after('<span class="error-message text-danger">First name is required.</span>');
                     isValid = false;
                 }
-                if (!altLast) {
-                    $('input[name="alt_lname"]').addClass('is-invalid')
+                if (!sLname) {
+                    $('input[name="shipping_last_name"]').addClass('is-invalid')
                         .after('<span class="error-message text-danger">Last name is required.</span>');
                     isValid = false;
                 }
-                if (!altAddress) {
-                    $('input[name="alt_address"]').addClass('is-invalid')
+                if (!sAddress) {
+                    $('input[name="shipping_address"]').addClass('is-invalid')
                         .after('<span class="error-message text-danger">Address is required.</span>');
                     isValid = false;
                 }
-                if (!altCity) {
-                    $('input[name="alt_city"]').addClass('is-invalid')
+                if (!sCity) {
+                    $('input[name="shipping_city"]').addClass('is-invalid')
                         .after('<span class="error-message text-danger">City is required.</span>');
                     isValid = false;
                 }
-                if (!altState || altState === 'Select State') {
-                    $('select[name="alt_state"]').addClass('is-invalid')
+                if (!sState || sState === 'Select State') {
+                    $('select[name="shipping_state"]').addClass('is-invalid')
                         .after('<span class="error-message text-danger">Please select a state.</span>');
                     isValid = false;
                 }
-                if (!altPin || !/^\d{6}$/.test(altPin)) {
-                    $('input[name="alt_pin"]').addClass('is-invalid')
+                if (!sPin || !/^\d{6}$/.test(sPin)) {
+                    $('input[name="shipping_pin"]').addClass('is-invalid')
                         .after('<span class="error-message text-danger">Please enter a valid 6-digit pin code.</span>');
                     isValid = false;
                 }
-                if (!altPhone || !/^\d{10}$/.test(altPhone)) {
-                    $('input[name="alt_phone"]').addClass('is-invalid')
+                if (!sPhone || !/^\d{10}$/.test(sPhone)) {
+                    $('input[name="shipping_mobile"]').addClass('is-invalid')
                         .after('<span class="error-message text-danger">Please enter a valid 10-digit phone number.</span>');
                     isValid = false;
                 }
             }
 
-            // Final submit
+            // ---------------- FINAL SUBMIT ----------------
             if (isValid) {
-                this.submit();
+                $.ajax({
+                    url: "{{ route('front.checkout.store') }}",
+                    method: "POST",
+                    data: $('#checkoutForm').serialize(),
+                    success: function (response) {
+                        if (response.status == 1) {
+                            alert(response.message);
+                            location.reload();
+                            $('#checkoutForm')[0].reset();
+                            $("#shippingAddressForm").hide();
+                        }
+                    }
+                });
             }
         });
 
     });
+
+    $(document).ready(function(){
+        $("input[name='address_option']").change(function(){
+            if($(this).val() === "different"){
+                $("#shippingAddressForm").slideDown();
+            } else {
+                $("#shippingAddressForm").slideUp();
+            }
+        });
+    });
+
+
 
 
   $( function() {

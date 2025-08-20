@@ -9,7 +9,7 @@
                     <li><a href="{{route('front.home')}}">Home</a></li>
                     <li><a href="{{route('front.shop.list')}}">Shop</a></li>
                     <li><a href="{{route('front.event.index')}}">Events</a></li>
-                    <li><a href="">About Us</a></li>
+                    <li><a href="{{route('front.about-us.index')}}">About Us</a></li>
                     <li><a href="{{ route('front.shop.list', ['category' => 'Book']) }}">Books</a></li>
                     <li><a href="{{ route('front.shop.list', ['category' => 'Medicine']) }}">Medicines</a></li>
                     <li><a href="{{ route('front.shop.list', ['category' => 'water']) }}">Water</a></li>
@@ -34,28 +34,6 @@
                     " class="account">
                     <img src="{{ asset('assets/images/user.svg') }}" alt="User">
                 </a>
-
-                {{-- <div class="dropdown">
-                    <a href="#" class="account dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{asset('assets/images/user.svg')}}" alt="User">
-                    </a>
-                    <ul class="dropdown-menu header_user_dropdown">
-                        @if(Auth::guard('web')->check())
-                            <li>
-                                <a class="dropdown-item" href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    Log out
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ route('front.profile') }}">My account</a>
-                            </li>
-                        @else
-                            <li>
-                                <a class="dropdown-item" href="{{ route('front.login') }}">Log in</a>
-                            </li>
-                        @endif
-                    </ul>
-                </div> --}}
 
                 <a href="{{route('front.cart.index')}}" class="cart">
                     <img src="{{asset('assets/images/bag.svg')}}">

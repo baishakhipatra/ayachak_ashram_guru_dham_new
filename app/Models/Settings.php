@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Settings extends Model
 {
-    //
+    protected $fillable = [
+        'page_heading',
+        'content',
+    ];
 }

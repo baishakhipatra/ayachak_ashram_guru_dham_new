@@ -9,9 +9,9 @@
                     <div class="group-image">
                         <img src="./assets/images/group-flower.png" alt="">
                     </div>
-                    <h2 class="banner-sub-heading">Find Your Zen</h2>
-                    <h1 class="banner-heading">Unleash Inner Peace and Vitality</h1>
-                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
+                    <h2 class="banner-sub-heading">{{ $banner->sub_title }}</h2>
+                    <h1 class="banner-heading">{{ $banner->title }}</h1>
+                    <p>{{ $banner->description }}</p>
                 </div>
             </div>
             <div class="col-lg-5">
@@ -20,7 +20,7 @@
                         <img src="{{asset('assets/images/sinle-flower.png')}}" alt="">
                     </div>
                     <div class="image-holder">
-                        <img src="{{asset('assets/images/banner-image.jpg')}}" alt="">
+                        <img src="{{ asset($banner->banner_image) }}" alt="">
                     </div>
                     <div class="play-btm" data-bs-toggle="modal" data-bs-target="#videoModal">
                         <img src="{{asset('assets/images/play.svg')}}" alt="">
@@ -45,11 +45,10 @@
                 <img src="./assets/images/divider.svg" alt="">
             </figure>
             <h3 class="section-sub-heading">Introduction</h3>
-            <h2 class="section-heading">About Our Guru Dham</h2>
+            <h2 class="section-heading">{{$page_heading}}</h2>
         </div>
-        <p>India is the holy land. The soil of India is blessed with the foot dust of innumerable ascetic saints and sages. The required religious sentiment, transcendence
-        and geist to awaken the inner divinity of the human being can’t get flourished unless someone gets birth in India.</p>
-        <a href="#" class="bton btn-fill">Read More</a>
+        <p>{{$short_description}}</p>
+        <a href="{{ route('front.about-us.index') }}" class="bton btn-fill">Read More</a>
     </div>
 </section>
 
@@ -72,15 +71,14 @@
                         <figure>
                             <img src="{{asset('assets/images/divider.svg')}}" alt="">
                         </figure>
-                        <h2 class="section-heading">Sri Srimat Swami Swarupananda Paramhansa Dev</h2>
+                        <h2 class="section-heading">{{$babamoni_heading}}</h2>
                         <h3 class="section-sub-heading">Popularly known as SRI SRI BABAMONI</h3>
                     </div>
                     <div class="section-content-place">
-                        <p>A versatile genius, Sri Sri Swami Swarupananda Paramhansa Dev was born in around the first half of last decade of nineteenth century in Chandpur, 
-                        the then sub-divisional town of the then District Comilla of undivided Bengal in British India. No exact date of birth was stated by His Divine Grace and no reliable document has been found about it. He came from a very rich, religious, benevolent family. The grand father of Sri Sri Babamoni, Sri Harihar Gangopadhay, Zamindar and who was famous for his profound knowledge. Maharishi Sri Sri Bholananda Giri Moharaj gave Him Honour by title ‘KALIR BASISTHA’.</p>
+                        <p>{{$babamoni_short_description}}</p>
                     </div>
                         
-                    <a href="#" class="bton btn-fill">Read More</a>
+                    <a href="{{route('front.babamoni.index')}}" class="bton btn-fill">Read More</a>
                 </div>
             </div>
        </div>

@@ -10,9 +10,11 @@ use App\Models\Category;
 use App\Models\Collection;
 use App\Models\Product;
 use App\Models\Gallery;
-use App\Models\Banner;
+use App\Models\BannerTitle;
 use App\Models\Event;
+use App\Models\Settings;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class FrontController extends Controller
 {
@@ -34,30 +36,29 @@ class FrontController extends Controller
         ->orderBy('created_at','desc')
         ->take(3)
         ->get();
-        return view('front.index',compact('categories','featuredProducts','latestEvents'));
+
+        $banner = BannerTitle::latest()->first();
+
+        //about us
+        $about = Settings::where('page_heading', 'About Our Guru Dham')->first();
+
+        $short_description = null;
+        $page_heading = null;
+
+        if ($about) {
+            $page_heading = $about->page_heading;
+            $short_description = Str::words($about->content, 50, '...');
+        }
+
+
+        //babamoni
+        $babamoni = Settings::where('page_heading', 'LIKE', '%Sri Srimat Swami Swarupananda Paramhansa Dev%')->first();
+        $babamoni_heading = $babamoni?->page_heading;
+        $babamoni_short_description = $babamoni ? Str::words($babamoni->content, 50, '...') : null;
+        
+        return view('front.index',compact('categories','featuredProducts','latestEvents','banner','page_heading',
+        'short_description','babamoni_heading','babamoni_short_description'));
     }
-    
-    // public function index(Request $request)
-    // {
-    //     // $category = Category::latest('id')->get();
-    //     // $collections = Collection::latest('id')->get();
-    //     $products = Product::where('is_trending', 1)->latest('view_count', 'id')->where('status', 1)->limit(14)->get();
-    //     $hot_deals = Product::where('status', 1)->orderBy('position', 'ASC')->get();
-
-    //     foreach ($hot_deals as $product) {
-    //         $availableColors[$product->id] = $this->productRepository->getAvailableColorByProductId($product->id);
-    //     }
-    //     $demo_product = Product::where('is_feature', 1)->take(5)->get();
-    //     $mobile_product = Product::where('cat_id', 17)->get();
-
-    //     // dd($mobile_product);
-    //     $deal_of_the_day_products = Product::where('is_deal_of_the_day', 1)->latest('view_count', 'id')->where('status', 1)->limit(14)->get();
-    //     // dd($demo_product[2]);  
-    //     // $products = Product::latest('view_count', 'id')->limit(16)->get();
-    //     $galleries = Gallery::latest('id')->get();
-    //     $banner = Banner::where('status', 1)->latest('id')->first();
-    //     return view('front.welcome', compact('products', 'galleries', 'banner', 'hot_deals', 'demo_product', 'deal_of_the_day_products', 'mobile_product', 'availableColors'));
-    // }
 
     public function mailSubscribe(Request $request)
     {

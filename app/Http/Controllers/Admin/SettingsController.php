@@ -50,11 +50,6 @@ class SettingsController extends Controller
     }
     public function bulkDestroy(Request $request)
     {
-        // $request->validate([
-        //     'bulk_action' => 'required',
-        //     'delete_check' => 'required|array',
-        // ]);
-
         $validator = Validator::make($request->all(), [
             'bulk_action' => 'required',
             'delete_check' => 'required|array',
@@ -76,4 +71,6 @@ class SettingsController extends Controller
             return redirect()->route('admin.settings.index')->with('failure', $validator->errors()->first())->withInput($request->all());
         }
     }
+
+
 }

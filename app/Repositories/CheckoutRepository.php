@@ -87,695 +87,173 @@ class CheckoutRepository implements CheckoutInterface
 
     // public function create(array $data)
     // {
-    //     $collectedData = collect($data);
     //     DB::beginTransaction();
+
     //     try {
-    //         $settings = Settings::all();
+    //         $userId = auth()->id();
 
-    //         // shipping charge fetch
-    //         $shippingChargeJSON = json_decode($settings[22]->content);
-    //         $minOrderAmount = $shippingChargeJSON->min_order;
-    //         $shippingCharge = $shippingChargeJSON->shipping_charge;
-	// 		$empshippingChargeJSON = json_decode($settings[24]->content);
-    //         $minEmpOrderAmount = $empshippingChargeJSON->min_order;
-    //         $empshippingCharge = $empshippingChargeJSON->shipping_charge;
-    //         // 1 order sequence
-    //         $OrderChk = Order::select('order_sequence_int')->latest('id')->first();
-    //         if($OrderChk->order_sequence_int == 0) $orderSeq = 1;
-    //         else $orderSeq = (int) $OrderChk->order_sequence_int + 1;
+    //         // Fetch cart items
+    //         $cartItems = Cart::with('productDetails')
+    //             ->where('user_id', $userId)
+    //             ->get();
 
-    //         $ordNo = sprintf("%'.05d", $orderSeq);
-	// 		$nextYear = 24; 
-    //         $curYear = date('y');
-    //         $order_no = "OIS".$curYear . (($curYear != $nextYear) ? '-' . $nextYear : '').'/'.$ordNo;
-    //        // $order_no = "OIS".date('y').'/'.$ordNo;
-
-    //         // 2 order place
-    //         $newEntry = new Order;
-    //         $newEntry->order_sequence_int = $orderSeq;
-    //         $newEntry->order_no = $order_no;
-    //         $newEntry->user_id = Auth::guard('web')->user()->id ?? 0;
-    //         $newEntry->ip = $this->ip;
-    //         $newEntry->email = $collectedData['email'];
-    //         $newEntry->mobile = $collectedData['mobile'];
-    //         $newEntry->fname = $collectedData['fname'];
-    //         $newEntry->lname = $collectedData['lname'];
-    //         /*$newEntry->billing_country = $collectedData['billing_country'];
-    //         $newEntry->billing_address = $collectedData['billing_address'];
-    //         $newEntry->billing_landmark = $collectedData['billing_landmark'];
-    //         $newEntry->billing_city = $collectedData['billing_city'];
-    //         $newEntry->billing_state = $collectedData['billing_state'];
-    //         $newEntry->billing_pin = $collectedData['billing_pin'];
-
-    //         // shipping & billing address check
-    //         $shippingSameAsBilling = $collectedData['shippingSameAsBilling'] ?? 0;
-    //         $newEntry->shippingSameAsBilling = $shippingSameAsBilling;
-
-    //         // dd($shippingSameAsBilling);
-
-    //         if ($shippingSameAsBilling == 0) {
-    //             $newEntry->shipping_country = $collectedData['shipping_country'];
-    //             $newEntry->shipping_address = $collectedData['shipping_address'];
-    //             $newEntry->shipping_landmark = $collectedData['shipping_landmark'];
-    //             $newEntry->shipping_city = $collectedData['shipping_city'];
-    //             $newEntry->shipping_state = $collectedData['shipping_state'];
-    //             $newEntry->shipping_pin = $collectedData['shipping_pin'];
-    //         } else {
-    //             $newEntry->shipping_country = $collectedData['billing_country'];
-    //             $newEntry->shipping_address = $collectedData['billing_address'];
-    //             $newEntry->shipping_landmark = $collectedData['billing_landmark'];
-    //             $newEntry->shipping_city = $collectedData['billing_city'];
-    //             $newEntry->shipping_state = $collectedData['billing_state'];
-    //             $newEntry->shipping_pin = $collectedData['billing_pin'];
-    //         }*/
-	// 		if(!empty($collectedData['addressType'])){
-    //             if($collectedData['addressType']=='ho')
-    //             {
-                    
-    //                 $newEntry->billing_country = 'India';
-    //                 $newEntry->billing_address = 'Adventz Infinity@5, BN Block, Sector V,Bidhannagar';
-    //                 $newEntry->billing_landmark = '';
-    //                 $newEntry->billing_city = 'Kolkata';
-    //                 $newEntry->billing_state = 'West Bengal';
-    //                 $newEntry->billing_pin = '700091';
-	// 				$newEntry->address_type = 'ho';
-    //                 // shipping & billing address check
-    //                 $shippingSameAsBilling = $collectedData['shippingSameAsBilling'] ?? 0;
-    //                 $newEntry->shippingSameAsBilling = $shippingSameAsBilling;
-
-    //                 // dd($shippingSameAsBilling);
-
-    //                 if ($shippingSameAsBilling == 0) {
-    //                     $newEntry->shipping_country = 'India';
-    //                     $newEntry->shipping_address = 'Adventz Infinity@5, BN Block, Sector V,Bidhannagar';
-    //                     $newEntry->shipping_landmark = '';
-    //                     $newEntry->shipping_city = 'Kolkata';
-    //                     $newEntry->shipping_state = 'West Bengal';
-    //                     $newEntry->shipping_pin = '700091';
-    //                 } else {
-    //                     $newEntry->shipping_country = 'India';
-    //                     $newEntry->shipping_address = 'Adventz Infinity@5, BN Block, Sector V,Bidhannagar';
-    //                     $newEntry->shipping_landmark = '';
-    //                     $newEntry->shipping_city = 'Kolkata';
-    //                     $newEntry->shipping_state = 'West Bengal';
-    //                     $newEntry->shipping_pin = '700091';
-    //                 }
-    //             }
-    //             else if($collectedData['addressType']=='dankuni')
-    //             {
-                    
-    //                 $newEntry->billing_country = 'India';
-    //                 $newEntry->billing_address = 'JL22, Mollarber, Janai Main Road';
-    //                 $newEntry->billing_landmark = '';
-    //                 $newEntry->billing_city = 'Dankuni';
-    //                 $newEntry->billing_state =  'West Bengal';
-    //                 $newEntry->billing_pin = '712310';
-	// 				$newEntry->address_type = 'dankuni';
-    //                 // shipping & billing address check
-    //                 $shippingSameAsBilling = $collectedData['shippingSameAsBilling'] ?? 0;
-    //                 $newEntry->shippingSameAsBilling = $shippingSameAsBilling;
-
-    //                 // dd($shippingSameAsBilling);
-
-    //                 if ($shippingSameAsBilling == 0) {
-    //                     $newEntry->shipping_country = 'India';
-    //                     $newEntry->shipping_address = 'JL22, Mollarber, Janai Main Road';
-    //                     $newEntry->shipping_landmark = '';
-    //                     $newEntry->shipping_city = 'Dankuni';
-    //                     $newEntry->shipping_state =  'West Bengal';
-    //                     $newEntry->shipping_pin = '712310';
-    //                 } else {
-    //                     $newEntry->shipping_country = 'India';
-    //                     $newEntry->shipping_address = 'JL22, Mollarber, Janai Main Road';
-    //                     $newEntry->shipping_landmark = '';
-    //                     $newEntry->shipping_city = 'Dankuni';
-    //                     $newEntry->shipping_state =  'West Bengal';
-    //                     $newEntry->shipping_pin = '712310';
-    //                 }
-    //             }else{
-                    
-    //                 $newEntry->billing_country = $collectedData['billing_country'];
-    //                 $newEntry->billing_address = $collectedData['billing_address'];
-    //                 $newEntry->billing_landmark = $collectedData['billing_landmark'];
-    //                 $newEntry->billing_city = $collectedData['billing_city'];
-    //                 $newEntry->billing_state = $collectedData['billing_state'];
-    //                 $newEntry->billing_pin = $collectedData['billing_pin'];
-	// 				$newEntry->address_type = 'other';
-    //                 // shipping & billing address check
-    //                 $shippingSameAsBilling = $collectedData['shippingSameAsBilling'] ?? 0;
-    //                 $newEntry->shippingSameAsBilling = $shippingSameAsBilling;
-
-    //                 // dd($shippingSameAsBilling);
-
-    //                 if ($shippingSameAsBilling == 0) {
-    //                     $newEntry->shipping_country = $collectedData['shipping_country'];
-    //                     $newEntry->shipping_address = $collectedData['shipping_address'];
-    //                     $newEntry->shipping_landmark = $collectedData['shipping_landmark'];
-    //                     $newEntry->shipping_city = $collectedData['shipping_city'];
-    //                     $newEntry->shipping_state = $collectedData['shipping_state'];
-    //                     $newEntry->shipping_pin = $collectedData['shipping_pin'];
-    //                 } else {
-    //                     $newEntry->shipping_country = $collectedData['billing_country'];
-    //                     $newEntry->shipping_address = $collectedData['billing_address'];
-    //                     $newEntry->shipping_landmark = $collectedData['billing_landmark'];
-    //                     $newEntry->shipping_city = $collectedData['billing_city'];
-    //                     $newEntry->shipping_state = $collectedData['billing_state'];
-    //                     $newEntry->shipping_pin = $collectedData['billing_pin'];
-    //                 }
-    //             }
-    //         }else{
-    //             $newEntry->billing_country = $collectedData['billing_country'];
-    //             $newEntry->billing_address = $collectedData['billing_address'];
-    //             $newEntry->billing_landmark = $collectedData['billing_landmark'];
-    //             $newEntry->billing_city = $collectedData['billing_city'] ?? '';
-    //             $newEntry->billing_state = $collectedData['billing_state'];
-    //             $newEntry->billing_pin = $collectedData['billing_pin'];
-	// 			$newEntry->address_type = 'other';
-    //             // shipping & billing address check
-    //             $shippingSameAsBilling = $collectedData['shippingSameAsBilling'] ?? 0;
-    //             $newEntry->shippingSameAsBilling = $shippingSameAsBilling;
-
-    //             // dd($shippingSameAsBilling);
-
-    //             if ($shippingSameAsBilling == 0) {
-    //                 $newEntry->shipping_country = $collectedData['shipping_country'];
-    //                 $newEntry->shipping_address = $collectedData['shipping_address'];
-    //                 $newEntry->shipping_landmark = $collectedData['shipping_landmark'];
-    //                 $newEntry->shipping_city = $collectedData['shipping_city'];
-    //                 $newEntry->shipping_state = $collectedData['shipping_state'];
-    //                 $newEntry->shipping_pin = $collectedData['shipping_pin'];
-    //             } else {
-    //                 $newEntry->shipping_country = $collectedData['billing_country'];
-    //                 $newEntry->shipping_address = $collectedData['billing_address'];
-    //                 $newEntry->shipping_landmark = $collectedData['billing_landmark'];
-    //                 $newEntry->shipping_city = $collectedData['billing_city'];
-    //                 $newEntry->shipping_state = $collectedData['billing_state'];
-    //                 $newEntry->shipping_pin = $collectedData['billing_pin'];
-    //             }
+    //         if ($cartItems->isEmpty()) {
+    //             return false;
     //         }
 
-    //         $newEntry->shipping_method = $collectedData['shipping_method'];
+    //         // Step 1: Create the Order
+    //         $order = Order::create([
+    //             'user_id' => $userId,
+    //             'email' => $data['email'],
+    //             'mobile' => $data['mobile'],
+    //             'fname' => $data['fname'],
+    //             'lname' => $data['lname'],
+    //             'billing_country' => $data['billing_country'],
+    //             'billing_address' => $data['billing_address'],
+    //             'billing_landmark' => $data['billing_landmark'] ?? null,
+    //             'billing_city' => $data['billing_city'],
+    //             'billing_state' => $data['billing_state'],
+    //             'billing_pin' => $data['billing_pin'],
+    //             'shipping_same_as_billing' => $data['shippingSameAsBilling'] ?? 1,
+    //             // Only copy billing if "same as billing" is checked
+    //             'shipping_country' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+    //                 ? $data['billing_country'] 
+    //                 : $data['shipping_country'],
 
-            
-    //         // fetch cart details
-    //         // $cartData = Cart::where('ip', $this->ip)->get();
-    //         if (Auth::guard()->check()) {
-    //             $cartData = Cart::where('user_id', Auth::guard()->user()->id)->get();
-    //         } else {
-    //             if (!empty($_COOKIE['cartToken'])) {
-    //                 $cartData = Cart::where('guest_token', $_COOKIE['cartToken'])->get();
-    //             } else {
-    //                 $cartData = [];
-    //                 return false;
-    //             }
+    //             'shipping_address' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+    //                 ? $data['billing_address'] 
+    //                 : $data['shipping_address'],
+
+    //             'shipping_landmark' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+    //                 ? ($data['billing_landmark'] ?? null) 
+    //                 : ($data['shipping_landmark'] ?? null),
+
+    //             'shipping_city' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+    //                 ? $data['billing_city'] 
+    //                 : $data['shipping_city'],
+
+    //             'shipping_state' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+    //                 ? $data['billing_state'] 
+    //                 : $data['shipping_state'],
+
+    //             'shipping_pin' => ($data['shippingSameAsBilling'] ?? 1) == 1 
+    //                 ? $data['billing_pin'] 
+    //                 : $data['shipping_pin'],
+
+    //             'shipping_method' => $data['shipping_method'] ?? 'standard',
+    //             'status' => 1,
+    //             'total_amount' => 0,
+    //             'gst' => 0,
+    //         ]);
+    //         //dd($order);
+
+    //         $grandTotal = 0;
+    //         $totalGstAmount = 0;
+
+    //         // Step 2: Loop through cart items
+    //         foreach ($cartItems as $item) {
+    //             $product = $item->productDetails;
+
+    //             if (!$product) continue;
+
+    //             $qty = $item->qty;
+    //             $gstPercent = $product->gst ?? 0;
+
+    //             $unitPrice = $product->offer_price > 0 ? $product->offer_price : $product->price;
+    //             $subtotal = $unitPrice * $qty;
+
+    //             $gstAmount = ($subtotal * $gstPercent) / 100;
+    //             $total = $subtotal + $gstAmount;
+
+    //             OrderProduct::create([
+    //                 'order_id' => $order->id,
+    //                 'product_id' => $product->id,
+    //                 'product_name' => $product->name,
+    //                 'product_image' => $product->image,
+    //                 'product_slug' => $product->slug,
+    //                 'product_variation_id' => $item->variation_id,
+    //                 'colour_name' => $item->color_name,
+    //                 'size_name' => $item->size_name,
+    //                 'sku_code' => $item->sku,
+    //                 'coupon_code' => null,
+    //                 'qty' => $qty,
+    //                 'gst' => $gstPercent,
+    //                 'price' => $product->price,
+    //                 'offer_price' => $product->offer_price,
+    //                 'gst_amount' => $gstAmount,
+    //                 'total' => $total,
+    //             ]);
+
+    //             $grandTotal += $total;
+    //             $totalGstAmount += $gstAmount;
     //         }
 
-    //         $subtotal = 0;
-    //         foreach($cartData as $cartValue) {
-    //             $subtotal += $cartValue->offer_price * $cartValue->qty;
-    //         }
-    //         $coupon_code_id = $cartData[0]->coupon_code_id ?? 0;
-    //         $newEntry->coupon_code_id = $coupon_code_id;
-    //         $newEntry->amount = $subtotal;
+    //         // Step 3: Update Order Totals
+    //         $order->update([
+    //             'total_amount' => $grandTotal,
+    //             'gst' => $totalGstAmount,
+    //         ]);
 
-    //         $total = (int) $subtotal;
+    //         // Step 4: Clear Cart
+    //         Cart::where('user_id', $userId)->delete();
 
-    //         $newEntry->tax_amount = 0;
-    //         $shippingCharges = 0;
-
-    //         // if coupon found
-    //         if (!empty($coupon_code_id) || $coupon_code_id != 0) {
-    //             // check for voucher/ coupon
-    //             if ($cartData[0]->couponDetails->is_coupon == 0) {
-    //                 $newEntry->coupon_code_type = 'voucher';
-                    
-    //                 if($cartData[0]->couponDetails->type == 1){
-    //                     $newEntry->discount_amount = $cartData[0]->couponDetails->amount;
-
-    //                     $couponCodeDiscount = (int) ($total * ($cartData[0]->couponDetails->amount / 100));
-
-    //                     $newEntry->coupon_code_discount_type = 'Percentage';
-    //                     $final_amount = ceil($total - $couponCodeDiscount);
-
-    //                     // shipping charges
-    //                     if ((int) $minOrderAmount >= (int) $final_amount ) {
-    //                         $shippingCharges = $shippingCharge;
-    //                         $final_amount = $final_amount + $shippingCharges;
-    //                     }
-    //                     $newEntry->shipping_charges = $shippingCharges;
-
-    //                     $newEntry->final_amount = $final_amount;
-    //                 }else{
-    //                     $newEntry->discount_amount = $cartData[0]->couponDetails->amount;
-
-    //                     $couponCodeDiscount = $cartData[0]->couponDetails->amount;
-
-    //                     $newEntry->coupon_code_discount_type = 'Flat';
-    //                     $final_amount = ceil($total - $couponCodeDiscount) > 0  ? ceil($total - $couponCodeDiscount) : 0;
-
-    //                     // shipping charges
-    //                     if ((int) $minOrderAmount >= (int) $final_amount ) {
-    //                         $shippingCharges = $shippingCharge;
-    //                         $final_amount = $final_amount + $shippingCharges;
-    //                     }
-    //                     $newEntry->shipping_charges = $shippingCharges;
-
-    //                     $newEntry->final_amount = $final_amount;
-    //                 }
-
-    //                 $newEntry->save();
-
-    //                 // dd($newEntry);
-    //             } else {
-    //                 $newEntry->coupon_code_type = 'coupon';
-    //                 if($cartData[0]->couponDetails->type == 1){
-	// 					$couponCode = substr($cartData[0]->couponDetails->coupon_code, 0, 3);
-    //                     $firstCode=$couponCode;
-    //                     $newEntry->discount_amount = $cartData[0]->couponDetails->amount;
-
-    //                     $couponCodeDiscount = (int) ($total * ($cartData[0]->couponDetails->amount / 100));
-
-    //                     $newEntry->coupon_code_discount_type = 'Percentage';
-    //                     $final_amount = ceil($total - $couponCodeDiscount);
-
-    //                     // shipping charges
-	// 					if ($firstCode=='EMP'){
-    //                         if ((int) $minEmpOrderAmount >= (int) $final_amount ) {
-    //                         $shippingCharges = $empshippingCharge;
-    //                         $final_amount = $final_amount + $shippingCharges;
-    //                        }
-                        
-    //                     }else{
-	// 						if ((int) $minOrderAmount >= (int) $final_amount ) {
-	// 							$shippingCharges = $shippingCharge;
-	// 							$final_amount = $final_amount + $shippingCharges;
-	// 						}
-	// 					}
-    //                     $newEntry->shipping_charges = $shippingCharges;
-
-    //                     $newEntry->final_amount = $final_amount;
-    //                 }else{
-	// 					$couponCode = substr($cartData[0]->couponDetails->coupon_code, 0, 3);
-    //                     $firstCode=$couponCode;
-    //                     $newEntry->discount_amount = $cartData[0]->couponDetails->amount;
-
-    //                     $couponCodeDiscount = $cartData[0]->couponDetails->amount;
-
-    //                     $newEntry->coupon_code_discount_type = 'Flat';
-    //                     $final_amount = ceil($total - $couponCodeDiscount) > 0  ? ceil($total - $couponCodeDiscount) : 0;
-
-    //                     // shipping charges
-	// 					if ($firstCode=='EMP'){
-    //                         if ((int) $minEmpOrderAmount >= (int) $final_amount ) {
-    //                         $shippingCharges = $empshippingCharge;
-    //                         $final_amount = $final_amount + $shippingCharges;
-    //                        }
-                        
-    //                     }else{
-	// 						if ((int) $minOrderAmount >= (int) $final_amount ) {
-	// 							$shippingCharges = $shippingCharge;
-	// 							$final_amount = $final_amount + $shippingCharges;
-	// 						}
-	// 					}
-    //                     $newEntry->shipping_charges = $shippingCharges;
-
-    //                     $newEntry->final_amount = $final_amount;
-    //                 }
-    //                 $newEntry->save();
-    //             }
-    //         } else {
-
-    //             // shipping charges
-    //             if ((int) $minOrderAmount >= (int) $total ) {
-    //                 $shippingCharges = $shippingCharge;
-    //                 $total = $total + $shippingCharges;
-    //             }
-
-    //             $newEntry->shipping_charges = $shippingCharges;
-
-    //             $newEntry->coupon_code_type = '';
-    //             $newEntry->discount_amount = 0;
-	// 			$newEntry->final_amount = $total;
-	// 			$newEntry->save();
-
-
-    //             // IF NO COUPON CODE, CHECK FOR OFFERS
-    //             // 1 all offers
-    //             $currentDate = date('Y-m-d');
-    //             $cartOffers = CartOffer::where('status', 1)->whereRaw("date(valid_from) <= '$currentDate' AND date(valid_upto) >= '$currentDate'")->orderBy('min_cart_order', 'desc')->get();
-                
-    //             $finalOrderAmount = $newEntry->final_amount;
-    //             $elligibleOfferCount = 1;
-
-    //             // 2 check if offer exists
-    //             if(count($cartOffers) > 0) {
-    //                 // 3 looping through all offers
-    //                 foreach($cartOffers as $offerKey => $offer) {
-    //                     // if offer exists for the order
-    //                     if($offer->min_cart_order < $finalOrderAmount) {
-    //                         // in case of multiple elligible offer, use highest one
-    //                         if ($elligibleOfferCount == 1) {
-    //                             // checking multiplier - when double the order amount of offer amount, customer receives multiplier offer
-    //                             $receiveQty = $offer->offer_product_qty;
-    //                             if ($offer->min_order_multiplier == 1) {
-    //                                 $receiveQty = (int) ($finalOrderAmount / $offer->min_cart_order) * (int) $offer->offer_product_qty;
-    //                             }
-
-    //                             // this offer is applicable for this order
-    //                             $newOrderOffer = new OrderOffer();
-    //                             $newOrderOffer->order_id = $newEntry->id;
-    //                             $newOrderOffer->offer_image = $offer->offer_image;
-    //                             $newOrderOffer->offer_name = $offer->offer_name;
-    //                             $newOrderOffer->min_cart_order = $offer->min_cart_order;
-    //                             $newOrderOffer->max_cart_order = $offer->max_cart_order;
-    //                             $newOrderOffer->min_order_multiplier = $offer->min_order_multiplier;
-    //                             $newOrderOffer->valid_from = $offer->valid_from;
-    //                             $newOrderOffer->valid_upto = $offer->valid_upto;
-    //                             $newOrderOffer->offer_product_name = $offer->offer_product_name;
-    //                             $newOrderOffer->offer_product_qty = $offer->offer_product_qty;
-    //                             $newOrderOffer->total_order_amount = $finalOrderAmount;
-    //                             $newOrderOffer->customer_receive_offer = 1;
-    //                             $newOrderOffer->customer_receive_product_name = $offer->offer_product_name;
-    //                             $newOrderOffer->customer_receive_product_qty = $receiveQty;
-    //                             $newOrderOffer->save();
-    //                         }
-    //                         $elligibleOfferCount++;
-    //                     }
-    //                 }
-    //             }
-    //         }
-
-    //         // coupon code usage handler
-    //         if (!empty($coupon_code_id) || $coupon_code_id != 0) {
-    //             $newEntry->discount_amount = $cartData[0]->couponDetails->amount;
-    //             $newEntry->final_amount = $total - (int) $cartData[0]->couponDetails->amount;
-
-    //             // update coupon code usage
-    //             $couponDetails = Coupon::findOrFail($coupon_code_id);
-    //             $old_no_of_usage = $couponDetails->no_of_usage;
-    //             $new_no_of_usage = $old_no_of_usage + 1;
-    //             $couponDetails->no_of_usage = $new_no_of_usage;
-    //             if ($new_no_of_usage == $couponDetails->max_time_of_use) $couponDetails->status = 0;
-    //             $couponDetails->save();
-
-    //             $newCouponUsageEntry = new CouponUsage();
-    //             $newCouponUsageEntry->coupon_code_id = $coupon_code_id;
-    //             $newCouponUsageEntry->coupon_code = $couponDetails->coupon_code;
-    //             $newCouponUsageEntry->discount = $cartData[0]->couponDetails->amount;
-    //             $newCouponUsageEntry->total_checkout_amount = $total;
-    //             $newCouponUsageEntry->final_amount = $total - (int) $cartData[0]->couponDetails->amount;
-    //             $newCouponUsageEntry->user_id = Auth::guard('web')->user()->id ?? 0;
-    //             $newCouponUsageEntry->email = $collectedData['email'];
-    //             $newCouponUsageEntry->ip = $this->ip;
-    //             $newCouponUsageEntry->order_id = $newEntry->id;
-    //             $newCouponUsageEntry->usage_time = date('Y-m-d H:i:s');
-    //             $newCouponUsageEntry->save();
-    //         }
-
-    //         // store address
-    //         // if user is logged in
-    //         if (Auth::guard('web')->check()) {
-    //             // check if address exists
-    //             $addrChk = Address::where('user_id', Auth::guard('web')->user()->id)
-    //             ->where('pin', $newEntry->billing_pin)
-    //             ->where('city', $newEntry->billing_city)
-    //             ->where('state', $newEntry->billing_state)
-    //             ->where('country', $newEntry->billing_country)
-    //             ->where('landmark', $newEntry->billing_landmark)
-    //             ->count();
-
-    //             if ($addrChk == 0) {
-    //                 $address = new Address();
-    //                 $address->user_id = Auth::guard('web')->user()->id;
-    //                 $address->address = $newEntry->billing_address;
-    //                 $address->landmark = $newEntry->billing_landmark;
-    //                 $address->lat = "";
-    //                 $address->lng = "";
-    //                 $address->state = $newEntry->billing_state;
-    //                 $address->city = $newEntry->billing_city;
-    //                 $address->pin = $newEntry->billing_pin;
-    //                 $address->country = $newEntry->billing_country;
-    //                 $address->type = 3;
-    //                 $address->billing = 1;
-    //                 $address->save();
-
-    //                 if ($shippingSameAsBilling == 0) {
-    //                     $address = new Address();
-    //                     $address->user_id = Auth::guard('web')->user()->id;
-    //                     $address->address = $newEntry->shipping_address;
-    //                     $address->landmark = $newEntry->shipping_landmark;
-    //                     $address->lat = "";
-    //                     $address->lng = "";
-    //                     $address->state = $newEntry->shipping_state;
-    //                     $address->city = $newEntry->shipping_city;
-    //                     $address->pin = $newEntry->shipping_pin;
-    //                     $address->country = $newEntry->shipping_country;
-    //                     $address->type = 3;
-    //                     $address->billing = 2;
-    //                     $address->save();
-    //                 }
-    //             }
-    //         }
-
-    //         // 2 insert cart data into order products
-    //         $orderProducts = [];
-    //         foreach($cartData as $cartValue) {
-    //             $orderProducts[] = [
-    //                 'order_id' => $newEntry->id,
-    //                 'product_id' => $cartValue->product_id,
-    //                 'product_name' => $cartValue->product_name,
-    //                 'product_image' => $cartValue->product_image,
-    //                 'product_slug' => $cartValue->product_slug,
-    //                 'product_variation_id' => $cartValue->product_variation_id,
-    //                 'colour_name' => ProductColorSize::find($cartValue->product_variation_id)->color_name ?? '',
-    //                 'size_name' => ProductColorSize::find($cartValue->product_variation_id)->size_name ?? '',
-    //                 'sku_code' => ProductColorSize::find($cartValue->product_variation_id)->code ?? '',
-    //                 'price' => $cartValue->price,
-    //                 'offer_price' => $cartValue->offer_price,
-    //                 'qty' => $cartValue->qty,
-    //             ];
-    //         }
-    //         $orderProductsNewEntry = OrderProduct::insert($orderProducts);
-
-    //         // dd($settings[23]->content);
-
-    //         // new guest user  - password send via email
-    //         $userCheck = User::where('email', $collectedData['email'])->first();
-
-    //         if(empty($userCheck)) {
-    //             $password = generateUniqueAlphaNumeric(10);
-    //             // insert new user 
-    //             $full_name = '';
-    //             if (isset($data['fname'])) {
-    //                 $full_name = $collectedData['fname'] . ' ' . $collectedData['lname'];
-    //             }
-
-    //             $newUserEntry = new User();
-    //             $newUserEntry->fname = $collectedData['fname'] ?? NULL;
-    //             $newUserEntry->lname = $collectedData['lname'] ?? NULL;
-    //             $newUserEntry->name = $full_name;
-    //             $newUserEntry->email = $collectedData['email'];
-    //             $newUserEntry->mobile = $collectedData['mobile'];
-    //             $newUserEntry->gender = $collectedData['gender'] ?? NULL;
-    //             $newUserEntry->password = Hash::make($password);
-
-    //             $newUserEntry->save();
-
-    //             //send email
-    //             if ($newUserEntry) {
-    //                 $email_data = [
-    //                     'name' => $full_name,
-    //                     'subject' => 'Onn - New registration',
-    //                     'email' => $collectedData['email'],
-    //                     'password' => $password,
-    //                     'blade_file' => 'front/mail/register',
-    //                 ];
-    //                 if ($settings[23]->content == "1") SendMail($email_data);
-    //             }
-    //         }
-
-    //         // 3 send product details mail
-    //         // $email_data = [
-    //         //     'name' => $collectedData['fname'].' '.$collectedData['lname'],
-    //         //     'subject' => 'Onn - New Order',
-    //         //     'email' => $collectedData['email'],
-    //         //     'orderId' => $newEntry->id,
-    //         //     'orderNo' => $order_no,
-    //         //     'orderAmount' => $total,
-    //         //     'orderProducts' => $orderProducts,
-    //         //     'blade_file' => 'front/mail/order-confirm',
-    //         // ];
-    //         // if ($settings[23]->content == "1") SendMail($email_data);
-
-    //         // send invoice mail starts
-    //         // $invoice_email_data = [
-    //         //     'name' => $collectedData['fname'].' '.$collectedData['lname'],
-    //         //     'subject' => 'Onn - Order Invoice',
-    //         //     'email' => $collectedData['email'],
-    //         //     'orderId' => $newEntry->id,
-    //         //     'payment_method' => $newEntry->payment_method,
-    //         //     'orderNo' => $order_no,
-    //         //     'orderAmount' => $total,
-    //         //     // 'orderProducts' => $orderProducts,
-    //         //     'blade_file' => 'front/mail/invoice',
-    //         // ];
-    //         // if ($settings[23]->content == "1") SendMail($invoice_email_data);
-
-	// 		// // Shiprocket
-    //         // if ($settings[23]->content == "1") $this->shiprocket($newEntry, $cartData);
-
-	// 		// // Unicommerce
-    //         // if ($settings[23]->content == "1") $this->feedUnicommerce($newEntry, $cartData);
-
-    //         // 4 remove cart data
-    //         $emptyCart = Cart::where('ip', $this->ip)->delete();
-    //         if (Auth::guard()->check()) {
-    //             $emptyCart = Cart::where('user_id', Auth::guard()->user()->id)->delete();
-    //         } else {
-    //             if (!empty($_COOKIE['cartToken'])) {
-    //                 $emptyCart = Cart::where('guest_token', $_COOKIE['cartToken'])->delete();
-    //             } else {
-    //                 $emptyCart = [];
-    //                 return false;
-    //             }
-    //         }
-
-    //         // 5 online payment
-    //         // if (isset($data['razorpay_payment_id'])) {
-    //         //     // fetch order details
-    //         //     $ordDetails = Order::findOrFail($newEntry->id);
-    //         //     // dd($data);
-
-    //         //     // Razorpay auto capture code
-    //         //     $amm = $ordDetails->final_amount*100;
-    //         //     $pay_id = $collectedData['razorpay_payment_id'];
-
-    //         //     $url = 'https://api.razorpay.com/v1/payments/'.$pay_id.'/capture';
-
-    //         //     $data_string = 'amount='.$amm;
-    //         //     $razorpay_key_id = $settings[20]->content;
-    //         //     $razorpay_key_secret = $settings[21]->content;
-
-    //         //     $headers = array(
-    //         //         'Content-Type: application/x-www-form-urlencoded',
-    //         //         'Authorization: Basic '. base64_encode("$razorpay_key_id:$razorpay_key_secret")
-    //         //     );
-
-    //         //     // Open connection
-    //         //     $ch = curl_init();
-    //         //     // Set the url, number of POST vars, POST data
-    //         //     curl_setopt($ch, CURLOPT_URL, $url);
-    //         //     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST"); 
-    //         //     curl_setopt($ch, CURLOPT_POST, true);                                                                  
-    //         //     curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-    //         //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    //         //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //         //     // Disabling SSL Certificate support temporarly
-    //         //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    //         //     //curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-    //         //     // Execute post
-    //         //     $result = curl_exec($ch);
-    //         //     // dd($result);
-    //         //     //echo $result;
-    //         //     //pr($result);
-    //         //     curl_close($ch);
-
-    //         //     // save in transaction
-    //         //     $txnData = new Transaction();
-    //         //     $txnData->user_id = Auth::guard('web')->user()->id ?? 0;
-    //         //     $txnData->order_id = $newEntry->id;
-    //         //     $txnData->transaction = 'TXN_'.strtoupper(Str::random(20));
-    //         //     $txnData->online_payment_id = $collectedData['razorpay_payment_id'];
-    //         //     // $txnData->amount = $total;razorpay_amount
-    //         //     //$txnData->amount = $ordDetails->final_amount;
-    //         //     $txnData->amount = $collectedData['razorpay_amount'];
-    //         //     $txnData->currency = "INR";
-    //         //     $txnData->method = "";
-    //         //     $txnData->description = "";
-    //         //     $txnData->bank = "";
-    //         //     $txnData->upi = "";
-    //         //     $txnData->save();
-    //         // }
-            
     //         DB::commit();
-    //         // dd($newEntry);
-    //         return $newEntry->id;
-    //     } catch (\Throwable $th) {
-    //         throw $th;
-    //         dd($th);
-    //         DB::rollback();
+    //         return $order->id;
+
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         \Log::error('Order Creation Failed: ' . $e->getMessage());
     //         return false;
     //     }
     // }
+
     public function create(array $data)
     {
         DB::beginTransaction();
-
         try {
             $userId = auth()->id();
-
-            // Fetch cart items
-            $cartItems = Cart::with('productDetails')
-                ->where('user_id', $userId)
-                ->get();
+            $cartItems = Cart::with('productDetails')->where('user_id', $userId)->get();
 
             if ($cartItems->isEmpty()) {
                 return false;
             }
 
-            // Step 1: Create the Order
+            // Determine shipping address
+            $sameAddress = $data['address_option'] === 'same';
+
             $order = Order::create([
                 'user_id' => $userId,
                 'email' => $data['email'],
                 'mobile' => $data['mobile'],
-                'fname' => $data['fname'],
-                'lname' => $data['lname'],
+                'fname' => $data['first_name'],
+                'lname' => $data['last_name'],
                 'billing_country' => $data['billing_country'],
                 'billing_address' => $data['billing_address'],
-                'billing_landmark' => $data['billing_landmark'] ?? null,
                 'billing_city' => $data['billing_city'],
                 'billing_state' => $data['billing_state'],
                 'billing_pin' => $data['billing_pin'],
-                'shipping_same_as_billing' => $data['shippingSameAsBilling'] ?? 1,
-                // Only copy billing if "same as billing" is checked
-                'shipping_country' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-                    ? $data['billing_country'] 
-                    : $data['shipping_country'],
 
-                'shipping_address' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-                    ? $data['billing_address'] 
-                    : $data['shipping_address'],
-
-                'shipping_landmark' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-                    ? ($data['billing_landmark'] ?? null) 
-                    : ($data['shipping_landmark'] ?? null),
-
-                'shipping_city' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-                    ? $data['billing_city'] 
-                    : $data['shipping_city'],
-
-                'shipping_state' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-                    ? $data['billing_state'] 
-                    : $data['shipping_state'],
-
-                'shipping_pin' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-                    ? $data['billing_pin'] 
-                    : $data['shipping_pin'],
+                'shipping_same_as_billing' => $sameAddress ? 1 : 0,
+                'shipping_country' => $sameAddress ? $data['billing_country'] : $data['shipping_country'],
+                'shipping_address' => $sameAddress ? $data['billing_address'] : $data['shipping_address'],
+                'shipping_city' => $sameAddress ? $data['billing_city'] : $data['shipping_city'],
+                'shipping_state' => $sameAddress ? $data['billing_state'] : $data['shipping_state'],
+                'shipping_pin' => $sameAddress ? $data['billing_pin'] : $data['shipping_pin'],
+                'shipping_mobile' => $sameAddress ? $data['mobile'] : $data['shipping_mobile'],
+                'shipping_fname' => $sameAddress ? $data['first_name'] : $data['shipping_first_name'],
+                'shipping_lname' => $sameAddress ? $data['last_name'] : $data['shipping_last_name'],
 
                 'shipping_method' => $data['shipping_method'] ?? 'standard',
                 'status' => 1,
                 'total_amount' => 0,
                 'gst' => 0,
             ]);
-            //dd($order);
 
             $grandTotal = 0;
             $totalGstAmount = 0;
 
-            // Step 2: Loop through cart items
             foreach ($cartItems as $item) {
                 $product = $item->productDetails;
-
                 if (!$product) continue;
 
                 $qty = $item->qty;
@@ -783,7 +261,6 @@ class CheckoutRepository implements CheckoutInterface
 
                 $unitPrice = $product->offer_price > 0 ? $product->offer_price : $product->price;
                 $subtotal = $unitPrice * $qty;
-
                 $gstAmount = ($subtotal * $gstPercent) / 100;
                 $total = $subtotal + $gstAmount;
 
@@ -810,24 +287,22 @@ class CheckoutRepository implements CheckoutInterface
                 $totalGstAmount += $gstAmount;
             }
 
-            // Step 3: Update Order Totals
             $order->update([
                 'total_amount' => $grandTotal,
                 'gst' => $totalGstAmount,
             ]);
 
-            // Step 4: Clear Cart
             Cart::where('user_id', $userId)->delete();
 
             DB::commit();
             return $order->id;
-
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Order Creation Failed: ' . $e->getMessage());
             return false;
         }
     }
+
 
     public function NewCreate(array $data){
         $collectedData = collect($data);

@@ -23,6 +23,9 @@ use PhpParser\Node\Stmt\Return_;
 use App\Models\ProductVariation;
 use App\Models\ProductVariationImage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ProductController extends Controller
 {
@@ -1068,7 +1071,7 @@ class ProductController extends Controller
             $f = fopen('php://memory', 'w');
 
             // Set Column Headers
-            $header = array("PRODUCT_ID","CATEGORY_ID","SUB_CATEGORY_ID","NAME","PRODUCT_STYLE_NO","POSITION","PRICE","OFFER_PRICE","BRAND","WASH_CARE","PATTERN","FABRIC","GST","STATUS[1:ACTIVE,0:INACTIVE]");
+            $header = array("PRODUCT_ID","CATEGORY_ID","NAME","PRODUCT_STYLE_NO","POSITION","PRICE","OFFER_PRICE","GST","STATUS[1:ACTIVE,0:INACTIVE]");
             fputcsv($f,$header,$delimiter);
 
             $count =1;
@@ -1076,16 +1079,16 @@ class ProductController extends Controller
                 $exportData = array(
                     $row->id ? $row->id : '',
                     $row->cat_id ? $row->cat_id : '',
-                    $row->sub_cat_id ? $row->sub_cat_id : '',
+                    //$row->sub_cat_id ? $row->sub_cat_id : '',
                     $row->name ? $row->name : '',
                     $row->product_style_no ? $row->product_style_no : '',
                     $row->position ? $row->position : '',
                     $row->price ? $row->price : '',      
                     $row->offer_price ? $row->offer_price : '',      
-                    $row->brand ? $row->brand : '',
-                    $row->wash_care ? $row->wash_care : '',      
-                    $row->pattern ? $row->pattern : '',      
-                    $row->fabric ? $row->fabric : '',      
+                    // $row->brand ? $row->brand : '',
+                    // $row->wash_care ? $row->wash_care : '',      
+                    // $row->pattern ? $row->pattern : '',      
+                    // $row->fabric ? $row->fabric : '',      
                     $row->gst ? $row->gst : '',      
                     $row->status ? $row->status : ''                       
                 );
@@ -1331,56 +1334,80 @@ class ProductController extends Controller
         return redirect()->back()->with('success', "$imported variations imported, $skipped skipped. ($duplicateCount duplicates found)");
     }
 
-    public function productSkuListExport(Request $request)
-    {
-        $data = DB::select("SELECT pcs.code, pcs.stock, pcs.last_stock_synched, p.name, p.style_no from product_color_sizes as pcs inner join products as p on pcs.product_id = p.id where pcs.code is not null and pcs.code != ''");
+    public function productSkuListExport(Request $request){
+        $search = $request->input('search');
 
-        if (count($data) > 0) {
-            $delimiter = ",";
-            $filename = "onninternational-all-sku-inventory-" . date('Y-m-d-H-i-s') . ".csv";
+        $query = ProductVariation::with('product:id,name,style_no');
 
-            // Create a file pointer
-            $f = fopen('php://memory', 'w');
-
-            // Set column headers
-            $fields = array('SR', 'SKU CODE', 'INVENTORY', 'LAST SYNCHED', 'NAME', 'STYLE NUMBER');
-            fputcsv($f, $fields, $delimiter);
-
-            $count = 1;
-
-            foreach ($data as $row) {
-                $lineData = array(
-                    $count,
-                    $row->code,
-                    $row->stock,
-                    $row->last_stock_synched,
-                    $row->name,
-                    $row->style_no
-                );
-
-                fputcsv($f, $lineData, $delimiter);
-                $count++;
-            }
-
-            // Move back to beginning of file
-            fseek($f, 0);
-
-            // Set headers to download file rather than displayed
-            header('Content-Type: text/csv');
-            header('Content-Disposition: attachment; filename="' . $filename . '";');
-
-            //output all remaining data on a file pointer
-            fpassthru($f);
+        if (!empty($search)) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                ->orWhereHas('product', function($qp) use ($search) {
+                    $qp->where('name', 'like', "%{$search}%")
+                        ->orWhere('style_no', 'like', "%{$search}%");
+                });
+            });
         }
+
+        $skus = $query->get();
+        // Build spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Headings
+        $headings = [
+            'SKU Code',
+            'Product Name',
+            'Product No',
+            'Weight',
+            'Position',
+            'Price',
+            'Offer Price',
+            'Status',
+        ];
+
+        $sheet->fromArray($headings, null, 'A1');
+
+        // Data
+        $rowNum = 2;
+        foreach ($skus as $row) {
+            $sheet->fromArray([
+                $row->code,
+                optional($row->product)->name,
+                optional($row->product)->style_no,
+                $row->weight,
+                $row->position,
+                $row->price,
+                $row->offer_price,
+                $row->status ? 'Active' : 'Inactive',
+            ], null, 'A'.$rowNum);
+            $rowNum++;
+        }
+
+        // File name
+        $fileName = 'product_sku_list_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+
+        // Output as download
+        $writer = new Xlsx($spreadsheet);
+        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($temp_file);
+
+        return response()->download($temp_file, $fileName)->deleteFileAfterSend(true);
     }
 
-    public function productSkuListSyncAll(Request $request)
-    {
-        $data = (object)[];
-        // DB::enableQueryLog();
-        $data->skuCount = ProductColorSize::where('code', '!=', '')->Where('code', '!=', NULL)->count();
-        // dd(DB::getQUeryLog());
-
-        return view('admin.product.product-sku-all', compact('data', 'request'));
-    }
 }
+
+
+
+
+
+    // public function productSkuListSyncAll(Request $request)
+    // {
+    //     $data = (object)[];
+    //     // DB::enableQueryLog();
+    //     $data->skuCount = ProductColorSize::where('code', '!=', '')->Where('code', '!=', NULL)->count();
+    //     // dd(DB::getQUeryLog());
+
+    //     return view('admin.product.product-sku-all', compact('data', 'request'));
+    // }
+

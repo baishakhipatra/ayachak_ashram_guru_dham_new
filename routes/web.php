@@ -47,44 +47,44 @@ Route::name('front.')->group(function () {
 
     // profile login & registration - guard
     Route::middleware(['auth:web'])->group(function () {
-        // Route::prefix('user/')->name('user.')->group(function () {
-            Route::view('profile', 'front.profile')->name('profile');
-            Route::view('manage', 'front.profile.edit')->name('manage');
-            Route::post('manage/update', 'Front\UserController@updateProfile')->name('manage.update');
-            Route::get('password/change', 'Front\UserController@showChangePasswordForm')->name('password.change');
-            Route::post('password/update', 'Front\UserController@updatePassword')->name('password.update');
-            Route::get('order', 'Front\UserController@order')->name('order');
-            Route::get('/order/details/{id}', 'Front\UserController@orderDetails')->name('order.details');
-            Route::post('order/cancel', 'Front\UserController@orderCancel')->name('order.cancel');
-            Route::post('order/return', 'Front\UserController@orderReturn')->name('order.return');
-            Route::get('order/{id}/invoice', 'Front\UserController@invoice')->name('invoice');
-            Route::get('coupon', 'Front\UserController@coupon')->name('coupon');
-            Route::get('address', 'Front\UserController@address')->name('address');
-            Route::view('address/add', 'front.profile.address-add')->name('address.add');
-            Route::post('address/add', 'Front\UserController@addressCreate')->name('address.create');
-            Route::get('wishlist', 'Front\UserController@wishlist')->name('wishlist');
-        //});
+    // Route::prefix('user/')->name('user.')->group(function () {
+        Route::view('profile', 'front.profile')->name('profile');
+        Route::view('manage', 'front.profile.edit')->name('manage');
+        Route::post('manage/update', 'Front\UserController@updateProfile')->name('manage.update');
+        Route::get('password/change', 'Front\UserController@showChangePasswordForm')->name('password.change');
+        Route::post('password/update', 'Front\UserController@updatePassword')->name('password.update');
+        Route::get('order', 'Front\UserController@order')->name('order');
+        Route::get('/order/details/{id}', 'Front\UserController@orderDetails')->name('order.details');
+        Route::post('order/cancel', 'Front\UserController@orderCancel')->name('order.cancel');
+        Route::post('order/return', 'Front\UserController@orderReturn')->name('order.return');
+        Route::get('order/{id}/invoice', 'Front\UserController@invoice')->name('invoice');
+        Route::get('coupon', 'Front\UserController@coupon')->name('coupon');
+        Route::get('address', 'Front\UserController@address')->name('address');
+        Route::view('address/add', 'front.profile.address-add')->name('address.add');
+        Route::post('address/add', 'Front\UserController@addressCreate')->name('address.create');
+        Route::get('wishlist', 'Front\UserController@wishlist')->name('wishlist');
+    //});
 
-            // wishlist
-            Route::prefix('wishlist')->name('wishlist.')->group(function () {
-                Route::get('/', 'Front\WishlistController@viewByUserId')->name('index');
-                Route::get('/add/{id}', 'Front\WishlistController@add')->name('add');
-                Route::post('/remove', 'Front\WishlistController@remove')->name('remove');
-                Route::get('/delete/{id}', 'Front\WishlistController@delete')->name('delete');
-            });
+        // wishlist
+        Route::prefix('wishlist')->name('wishlist.')->group(function () {
+            Route::get('/', 'Front\WishlistController@viewByUserId')->name('index');
+            Route::get('/add/{id}', 'Front\WishlistController@add')->name('add');
+            Route::post('/remove', 'Front\WishlistController@remove')->name('remove');
+            Route::get('/delete/{id}', 'Front\WishlistController@delete')->name('delete');
+        });
 
-            // cart
-            Route::prefix('cart')->group(function () {
-                Route::get('/details', 'Front\CartController@index')->name('cart.index');
-                Route::post('/update-quantity', 'Front\CartController@updateQuantity')->name('cart.update-quantity');
-                Route::post('/remove-quantity', 'Front\CartController@removeQuantity')->name('cart.remove-quantity');
-                Route::post('/add-to-checkoout', 'Front\CartController@add_to_checkoout')->name('cart.add_to_checkoout');
-                Route::post('/coupon/check', 'Front\CartController@couponCheck')->name('cart.coupon.check');
-                Route::post('/coupon/remove', 'Front\CartController@couponRemove')->name('cart.coupon.remove');
-                Route::post('/add', 'Front\CartController@add')->name('cart.add');
-                Route::get('/delete/{id}', 'Front\CartController@delete')->name('cart.delete');
-                Route::get('/quantity/{id}/{type}', 'Front\CartController@qtyUpdate')->name('cart.quantity');
-            });
+        // cart
+        Route::prefix('cart')->group(function () {
+            Route::get('/details', 'Front\CartController@index')->name('cart.index');
+            Route::post('/update-quantity', 'Front\CartController@updateQuantity')->name('cart.update-quantity');
+            Route::post('/remove-quantity', 'Front\CartController@removeQuantity')->name('cart.remove-quantity');
+            Route::post('/add-to-checkoout', 'Front\CartController@add_to_checkoout')->name('cart.add_to_checkoout');
+            Route::post('/coupon/check', 'Front\CartController@couponCheck')->name('cart.coupon.check');
+            Route::post('/coupon/remove', 'Front\CartController@couponRemove')->name('cart.coupon.remove');
+            Route::post('/add', 'Front\CartController@add')->name('cart.add');
+            Route::get('/delete/{id}', 'Front\CartController@delete')->name('cart.delete');
+            Route::get('/quantity/{id}/{type}', 'Front\CartController@qtyUpdate')->name('cart.quantity');
+        });
 
         // checkout
         Route::prefix('checkout')->name('checkout.')->group(function () {
@@ -117,6 +117,16 @@ Route::name('front.')->group(function () {
     Route::prefix('event')->group(function () {
         Route::get('/list', 'Front\EventController@index')->name('event.index');
         Route::get('/details/{slug}', 'Front\EventController@details')->name('event.details');
+    });
+
+
+    //about us  
+    Route::prefix('about-us')->group(function (){
+        Route::get('/', 'Front\PageController@AboutUs')->name('about-us.index');
+    });
+
+    Route::prefix('sri-sri-babamoni')->group(function (){
+        Route::get('/', 'Front\PageController@babamoni')->name('babamoni.index');
     });
 });
 

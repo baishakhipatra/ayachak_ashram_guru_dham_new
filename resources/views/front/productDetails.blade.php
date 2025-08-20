@@ -114,23 +114,6 @@
                             @endif
                         </div>
 
-                      
-                        {{-- <div class="variation-list">
-                            @foreach ($productVariations as $key => $variation)
-                                <label>
-                                    {{ $variation->weight }}
-                                    <input type="radio"
-                                        name="variation"
-                                        value="{{ $variation->id }}"
-                                        data-price="{{ $variation->price }}"
-                                        data-offer-price="{{ $variation->offer_price }}"
-                                        data-images="@json($variation->images)"
-                                        {{ $key == 0 ? 'checked' : '' }}>
-                                    <span></span>
-                                </label>
-                            @endforeach
-                        </div> --}}
-
                         @if(isset($productVariations) && $productVariations->count() > 0)
                             <div class="variation-list">
                                 @foreach ($productVariations as $key => $variation)
@@ -152,7 +135,7 @@
                         <div class="quantity-group">
                             <div class="number-input">
                                 <button type="button" class="decrement">-</button>
-                                <input type="number" class="quantity" name="quantity" min="1" max="10" value="1" step="1">
+                                <input type="number" class="quantity" name="quantity" min="1" max="10" value="1" step="1" readonly>
                                 <button type="button" class="increment">+</button>
                             </div>
                             <input type="submit" class="bton btn-fill" value="Add to Cart">

@@ -16,19 +16,18 @@
                 </form>
             </div>
             <div class="col-md-6 text-end">
+                {{-- <a href="{{route('admin.product.sku_list.export', ['search' => request('search')])}}" class="btn btn-sm btn-primary">Export</a> --}}
+                <a href="{{ route('admin.product.sku_list.export', request()->query()) }}" 
+                    class="btn btn-sm btn-primary">
+                    Export
+                </a>
+
                 <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#importWeightVariationModal">
                     Import Weight Variation
                 </button>
             </div>
         </div>
     </div>
-
-    {{-- @if (Session::has('message'))
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>{{ Session::get('message') }}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif --}}
 
     <table class="table">
         <thead>

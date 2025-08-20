@@ -73,7 +73,7 @@
     <form action="{{ route('admin.product.bulkDestroy') }}">
         <div class="filter">
             <div class="row align-items-center justify-content-between">
-                <div class="col">
+                {{-- <div class="col">
                     <div class="row g-3 align-items-center">
                         <div class="col-auto">
                             <select name="bulk_action" class="form-control">
@@ -85,7 +85,7 @@
                             <button type="submit" class="btn btn-outline-danger btn-sm">Apply</button>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <div class="col-auto">
                     @php
                         if (!empty($_GET['status'])) {
@@ -132,6 +132,7 @@
                 {{-- <th>Ranges</th> --}}
                 <th>Category</th>
                 <th>Price</th>
+                <th>Offer Price</th>
                 <th>Action</th>
                 <th>Date</th>
                 <th>Status</th>
@@ -192,18 +193,21 @@
                         {{-- {{$item->subCategory ? $item->subCategory->name : 'NA'}} --}}
                     </td>
                     <td>
-                        <small> <del>{{ $item->price }}</del> </small> Rs. {{ $item->offer_price }}
+                         Rs. {{ $item->price }}
                     </td>
                     <td>
-                        <a href="{{ route('admin.product.sale', $item->id) }}" class="text-decoration-none">
+                         Rs. {{ $item->offer_price }}
+                    </td>
+                    <td>
+                        {{-- <a href="{{ route('admin.product.sale', $item->id) }}" class="text-decoration-none">
                             @if ($item->saleDetails)
                                 <span class="text-success fw-bold"> <i class="fi-br-check"></i> Sale</span>
                             @else
                                 <span class="text-danger fw-bold single-line"> <i class="fi-br-plus"></i>
                                     Sale</span>
                             @endif
-                        </a>
-                        <br>
+                        </a> --}}
+                        {{-- <br>
                         <a href="{{ route('admin.product.trending', $item->id) }}" class="text-decoration-none">
                             @if ($item->is_trending == 1)
                                 <span class="text-success fw-bold"> <i class="fi-br-check"></i> Trending</span>
@@ -211,15 +215,15 @@
                                 <span class="text-danger fw-bold single-line"> <i class="fi-br-plus"></i>
                                     Trending</span>
                             @endif
-                        </a>
-                        <a href="{{ route('admin.product.hotdeal', $item->id) }}" class="text-decoration-none">
+                        </a> --}}
+                        {{-- <a href="{{ route('admin.product.hotdeal', $item->id) }}" class="text-decoration-none">
                             @if ($item->is_hotdeal == 1)
                                 <span class="text-success fw-bold"> <i class="fi-br-check"></i> Hot-deal</span>
                             @else
                                 <span class="text-danger fw-bold single-line"> <i class="fi-br-plus"></i>
                                 Hot-deal</span>
                             @endif
-                        </a>
+                        </a> --}}
                         <a href="{{ route('admin.product.feature', $item->id) }}" class="text-decoration-none">
                             @if ($item->is_feature == 1)
                                 <span class="text-success fw-bold"> <i class="fi-br-check"></i> Featured</span>
@@ -228,14 +232,14 @@
                                 Featured</span>
                             @endif
                         </a>
-                        <a href="{{ route('admin.product.dealoftheday', $item->id) }}" class="text-decoration-none">
+                        {{-- <a href="{{ route('admin.product.dealoftheday', $item->id) }}" class="text-decoration-none">
                             @if ($item->is_deal_of_the_day == 1)
                                 <span class="text-success fw-bold"> <i class="fi-br-check"></i> Deal Of the day</span>
                             @else
                                 <span class="text-danger fw-bold single-line"> <i class="fi-br-plus"></i>
                                 Deal Of the day</span>
                             @endif
-                        </a>
+                        </a> --}}
                    
                     </td>
                     <td>Published<br />{{ date('j M Y', strtotime($item->created_at)) }}</td>

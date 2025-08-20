@@ -3,55 +3,42 @@
 namespace App\Repositories;
 
 use App\Interfaces\BannerInterface;
-use App\Models\Banner;
+use App\Models\BannerTitle;
 
 class BannerRepository implements BannerInterface 
 {
     public function listAll() 
     {
-        return Banner::orderBy('position')->get();
+        return BannerTitle::orderBy('id','desc')->get();
     }
 
     public function listById($id) 
     {
-        return Banner::findOrFail($id);
+        return BannerTitle::findOrFail($id);
     }
 
     public function create(array $data) 
     {
-        $upload_path = "public/uploads/banner/";
-        $collection = collect($data);
-        $banner = new Banner;
+        $upload_path = "uploads/banner/";
+        $banner = new BannerTitle;
 
-        // image
-        $image = $collection['image'];
-        $imageName = time().".".mt_rand().".".$image->getClientOriginalName();
-        $image->move($upload_path, $imageName);
-        $uploadedImage = $imageName;
-        $banner->file_path = $upload_path.$uploadedImage;
+        $banner->title       = $data['title'] ?? null;
+        $banner->sub_title   = $data['sub_title'] ?? null;
+        $banner->description = $data['description'] ?? null;
 
-        // file type
-        $extension = $image->getClientOriginalExtension();
-        $imageTypes = array('jpg', 'jpeg', 'png', 'svg', 'gif');
-
-        if (in_array($extension, $imageTypes)) {
-            $banner->type = 'img';
-        } else {
-            $banner->type = 'video';
+        if (isset($data['banner_image'])) {
+            $image      = $data['banner_image'];
+            $imageName  = time()."_".uniqid().".".$image->getClientOriginalExtension();
+            $image->move(public_path($upload_path), $imageName);
+            $banner->banner_image = $upload_path.$imageName;
         }
-        // image
-        $mobile_image = $collection['mobile_image'];
-        $mobileimageName = time().".".mt_rand().".".$mobile_image->getClientOriginalName();
-        $mobile_image->move($upload_path, $mobileimageName);
-        $mobiluploadedImage = $mobileimageName;
-        $banner->mobile_image_path = $upload_path.$mobiluploadedImage;
 
-        // position
-        $latestPosition = Banner::select('position')->orderBy('position', 'desc')->first();
-        if(!empty($latestPosition)) {
-            $banner->position = $latestPosition->position + 1;
-        } else {
-            $banner->position = 1;
+  
+        if (!empty($data['banner_videos'])) {
+            $video      = $data['banner_videos'];
+            $videoName  = time()."_".uniqid().".".$video->getClientOriginalExtension();
+            $video->move(public_path($upload_path), $videoName);
+            $banner->banner_videos = $upload_path.$videoName;
         }
 
         $banner->save();
@@ -61,36 +48,27 @@ class BannerRepository implements BannerInterface
 
     public function update($id, array $newDetails) 
     {
-        $upload_path = "public/uploads/banner/";
-        $banner = Banner::findOrFail($id);
-        $collection = collect($newDetails); 
+        $upload_path = "uploads/banner/";
+        $banner = BannerTitle::findOrFail($id);
 
-        if (isset($newDetails['image'])) {
-            // image
-            $image = $collection['image'];
-            $imageName = time().".".mt_rand().".".$image->getClientOriginalName();
-            $image->move($upload_path, $imageName);
-            $uploadedImage = $imageName;
-            $banner->file_path = $upload_path.$uploadedImage;
+        $banner->title       = $newDetails['title'] ?? $banner->title;
+        $banner->sub_title   = $newDetails['sub_title'] ?? $banner->sub_title;
+        $banner->description = $newDetails['description'] ?? $banner->description;
 
-            // file type
-            $extension = $image->getClientOriginalExtension();
-            $imageTypes = array('jpg', 'jpeg', 'png', 'svg', 'gif');
-
-            if (in_array($extension, $imageTypes)) {
-                $banner->type = 'img';
-            } else {
-                $banner->type = 'video';
-            }
+        // Update banner image if uploaded
+        if (isset($newDetails['banner_image'])) {
+            $image      = $newDetails['banner_image'];
+            $imageName  = time()."_".uniqid().".".$image->getClientOriginalExtension();
+            $image->move(public_path($upload_path), $imageName);
+            $banner->banner_image = $upload_path.$imageName;
         }
-        if (isset($newDetails['mobile_image'])) {
-            // image
-            $mobile_image = $collection['mobile_image'];
-            $mobileimageName = time().".".mt_rand().".".$mobile_image->getClientOriginalName();
-            $mobile_image->move($upload_path, $mobileimageName);
-            $uploadedImage = $mobileimageName;
-            $banner->mobile_image_path = $upload_path.$uploadedImage;
 
+        // Update banner video if uploaded
+        if (isset($newDetails['banner_videos'])) {
+            $video      = $newDetails['banner_videos'];
+            $videoName  = time()."_".uniqid().".".$video->getClientOriginalExtension();
+            $video->move(public_path($upload_path), $videoName);
+            $banner->banner_videos = $upload_path.$videoName;
         }
 
         $banner->save();
@@ -98,18 +76,9 @@ class BannerRepository implements BannerInterface
         return $banner;
     }
 
-    public function toggle($id){
-        $updatedEntry = Banner::findOrFail($id);
-
-        $status = ( $updatedEntry->status == 1 ) ? 0 : 1;
-        $updatedEntry->status = $status;
-        $updatedEntry->save();
-
-        return $updatedEntry;
-    }
-
     public function delete($id) 
     {
-        Banner::destroy($id);
+        BannerTitle::destroy($id);
     }
+
 }

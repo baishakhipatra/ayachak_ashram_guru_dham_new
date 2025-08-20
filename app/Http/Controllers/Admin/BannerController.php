@@ -25,17 +25,20 @@ class BannerController extends Controller
     public function store(Request $request) 
     {
         $request->validate([
-            "image" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
-            "mobile_image" => "required|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "title"         => "required|string|max:255",
+            "sub_title"     => "nullable|string|max:255",
+            "description"   => "nullable|string",
+            "banner_image"  => "required|mimes:jpg,jpeg,png,svg,gif,webp|max:10000000",
+            "banner_videos" => "nullable|mimes:mp4,avi,mov,webm|max:200000", 
         ]);
 
         $params = $request->except('_token');
         $storeData = $this->bannerRepository->create($params);
 
         if ($storeData) {
-            return redirect()->route('admin.banner.index');
+            return redirect()->route('admin.banner.index')->with('success', 'Banner created successfully!');
         } else {
-            return redirect()->route('admin.banner.create')->withInput($request->all());
+            return redirect()->route('admin.banner.create')->withInput($request->all())->with('error', 'Something went wrong.');
         }
     }
 
@@ -48,35 +51,34 @@ class BannerController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            "image" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
-            "mobile_image" => "nullable|mimes:jpg,jpeg,png,svg,gif|max:10000000",
+            "title"         => "required|string|max:255",
+            "sub_title"     => "nullable|string|max:255",
+            "description"   => "nullable|string",
+            "banner_image"  => "nullable|mimes:jpg,jpeg,png,svg,gif,webp|max:10000000",
+            "banner_videos" => "nullable|mimes:mp4,avi,mov,webm|max:200000",
         ]);
 
         $params = $request->except('_token');
-        $storeData = $this->bannerRepository->update($id, $params);
+        $updateData = $this->bannerRepository->update($id, $params);
 
-        if ($storeData) {
-            return redirect()->route('admin.banner.index');
+        if ($updateData) {
+            return redirect()->route('admin.banner.index')->with('success', 'Banner updated successfully!');
         } else {
-            return redirect()->route('admin.banner.create')->withInput($request->all());
+            return redirect()->back()->withInput($request->all())->with('error', 'Update failed!');
         }
     }
 
-    public function status(Request $request, $id)
-    {
-        $storeData = $this->bannerRepository->toggle($id);
 
-        if ($storeData) {
-            return redirect()->route('admin.banner.index');
-        } else {
-            return redirect()->route('admin.banner.create')->withInput($request->all());
-        }
-    }
-
-    public function destroy(Request $request, $id) 
+    public function destroy(Request $request)
     {
+        $id = $request->id;
+
         $this->bannerRepository->delete($id);
 
-        return redirect()->route('admin.banner.index');
+        return response()->json([
+            'status' => 200,
+            'message' => 'Banner deleted successfully!'
+        ]);
     }
+
 }
