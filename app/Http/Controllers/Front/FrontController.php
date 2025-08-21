@@ -54,10 +54,93 @@ class FrontController extends Controller
         //babamoni
         $babamoni = Settings::where('page_heading', 'LIKE', '%Sri Srimat Swami Swarupananda Paramhansa Dev%')->first();
         $babamoni_heading = $babamoni?->page_heading;
+        $babamoni_sub_heading = $babamoni ? Str::words($babamoni->page_sub_heading) : null;
         $babamoni_short_description = $babamoni ? Str::words($babamoni->content, 50, '...') : null;
+
+        //mamoni
+        $mamoni = Settings::where('page_heading', 'LIKE', '%Mahasonnyasini Sri Sri Samhita Devi%')->first();
+        $mamoni_heading = $mamoni?->page_heading;
+        $mamoni_sub_heading = $mamoni ? Str::words($mamoni->page_sub_heading) : null;
+        $mamoni_short_description = $mamoni ? Str::words($mamoni->content, 50, '...') : null;
+
+        //mamoni
+        $sadhanaDevi = Settings::where('page_heading', 'LIKE', '%Brahmacharini Sri Sri Sadhana Devi%')->first();
+        $sadhanaDevi_heading = $sadhanaDevi?->page_heading;
+        $sadhanaDevi_sub_heading = $sadhanaDevi ? Str::words($sadhanaDevi->page_sub_heading) : null;
+        $sadhanaDevi_short_description = $sadhanaDevi ? Str::words($sadhanaDevi->content, 50, '...') : null;
+
+        //bhaida
+        $bhaida = Settings::where('page_heading', 'LIKE', '%Sri Sri Snehamoy Brahmachary%')->first();
+        $bhaida_heading = $bhaida?->page_heading;
+        $bhaida_sub_heading = $bhaida ? Str::words($bhaida->page_sub_heading) : null;
+        $bhaida_short_description = $bhaida ? Str::words($bhaida->content, 50, '...') : null;
+
+        //abhiksha
+        $abhiksha = Settings::where('page_heading', 'LIKE', '%Abhiksha%')->first();
+        $abhiksha_heading = $abhiksha?->page_heading;
+        $abhiksha_short_description = $abhiksha ? Str::words($abhiksha->content, 50, '...') : null;
+
+        //Morality Campaign
+        $morality_campaign = Settings::where('page_heading', 'LIKE', '%Morality Campaign%')->first();
+        $morality_campaign_heading = $morality_campaign?->page_heading;
+        $morality_campaign_short_description = $morality_campaign ? Str::words($morality_campaign->content, 50, '...') : null;
+
+        
+        //ayachak ashram
+        $ayachak_ashram = Settings::where('page_heading', 'LIKE', '%Ayachak Ashram%')->first();
+        $ayachak_ashram_heading = $ayachak_ashram?->page_heading;
+        $ayachak_ashram_short_description = $ayachak_ashram ? Str::words($ayachak_ashram->content, 50, '...') : null;
+
+        //The Multiversity
+        $the_multiversity = Settings::where('page_heading', 'LIKE', '%The Multiversity%')->first();
+        $the_multiversity_heading = $the_multiversity?->page_heading;
+        $the_multiversity_short_description = $the_multiversity ? Str::words($the_multiversity->content, 50, '...') : null;
+
+        //ayurvedic medicines
+        $ayurvedic_medicines = Settings::where('page_heading', 'LIKE', '%Ayurvedic Medicines%')->first();
+        $ayurvedic_medicines_heading = $ayurvedic_medicines?->page_heading;
+        $ayurvedic_medicines_short_description = $ayurvedic_medicines ? $ayurvedic_medicines->content : null;
+
+        //books
+        $books = Settings::where('page_heading', 'LIKE', '%Books%')->first();
+        $books_heading = $books?->page_heading;
+        $books_short_description = $books ? $books->content : null;
+
+        //Voluntary Donations
+        $voluntary_donations = Settings::where('page_heading', 'LIKE', '%Voluntary Donations%')->first();
+        $voluntary_donations_heading = $voluntary_donations?->page_heading;
+        $voluntary_donations_short_description = $voluntary_donations ? $voluntary_donations->content : null;
+
+        //Who is Akhanda
+        $akhanda = Settings::where('page_heading', 'LIKE', '%Who is Akhanda%')->first();
+        $akhanda_heading = $akhanda?->page_heading;
+        $akhanda_short_description = $akhanda ? Str::words($akhanda->content, 50, '...') : null;
+
+        //What is meant by ‘OMKAR’
+        $omkar = Settings::where('page_heading', 'LIKE', '%What is meant by ‘OMKAR’%')->first();
+        $omkar_heading = $omkar?->page_heading;
+        $omkar_short_description = $omkar ? Str::words($omkar->content, 50, '...') : null;
+
+        //The Structure 0f Akhanda Sangathan
+        $Sangathan = Settings::where('page_heading', 'LIKE', '%What is meant by ‘OMKAR’%')->first();
+        $Sangathan_heading = $Sangathan?->page_heading;
+        $Sangathan_short_description = $Sangathan ? Str::words($Sangathan->content, 50, '...') : null;
+
+        //WHAT IS ‘SAMABETA UPASANA?
+        $samabeta_upasana = Settings::where('page_heading', 'LIKE', '%WHAT IS ‘SAMABETA UPASANA?%')->first();
+        $samabeta_upasana_heading = $Sangathan?->page_heading;
+        $samabeta_upasana_short_description = $Sangathan ? Str::words($Sangathan->content, 50, '...') : null;
+
         
         return view('front.index',compact('categories','featuredProducts','latestEvents','banner','page_heading',
-        'short_description','babamoni_heading','babamoni_short_description'));
+        'short_description','babamoni_heading','babamoni_short_description','babamoni_sub_heading','mamoni_heading','mamoni_short_description','mamoni_sub_heading',
+        'sadhanaDevi_heading','sadhanaDevi_short_description','sadhanaDevi_sub_heading','bhaida_heading','bhaida_short_description','bhaida_sub_heading',
+        'abhiksha_heading','abhiksha_short_description','morality_campaign_heading','morality_campaign_short_description',
+        'ayachak_ashram_heading','ayachak_ashram_short_description','the_multiversity_heading','the_multiversity_short_description',
+        'ayurvedic_medicines_heading','ayurvedic_medicines_short_description','books_heading','books_short_description',
+        'voluntary_donations_heading','voluntary_donations_short_description','akhanda_heading','akhanda_short_description',
+        'omkar_heading','omkar_short_description','Sangathan_heading','Sangathan_short_description','samabeta_upasana_heading',
+        'samabeta_upasana_short_description'));
     }
 
     public function mailSubscribe(Request $request)

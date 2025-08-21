@@ -72,7 +72,7 @@
                             <img src="{{asset('assets/images/divider.svg')}}" alt="">
                         </figure>
                         <h2 class="section-heading">{{$babamoni_heading}}</h2>
-                        <h3 class="section-sub-heading">Popularly known as SRI SRI BABAMONI</h3>
+                        <h3 class="section-sub-heading">{{$babamoni_sub_heading}}</h3>
                     </div>
                     <div class="section-content-place">
                         <p>{{$babamoni_short_description}}</p>
@@ -103,21 +103,24 @@
                                 <img src="{{asset('assets/images/icon.svg')}}" alt="">
                             </figure>
                             <figcaption>
-                                <h4>Abhiksha</h4>
-                                <p>It is wellknown that any Ashram or of such nature always perform welfare activities in society by taking financial aid from general public or from Government.</p>
+                                <h4>{{$abhiksha_heading}}</h4>
+                                <p>{{$abhiksha_short_description}}</p>
                             </figcaption>
                         </li>
+                    </ul>
+                    <a href="{{route('front.abhiksha.index')}}" class="bton btn-fill">Read More</a>
+                    <ul class="content-list">
                         <li>
                             <figure>
                                 <img src="{{asset('assets/images/icon.svg')}}" alt="">
                             </figure>
                             <figcaption>
-                                <h4>Morality Campaign</h4>
-                                <p>Transformation of the present human race into a completely divine society is His ultimate object and character-building movement is the means to achieve this object.</p>
+                                <h4>{{$morality_campaign_heading}}</h4>
+                                <p>{{$morality_campaign_short_description}}</p>
                             </figcaption>
                         </li>
                     </ul>
-                    <a href="#" class="bton btn-fill">Read More</a>
+                    <a href="{{route('front.morality-compaign.index')}}" class="bton btn-fill">Read More</a>
                 </div>
                 <div class="col-md-12 col-lg-5 mb-4 mb-md-5 mb-lg-0 order-lg-2 order-1">
                     <div class="section-image-holder">
@@ -164,21 +167,24 @@
                                 <img src="{{asset('assets/images/icon.svg')}}" alt="">
                             </figure>
                             <figcaption>
-                                <h4>Ayachak Ashram</h4>
-                                <p>The non-begging Saint, Sri Sri Babamoni, has appropriately named his Ashram as AYACHAK (i.e ‘A’ connotes one, who and ‘YACHAK’ connotes Yachana, bhiksha) which means ‘ONE WHO NEVER BEGS.’</p>
+                                <h4>{{$ayachak_ashram_heading}}</h4>
+                                <p>{{$ayachak_ashram_short_description}}</p>
                             </figcaption>
                         </li>
+                    </ul>
+                    <a href="{{route('front.ayachak-ashram.index')}}" class="bton btn-fill">Read More</a>
+                    <ul class="content-list">
                         <li>
                             <figure>
                                 <img src="{{asset('assets/images/icon.svg')}}" alt="">
                             </figure>
                             <figcaption>
-                                <h4>The Multiversity</h4>
-                                <p>The Multiversity was established, by His Divine Grace Sri Srimat Swami Swarupananda Paramhansa Dev in the year 1973-1974 and registered under the West-Bengal Societies Act, 1961, vide Registration No. S\13107 of 1973-74 dated 15th June, 1975 solely for the benefit of the public in general and the students and inmates of The Multiversity.</p>
+                                <h4>{{$the_multiversity_heading}}</h4>
+                                <p>{{$the_multiversity_short_description}}</p>
                             </figcaption>
                         </li>
                     </ul>
-                    <a href="#" class="bton btn-fill">Read More</a>
+                    <a href="{{route('front.the-multiversity.index')}}" class="bton btn-fill">Read More</a>
                 </div>
             </div>
         </div>
@@ -197,7 +203,7 @@
                         <img src="{{asset('assets/images/divider.svg')}}" alt="">
                     </figure>
                     <h2 class="section-heading">Donating to charity helps support those in need and makes a positive difference in the world.</h2>
-                    <a href="#" class="bton btn-fill">Donate Now</a>
+                    <a href="{{route('front.donation.form')}}" class="bton btn-fill">Donate Now</a>
                 </div>
             </div>
         </div>
@@ -220,13 +226,12 @@
                         <img src="{{asset('assets/images/icon2.svg')}}" alt="">
                     </figure>
                     <figcaption>
-                        <h2>Ayurvedic Medicines</h2>
+                        <h2>{{$ayurvedic_medicines_heading}}</h2>
                         <p>
-                            In initial stage, there was extreme financial crunch. Due to extreme poverty, Sri Sri Babamoni had to take only ‘Mahua leaf’ for living. 
-                            But crisis could not be able to create obstacle on the path of selfless service to the mankind.
+                           {{$ayurvedic_medicines_short_description}}
                         </p>
                     </figcaption>
-                    <a href="#" class="bton btn-fill">Shop Now</a>
+                    <a href="{{route('front.shop.list')}}" class="bton btn-fill">Shop Now</a>
                 </div>
             </li>
             <li>
@@ -235,12 +240,12 @@
                         <img src="{{asset('assets/images/icon3.svg')}}" alt="">
                     </figure>
                     <figcaption>
-                        <h2>Books</h2>
+                        <h2>{{$books_heading}}</h2>
                         <p>
-                            ‘Ayachak Ashram’ earns from selling valuable books written by Sri Sri Babamoni.
+                            {{$books_short_description}}
                         </p>
                     </figcaption>
-                    <a href="#" class="bton btn-fill">Shop Now</a>
+                    <a href="{{ route('front.shop.list', ['category' => 'Book']) }}" class="bton btn-fill">Shop Now</a>
                 </div>
             </li>
             <li>
@@ -249,18 +254,15 @@
                         <img src="{{asset('assets/images/icon1.svg')}}" alt="">
                     </figure>
                     <figcaption>
-                        <h2>Voluntary Donations</h2>
+                        <h2>{{$voluntary_donations_heading}}</h2>
                         <p>
-                            Ayachak Ashram never begs from anyone, still, the disciples of this order (who are called Akhandas), 
-                            voluntarily contribute donations for building up Akhanda Mandir at different places and they always come forward to perform relief work...
+                           {{$voluntary_donations_short_description}}
                         </p>
                     </figcaption>
-                    <a href="#" class="bton btn-fill">Donate Now</a>
+                    <a href="{{route('front.donation.form')}}" class="bton btn-fill">Donate Now</a>
                 </div>
             </li>
         </ul>
-
-
     </div>
 </section>
 
@@ -273,15 +275,14 @@
                         <figure>
                             <img src="{{asset('assets/images/divider.svg')}}" alt="">
                         </figure>
-                        <h2 class="section-heading">Mahasonnyasini Sri Sri Samhita Devi</h2>
-                        <h3 class="section-sub-heading">Popularly known as ‘SRI SRI MAMONI’</h3>
+                        <h2 class="section-heading">{{$mamoni_heading}}</h2>
+                        <h3 class="section-sub-heading">{{$mamoni_sub_heading}}</h3>
                     </div>
                     <div class="section-content-place">
-                        <p>Mahasonnyasini Sri Sri Samhita Devi alias Mangalmoyee Bandyopadhyay was only child of Sri Hrishikesh Bandyopadhyay and Smt. Urmila Devi. Parents of Sri Sri Samhita Devi were very much devoted to Sri Sri Babamoni and they were initiated disciples of Sri Sri Babamani. Hrishikesh Bandyopadhyay was a fabulously rich person who was a diamond merchant in Lucknow. When Samhita Devi was only about one year old, her mother Urmila Devi expired. 
-                            A feeling of renunciation has been stirred up in the mind of the father of Sri Sri Samhita Devi and so he decided that he would embrace Sanyas by leaving the material world. He took permission from Sri Sri Babamani and finally left for an unknown place near Haridwar and he never returned</p>
+                        <p>{{$mamoni_short_description}}</p>
                     </div>
                         
-                    <a href="#" class="bton btn-fill">Read More</a>
+                    <a href="{{route('front.mamoni.index')}}" class="bton btn-fill">Read More</a>
                 </div>
                 <div class="col-md-12 col-lg-5 mb-4 mb-md-5 mb-lg-0 order-lg-2 order-1">
                     <div class="section-image-holder">
@@ -326,13 +327,13 @@
                         <figure>
                             <img src="{{asset('assets/images/divider.svg')}}" alt="">
                         </figure>
-                        <h2 class="section-heading">Brahmacharini Sri Sri Sadhana Devi</h2>
-                        <h3 class="section-sub-heading">Popularly known as Ashram Mata</h3>
+                        <h2 class="section-heading">{{$sadhanaDevi_heading}}</h2>
+                        <h3 class="section-sub-heading">{{$sadhanaDevi_sub_heading}}</h3>
                     </div>
                     <div class="section-content-place">
-                        <p>Brahmacharini Sadhana Devi was one of the most affectionate, reliable, efficient, committed and trustworthy disciple and wellwisher of Sri Sri Babamoni. She was the eldest daughter of eminent physician and great devotee Respectable Nagesh Brahmachary and Kadambini Devi.</p>
+                        <p>{{$sadhanaDevi_short_description}}</p>
                     </div>
-                    <a href="#" class="bton btn-fill">Read More</a>
+                    <a href="{{route('front.sadhanadevi.index')}}" class="bton btn-fill">Read More</a>
                 </div>
             </div>
         </div>
@@ -357,13 +358,13 @@
                         <figure>
                             <img src="{{asset('assets/images/divider.svg')}}" alt="">
                         </figure>
-                        <h2 class="section-heading">Sri Sri Snehamoy Brahmachary</h2>
-                        <h3 class="section-sub-heading">Popularly known as Bhaida</h3>
+                        <h2 class="section-heading">{{$bhaida_heading}}</h2>
+                        <h3 class="section-sub-heading">{{$bhaida_sub_heading}}</h3>
                     </div>
                     <div class="section-content-place">
-                        <p>Like Ashram-mata Sri Sri Sadhana Devi, the name of other pillar of our Ayachak Ashram is Sri Sri Snehamoy Brahmachary who spent his life with Sri Sri Babamoni since his childhood. He has sacrificed and gifted himself to the holy feet of Sri Sri Babamoni and worked throughout life for various service of Ayachak Ashram.</p>
+                        <p>{{$bhaida_short_description}}</p>
                     </div>
-                    <a href="#" class="bton btn-fill">Read More</a>
+                    <a href="{{route('front.bhaida.index')}}" class="bton btn-fill">Read More</a>
                 </div>
                 <div class="col-md-12 col-lg-5 mb-4 mb-md-5 mb-lg-0 order-lg-2 order-1">
                     <div class="section-image-holder">
@@ -388,9 +389,9 @@
                     <img src="{{asset('assets/images/image1.jpg')}}" alt="">
                 </figure>
                 <figcaption>
-                    <h3>Who is Akhanda</h3>
-                    <p>Those who are spiritually connected to Sri Sri Babamoni love to call themselves as ‘Akhanda’ (the undivided).</p>
-                    <a  href="#" class="text-arrow">
+                    <h3>{{$akhanda_heading}}</h3>
+                    <p>{{$akhanda_short_description}}</p>
+                    <a  href="{{route('front.akhanda.index')}}" class="text-arrow">
                         Read More
                         <img src="{{asset('assets/images/text-arrow.svg')}}" alt="">
                     </a>
@@ -403,9 +404,9 @@
                     <img src="{{asset('assets/images/image2.jpg')}}" alt="">
                 </figure>
                 <figcaption>
-                    <h3>What is meant by ‘OMKAR’</h3>
-                    <p>Sri Sri Babamoni,—There is no doubt that Omkar is the king of all mantras. Omkar is the combination of all mantras of the world...</p>
-                    <a  href="#" class="text-arrow">
+                    <h3>{{$omkar_heading}}</h3>
+                    <p>{{$omkar_short_description}}</p>
+                    <a  href="{{route('front.omkar.index')}}" class="text-arrow">
                         Read More
                         <img src="{{asset('assets/images/text-arrow.svg')}}" alt="">
                     </a>
@@ -419,9 +420,9 @@
                     <img src="{{asset('assets/images/image3.jpg')}}" alt="">
                 </figure>
                 <figcaption>
-                    <h3>The Structure 0f Akhanda Sangathan</h3>
-                    <p>From the above chart, the shape of Akhanda Sangathan will be clear. It works Statewise (in different State), Districtwise...</p>
-                    <a  href="#" class="text-arrow">
+                    <h3>{{$Sangathan_heading}}</h3>
+                    <p>{{$Sangathan_short_description}}</p>
+                    <a  href="{{route('front.sangathan.index')}}" class="text-arrow">
                         Read More
                         <img src="{{asset('assets/images/text-arrow.svg')}}" alt="">
                     </a>
@@ -434,9 +435,9 @@
                     <img src="{{asset('assets/images/image4.jpg')}}" alt="">
                 </figure>
                 <figcaption>
-                    <h3>Samabeta Upasana</h3>
-                    <p>Samabeta Upasana i.e. congretional prayer means an assemble of disciples and devotees of Ayachak Ashram...</p>
-                    <a  href="#" class="text-arrow">
+                    <h3>{{$samabeta_upasana_heading}}</h3>
+                    <p>{{$samabeta_upasana_short_description}}</p>
+                    <a  href="{{route('front.samabeta_upasana.index')}}" class="text-arrow">
                         Read More
                         <img src="{{asset('assets/images/image4.jpg')}}" alt="">
                     </a>

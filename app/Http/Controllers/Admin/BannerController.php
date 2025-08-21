@@ -51,7 +51,7 @@ class BannerController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            "title"         => "required|string|max:255",
+            "title"         => "nullable|string|max:255",
             "sub_title"     => "nullable|string|max:255",
             "description"   => "nullable|string",
             "banner_image"  => "nullable|mimes:jpg,jpeg,png,svg,gif,webp|max:10000000",

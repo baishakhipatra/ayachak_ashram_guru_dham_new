@@ -114,8 +114,8 @@ Route::name('front.')->group(function () {
         Route::post('/store', 'Front\DonationController@store')->name('store');
     });
 
-    Route::prefix('event')->group(function () {
-        Route::get('/list', 'Front\EventController@index')->name('event.index');
+    Route::prefix('events')->group(function () {
+        Route::get('/', 'Front\EventController@index')->name('event.index');
         Route::get('/details/{slug}', 'Front\EventController@details')->name('event.details');
     });
 
@@ -128,6 +128,51 @@ Route::name('front.')->group(function () {
     Route::prefix('sri-sri-babamoni')->group(function (){
         Route::get('/', 'Front\PageController@babamoni')->name('babamoni.index');
     });
+
+    Route::prefix('sri-sri-mamoni')->group(function (){
+        Route::get('/', 'Front\PageController@mamoni')->name('mamoni.index');
+    });
+
+    Route::prefix('sri-sri-sadhana-devi')->group(function (){
+        Route::get('/', 'Front\PageController@sadhanaDevi')->name('sadhanadevi.index');
+    });
+
+    Route::prefix('sri-sri-bhaida')->group(function (){
+        Route::get('/', 'Front\PageController@bhaida')->name('bhaida.index');
+    });
+
+    Route::prefix('abhiksha')->group(function (){
+        Route::get('/', 'Front\PageController@abhiksha')->name('abhiksha.index');
+    });
+
+    Route::prefix('morality-compaign')->group(function (){
+        Route::get('/', 'Front\PageController@moralityCompaign')->name('morality-compaign.index');
+    });
+
+    Route::prefix('ayachak-ashram')->group(function (){
+        Route::get('/', 'Front\PageController@ayachakAshram')->name('ayachak-ashram.index');
+    });
+
+    Route::prefix('the-multiversity')->group(function (){
+        Route::get('/', 'Front\PageController@theMultiversity')->name('the-multiversity.index');
+    });
+
+    Route::prefix('who-is-akhanda')->group(function (){
+        Route::get('/', 'Front\PageController@akhanda')->name('akhanda.index');
+    });
+
+    Route::prefix('what-is-omkar')->group(function (){
+        Route::get('/', 'Front\PageController@omkar')->name('omkar.index');
+    });
+
+    Route::prefix('the-structure-of-akhanda-sangathan')->group(function (){
+        Route::get('/', 'Front\PageController@sangathan')->name('sangathan.index');
+    });
+
+    Route::prefix('what-is-samabeta-upasana')->group(function (){
+        Route::get('/', 'Front\PageController@samabeta_upasana')->name('samabeta_upasana.index');
+    });
+
 });
 
 // // category detail
