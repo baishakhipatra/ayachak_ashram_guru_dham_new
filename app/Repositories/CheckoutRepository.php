@@ -88,72 +88,50 @@ class CheckoutRepository implements CheckoutInterface
     // public function create(array $data)
     // {
     //     DB::beginTransaction();
-
     //     try {
     //         $userId = auth()->id();
-
-    //         // Fetch cart items
-    //         $cartItems = Cart::with('productDetails')
-    //             ->where('user_id', $userId)
-    //             ->get();
+    //         $cartItems = Cart::with('productDetails')->where('user_id', $userId)->get();
 
     //         if ($cartItems->isEmpty()) {
     //             return false;
     //         }
 
-    //         // Step 1: Create the Order
+    //         // Determine shipping address
+    //         $sameAddress = $data['address_option'] === 'same';
+
     //         $order = Order::create([
     //             'user_id' => $userId,
     //             'email' => $data['email'],
     //             'mobile' => $data['mobile'],
-    //             'fname' => $data['fname'],
-    //             'lname' => $data['lname'],
+    //             'fname' => $data['first_name'],
+    //             'lname' => $data['last_name'],
     //             'billing_country' => $data['billing_country'],
     //             'billing_address' => $data['billing_address'],
-    //             'billing_landmark' => $data['billing_landmark'] ?? null,
     //             'billing_city' => $data['billing_city'],
     //             'billing_state' => $data['billing_state'],
     //             'billing_pin' => $data['billing_pin'],
-    //             'shipping_same_as_billing' => $data['shippingSameAsBilling'] ?? 1,
-    //             // Only copy billing if "same as billing" is checked
-    //             'shipping_country' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-    //                 ? $data['billing_country'] 
-    //                 : $data['shipping_country'],
 
-    //             'shipping_address' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-    //                 ? $data['billing_address'] 
-    //                 : $data['shipping_address'],
-
-    //             'shipping_landmark' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-    //                 ? ($data['billing_landmark'] ?? null) 
-    //                 : ($data['shipping_landmark'] ?? null),
-
-    //             'shipping_city' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-    //                 ? $data['billing_city'] 
-    //                 : $data['shipping_city'],
-
-    //             'shipping_state' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-    //                 ? $data['billing_state'] 
-    //                 : $data['shipping_state'],
-
-    //             'shipping_pin' => ($data['shippingSameAsBilling'] ?? 1) == 1 
-    //                 ? $data['billing_pin'] 
-    //                 : $data['shipping_pin'],
+    //             'shipping_same_as_billing' => $sameAddress ? 1 : 0,
+    //             'shipping_country' => $sameAddress ? $data['billing_country'] : $data['shipping_country'],
+    //             'shipping_address' => $sameAddress ? $data['billing_address'] : $data['shipping_address'],
+    //             'shipping_city' => $sameAddress ? $data['billing_city'] : $data['shipping_city'],
+    //             'shipping_state' => $sameAddress ? $data['billing_state'] : $data['shipping_state'],
+    //             'shipping_pin' => $sameAddress ? $data['billing_pin'] : $data['shipping_pin'],
+    //             'shipping_mobile' => $sameAddress ? $data['mobile'] : $data['shipping_mobile'],
+    //             'shipping_fname' => $sameAddress ? $data['first_name'] : $data['shipping_first_name'],
+    //             'shipping_lname' => $sameAddress ? $data['last_name'] : $data['shipping_last_name'],
 
     //             'shipping_method' => $data['shipping_method'] ?? 'standard',
     //             'status' => 1,
     //             'total_amount' => 0,
     //             'gst' => 0,
     //         ]);
-    //         //dd($order);
 
     //         $grandTotal = 0;
     //         $totalGstAmount = 0;
 
-    //         // Step 2: Loop through cart items
     //         foreach ($cartItems as $item) {
     //             $product = $item->productDetails;
-
     //             if (!$product) continue;
 
     //             $qty = $item->qty;
@@ -161,7 +139,6 @@ class CheckoutRepository implements CheckoutInterface
 
     //             $unitPrice = $product->offer_price > 0 ? $product->offer_price : $product->price;
     //             $subtotal = $unitPrice * $qty;
-
     //             $gstAmount = ($subtotal * $gstPercent) / 100;
     //             $total = $subtotal + $gstAmount;
 
@@ -188,18 +165,15 @@ class CheckoutRepository implements CheckoutInterface
     //             $totalGstAmount += $gstAmount;
     //         }
 
-    //         // Step 3: Update Order Totals
     //         $order->update([
     //             'total_amount' => $grandTotal,
     //             'gst' => $totalGstAmount,
     //         ]);
 
-    //         // Step 4: Clear Cart
     //         Cart::where('user_id', $userId)->delete();
 
     //         DB::commit();
     //         return $order->id;
-
     //     } catch (\Exception $e) {
     //         DB::rollBack();
     //         \Log::error('Order Creation Failed: ' . $e->getMessage());
@@ -213,95 +187,149 @@ class CheckoutRepository implements CheckoutInterface
         try {
             $userId = auth()->id();
             $cartItems = Cart::with('productDetails')->where('user_id', $userId)->get();
-
             if ($cartItems->isEmpty()) {
                 return false;
             }
 
-            // Determine shipping address
-            $sameAddress = $data['address_option'] === 'same';
+   
+            $sameAddress = isset($data['address_option']) && $data['address_option'] === 'same';
 
-            $order = Order::create([
-                'user_id' => $userId,
-                'email' => $data['email'],
-                'mobile' => $data['mobile'],
-                'fname' => $data['first_name'],
-                'lname' => $data['last_name'],
-                'billing_country' => $data['billing_country'],
-                'billing_address' => $data['billing_address'],
-                'billing_city' => $data['billing_city'],
-                'billing_state' => $data['billing_state'],
-                'billing_pin' => $data['billing_pin'],
-
-                'shipping_same_as_billing' => $sameAddress ? 1 : 0,
-                'shipping_country' => $sameAddress ? $data['billing_country'] : $data['shipping_country'],
-                'shipping_address' => $sameAddress ? $data['billing_address'] : $data['shipping_address'],
-                'shipping_city' => $sameAddress ? $data['billing_city'] : $data['shipping_city'],
-                'shipping_state' => $sameAddress ? $data['billing_state'] : $data['shipping_state'],
-                'shipping_pin' => $sameAddress ? $data['billing_pin'] : $data['shipping_pin'],
-                'shipping_mobile' => $sameAddress ? $data['mobile'] : $data['shipping_mobile'],
-                'shipping_fname' => $sameAddress ? $data['first_name'] : $data['shipping_first_name'],
-                'shipping_lname' => $sameAddress ? $data['last_name'] : $data['shipping_last_name'],
-
-                'shipping_method' => $data['shipping_method'] ?? 'standard',
-                'status' => 1,
-                'total_amount' => 0,
-                'gst' => 0,
-            ]);
-
-            $grandTotal = 0;
-            $totalGstAmount = 0;
+            $subtotal = 0.0;
+            $taxTotal = 0.0;
 
             foreach ($cartItems as $item) {
                 $product = $item->productDetails;
                 if (!$product) continue;
 
-                $qty = $item->qty;
-                $gstPercent = $product->gst ?? 0;
+                $qty = (int) $item->qty;
+                $unitPrice = $product->offer_price > 0 ? (float) $product->offer_price : (float) $product->price;
 
-                $unitPrice = $product->offer_price > 0 ? $product->offer_price : $product->price;
-                $subtotal = $unitPrice * $qty;
-                $gstAmount = ($subtotal * $gstPercent) / 100;
-                $total = $subtotal + $gstAmount;
+                $lineSubtotal = $unitPrice * $qty;
+                $gstPercent  = (float) ($product->gst ?? 0);
+                $lineTax     = ($lineSubtotal * $gstPercent) / 100.0;
+
+                $subtotal += $lineSubtotal;
+                $taxTotal += $lineTax;
+            }
+
+            $discount = 0.0;
+            $couponId = 0;
+            $couponDiscountType = '';          
+
+            if (session()->has('couponCodeId')) {
+                $coupon = Coupon::find(session('couponCodeId'));
+                dd($coupon);
+                if ($coupon) {
+                    $couponId = (int) $coupon->id;
+                    $couponType = $coupon->type ?? null;                
+                    $couponDiscountType = $coupon->discount_type ?? '';  
+                    $discount = (float) ($coupon->amount ?? 0);
+                }
+            }
+          
+            $shippingCharges = 0.00;
+
+            $finalAmount = max(0, ($subtotal + $taxTotal + $shippingCharges) - $discount);
+
+            
+            $orderNo = 'ORD-' . date('YmdHis') . '-' . mt_rand(100, 999);
+            $ipAddr  = request()->ip() ?? '0.0.0.0';
+
+            $order = Order::create([
+                'order_sequence_int' => 0,                      
+                'order_no' => $orderNo,
+                'ip' => $ipAddr,
+                'user_id' => $userId,
+
+                'fname' => $data['first_name'] ?? null,
+                'lname' => $data['last_name'] ?? null,
+                'email' => $data['email'] ?? null,
+                'mobile' => $data['mobile'] ?? null,
+                'alt_mobile' => null,
+
+                'billing_address_id' => 0,
+                'address_type' => null,
+                'billing_address' => $data['billing_address'] ?? null,
+                'billing_landmark' => null,
+                'billing_country' => $data['billing_country'] ?? null,
+                'billing_state' => $data['billing_state'] ?? null,
+                'billing_city' => $data['billing_city'] ?? null,
+                'billing_pin' => $data['billing_pin'] ?? null,
+
+                'shippingSameAsBilling' => $sameAddress ? 1 : 0,
+
+                'shipping_address_id' => 0,
+                'shipping_address' => $sameAddress ? ($data['billing_address'] ?? null) : ($data['shipping_address'] ?? null),
+                'shipping_landmark' => null,
+                'shipping_country' => $sameAddress ? ($data['billing_country'] ?? null) : ($data['shipping_country'] ?? null),
+                'shipping_state' => $sameAddress ? ($data['billing_state'] ?? null) : ($data['shipping_state'] ?? null),
+                'shipping_city' => $sameAddress ? ($data['billing_city'] ?? null) : ($data['shipping_city'] ?? null),
+                'shipping_pin' => $sameAddress ? ($data['billing_pin'] ?? null) : ($data['shipping_pin'] ?? null),
+
+                'shipping_charges' => $shippingCharges,
+                'shipping_method' => $data['shipping_method'] ?? 'standard',
+
+                'coupon_code_id' => $couponId,
+                'coupon_code_type' => $couponType,                 
+                'coupon_code_discount_type' => $couponDiscountType, 
+                'amount' => $subtotal,
+                'discount_amount' => $discount,
+                'tax_amount' => $taxTotal,
+                'final_amount' => $finalAmount,
+                'payment_method' => '',
+                'is_paid' => 0,
+                'txn_id' => 0,
+                'status' => 1,
+                'is_live_order' => 1,
+                'orderCancelledBy' => 0,
+                'orderCancelledReason' => null,
+            ]);
+
+            foreach ($cartItems as $item) {
+                $product = $item->productDetails;
+                if (!$product) continue;
+
+                $qty = (int) $item->qty;
+                $unitPrice = $product->offer_price > 0 ? (float) $product->offer_price : (float) $product->price;
+
+                $lineSubtotal = $unitPrice * $qty;
+                $gstPercent  = (float) ($product->gst ?? 0);
+                $lineTax     = ($lineSubtotal * $gstPercent) / 100.0;
+                $lineTotal   = $lineSubtotal + $lineTax;
 
                 OrderProduct::create([
                     'order_id' => $order->id,
                     'product_id' => $product->id,
-                    'product_name' => $product->name,
-                    'product_image' => $product->image,
-                    'product_slug' => $product->slug,
-                    'product_variation_id' => $item->variation_id,
-                    'colour_name' => $item->color_name,
-                    'size_name' => $item->size_name,
-                    'sku_code' => $item->sku,
-                    'coupon_code' => null,
+                    'product_name' => $product->name ?? null,
+                    'product_image' => $product->image ?? null,
+                    'product_slug' => $product->slug ?? null,
+                    'product_variation_id' => $item->variation_id ?? null,
+                    'colour_name' => $item->color_name ?? null,
+                    'size_name' => $item->size_name ?? null,
+                    'sku_code' => $item->sku ?? null,
                     'qty' => $qty,
                     'gst' => $gstPercent,
-                    'price' => $product->price,
-                    'offer_price' => $product->offer_price,
-                    'gst_amount' => $gstAmount,
-                    'total' => $total,
+                    'price' => (float) $product->price,
+                    'offer_price' => (float) $product->offer_price,
+                    'gst_amount' => $lineTax,
+                    'total' => $lineTotal,
                 ]);
-
-                $grandTotal += $total;
-                $totalGstAmount += $gstAmount;
             }
-
-            $order->update([
-                'total_amount' => $grandTotal,
-                'gst' => $totalGstAmount,
-            ]);
 
             Cart::where('user_id', $userId)->delete();
 
             DB::commit();
             return $order->id;
-        } catch (\Exception $e) {
+
+        } catch (\Throwable $e) {
             DB::rollBack();
-            \Log::error('Order Creation Failed: ' . $e->getMessage());
+            \Log::error('Order Creation Failed: '.$e->getMessage(), ['trace' => $e->getTraceAsString()]);
             return false;
         }
     }
+
+
+
 
 
     public function NewCreate(array $data){

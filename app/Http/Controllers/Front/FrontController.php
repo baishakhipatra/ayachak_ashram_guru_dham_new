@@ -122,14 +122,14 @@ class FrontController extends Controller
         $omkar_short_description = $omkar ? Str::words($omkar->content, 50, '...') : null;
 
         //The Structure 0f Akhanda Sangathan
-        $Sangathan = Settings::where('page_heading', 'LIKE', '%What is meant by ‘OMKAR’%')->first();
+        $Sangathan = Settings::where('page_heading', 'LIKE', '%The Structure 0f Akhanda Sangathan%')->first();
         $Sangathan_heading = $Sangathan?->page_heading;
         $Sangathan_short_description = $Sangathan ? Str::words($Sangathan->content, 50, '...') : null;
 
         //WHAT IS ‘SAMABETA UPASANA?
-        $samabeta_upasana = Settings::where('page_heading', 'LIKE', '%WHAT IS ‘SAMABETA UPASANA?%')->first();
-        $samabeta_upasana_heading = $Sangathan?->page_heading;
-        $samabeta_upasana_short_description = $Sangathan ? Str::words($Sangathan->content, 50, '...') : null;
+        $samabeta_upasana = Settings::where('page_heading', 'LIKE', '%WHAT IS SAMABETA UPASANA?%')->first();
+        $samabeta_upasana_heading = $samabeta_upasana?->page_heading;
+        $samabeta_upasana_short_description = $samabeta_upasana ? Str::words($samabeta_upasana->content, 50, '...') : null;
 
         
         return view('front.index',compact('categories','featuredProducts','latestEvents','banner','page_heading',

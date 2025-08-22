@@ -195,15 +195,14 @@ class CartController extends Controller
     public function add_to_checkoout(Request $request)
     {
         $userId = Auth::guard('web')->id();
-
+       
         DB::beginTransaction();
 
         try {
             $cartItems = Cart::with(['productDetails', 'variation'])
                 ->where('user_id', $userId)
                 ->get();
-
-            if ($cartItems->isEmpty()) {
+            if (count($cartItems)==0) {
                 return back()->with('error', 'Your cart is empty.');
             }
 
@@ -298,6 +297,7 @@ class CartController extends Controller
                 ->with('success', 'Items successfully added.');
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e->getMessage());
             return back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }

@@ -7,13 +7,27 @@
             <div class="main-nav">
                 <ul class="menu">
                     <li><a href="{{route('front.home')}}">Home</a></li>
-                    <li><a href="{{route('front.shop.list')}}">Shop</a></li>
+
+                    <li class="">
+                        <a href="javascript.void(0)" class="dropdown dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu sub-menu">
+                                 <li><a href="{{route('front.shop.list')}}">All Products</a></li>
+                                {{-- <li><a href="{{ route('front.shop.list', ['category' => 'Book']) }}">Books</a></li>
+                                <li><a href="{{ route('front.shop.list', ['category' => 'Medicine']) }}">Medicines</a></li>
+                                <li><a href="{{ route('front.shop.list', ['category' => 'water']) }}">Water</a></li>
+                                <li><a href="{{ route('front.shop.list', ['category' => 'photo-frame']) }}">Photo Frame</a></li> --}}
+                                @foreach($categories as $category)
+                                    <li>
+                                        <a href="{{ route('front.shop.list', ['category' => Str::slug($category->name)]) }}">
+                                            {{ $category->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                    </li>
                     <li><a href="{{route('front.event.index')}}">Events</a></li>
                     <li><a href="{{route('front.about-us.index')}}">About Us</a></li>
-                    <li><a href="{{ route('front.shop.list', ['category' => 'Book']) }}">Books</a></li>
-                    <li><a href="{{ route('front.shop.list', ['category' => 'Medicine']) }}">Medicines</a></li>
-                    <li><a href="{{ route('front.shop.list', ['category' => 'water']) }}">Water</a></li>
-                    <li><a href="{{ route('front.shop.list', ['category' => 'photo-frame']) }}">Photo Frame</a></li>
+                    
                 </ul>
             </div>
             <a href="{{route('front.donation.form')}}" class="bton btn-fill">Donate Now</a>
@@ -57,12 +71,19 @@
         </div>
         <div class="menu-holder">
             <ul class="menu">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Books</a></li>
-                <li><a href="#">Medicines</a></li>
-                <li><a href="#">Water</a></li>
-                <li><a href="#">Photo Frame</a></li>
+                <li><a href="{{route('front.home')}}">Home</a></li>
+                    <li class="">
+                        <a href="javascript.void(0)" class="dropdown dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu sub-menu">
+                                 <li><a href="{{route('front.shop.list')}}">All Products</a></li>
+                                <li><a href="{{ route('front.shop.list', ['category' => 'Book']) }}">Books</a></li>
+                                <li><a href="{{ route('front.shop.list', ['category' => 'Medicine']) }}">Medicines</a></li>
+                                <li><a href="{{ route('front.shop.list', ['category' => 'water']) }}">Water</a></li>
+                                <li><a href="{{ route('front.shop.list', ['category' => 'photo-frame']) }}">Photo Frame</a></li>
+                            </ul>
+                    </li>
+                <li><a href="{{route('front.event.index')}}">Events</a></li>
+                <li><a href="{{route('front.about-us.index')}}">About Us</a></li>
             </ul>
             <a href="#" class="bton btn-fill">Donate Now</a>
         </div>

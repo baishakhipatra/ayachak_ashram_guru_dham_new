@@ -439,7 +439,7 @@
                     <p>{{$samabeta_upasana_short_description}}</p>
                     <a  href="{{route('front.samabeta_upasana.index')}}" class="text-arrow">
                         Read More
-                        <img src="{{asset('assets/images/image4.jpg')}}" alt="">
+                        <img src="{{asset('assets/images/text-arrow.svg')}}" alt="">
                     </a>
                 </figcaption>
             </div>

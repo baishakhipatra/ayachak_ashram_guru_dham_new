@@ -13,6 +13,7 @@ use App\Models\Collection;
 use App\Models\Settings;
 use App\Models\Cart;
 use App\Models\Wishlist;
+use App\Http\View\Composers\CategoryComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        View::composer('*', CategoryComposer::class);
         view::composer('*', function($view) {
             //count cart total
             $cartCount = auth()->check() ? Cart::where('user_id', auth()->id())->count() : 0;

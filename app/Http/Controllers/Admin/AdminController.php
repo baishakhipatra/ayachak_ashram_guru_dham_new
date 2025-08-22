@@ -12,6 +12,7 @@ use App\Models\SubCategory;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Event;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -47,7 +48,7 @@ class AdminController extends Controller
         $data = (object)[];
         $data->users = User::count();
         $data->category = Category::count();
-        $data->collection = Collection::count();
+        $data->collection = Event::count();
         $data->products = Product::latest('id')->get();
         $data->orders = Order::latest('id')->limit(5)->get();
 

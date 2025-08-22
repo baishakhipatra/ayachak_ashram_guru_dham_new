@@ -26,7 +26,7 @@
         <div class="col-sm-6 col-lg-3">
             <div class="card home__card bg-gradient-success">
                 <div class="card-body">
-                    <h4>Collection <i class="fi fi-br-user"></i></h4>
+                    <h4>Events <i class="fi fi-br-tree"></i></h4>
                     <h2>{{$data->collection}}</h2>
                 </div>
             </div>
@@ -125,33 +125,6 @@
                             <td>{{date('j M Y g:i A', strtotime($order->created_at))}}</td>
                             <td>Rs {{$order->final_amount}}</td>
                             <td><span class="badge bg-info">{{ $status }}</span></td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        <div class="col-xl-6">
-            <h5>Top 10 Product (SKU-Wise)</h5>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="text-center">#</th>
-                        <th>Name</th>
-                        <th>Product SKU</th>
-                        <th>Amount</th>
-                        <th>Total orders placed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($sku_product_count as $key => $item)
-                        <tr>
-                            <td class="text-center">{{$key+1}}</td>
-                            <td>
-                                {{ $item->product_name ?? '' }}
-                            </td>
-                            <td>{{$item->sku_code ?? ''}}</td>
-                            <td>Rs.{{number_format($item->offer_price) ?? 0}}</td>
-                            <td>{{$item->count}}</td>
                         </tr>
                     @endforeach
                 </tbody>

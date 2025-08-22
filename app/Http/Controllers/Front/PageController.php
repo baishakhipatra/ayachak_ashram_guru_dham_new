@@ -194,7 +194,7 @@ class PageController extends Controller
 
     
     public function samabeta_upasana(){
-        $page_heading = 'WHAT IS ‘SAMABETA UPASANA?';
+        $page_heading = 'WHAT IS SAMABETA UPASANA?';
 
        $setting = Settings::where('page_heading', 'like', "%{$page_heading}%")->first();
         //dd($setting);

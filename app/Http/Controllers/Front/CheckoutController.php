@@ -58,7 +58,7 @@ class CheckoutController extends Controller
             if ($coupon) {
                 // If your coupon is a fixed amount
                 $discount = $coupon->amount;
-
+                
                 // Or if your coupon is percentage based:
                 // $discount = ($subtotal * $coupon->discount_percentage) / 100;
             }
@@ -77,9 +77,108 @@ class CheckoutController extends Controller
         return $couponData;
     }
 
+    // public function store(Request $request)
+    // {
+    //     // Validation rules based on your form
+    //     $rules = [
+    //         'email' => 'required|email|max:255',
+    //         'mobile' => 'required|digits:10',
+    //         'first_name' => 'required|string|max:255',
+    //         'last_name' => 'required|string|max:255',
+    //         'billing_country' => 'required|string|max:255',
+    //         'billing_address' => 'required|string|max:1000',
+    //         'billing_city' => 'required|string|max:255',
+    //         'billing_state' => 'required|string|max:255',
+    //         'billing_pin' => 'required|string|max:6',
+
+    //         'address_option' => 'required|in:same,different',
+    //         'shipping_country' => 'nullable|string|max:255',
+    //         'shipping_first_name' => 'nullable|string|max:255',
+    //         'shipping_last_name' => 'nullable|string|max:255',
+    //         'shipping_address' => 'nullable|string|max:500',
+    //         'shipping_city' => 'nullable|string|max:255',
+    //         'shipping_state' => 'nullable|string|max:255',
+    //         'shipping_pin' => 'nullable|string|max:6',
+    //         'shipping_mobile' => 'nullable|digits:10',
+    //     ];
+
+    //     $messages = [
+    //         'mobile.*' => 'Please enter a valid 10 digit mobile number',
+    //         'billing_pin.*' => 'Please enter a valid 6 digit pin',
+    //         'shipping_pin.*' => 'Please enter a valid 6 digit pin',
+    //     ];
+
+    //     $validator = Validator::make($request->all(), $rules);
+
+    //     if ($validator->fails()) {
+    //         if ($request->ajax()) {
+    //             return response()->json([
+    //                 'errors' => $validator->errors()
+    //             ], 422);
+    //         }
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+
+    //     $userId = auth()->id();
+    //     $cartItems = Cart::with(['productDetails'])->where('user_id', $userId)->get();
+
+    //     if ($cartItems->isEmpty()) {
+    //         return response()->json(['error' => 'Cart is empty'], 422);
+    //     }
+
+    //     // Calculate totals
+    //     $subtotal = 0;
+    //     $tax = 0;
+
+    //     foreach ($cartItems as $item) {
+    //         $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
+    //         $lineSubtotal = $item->qty * $price;
+    //         $subtotal += $lineSubtotal;
+
+    //         $gstPercent = $item->productDetails->gst ?? 0;
+    //         $lineTax = ($lineSubtotal * $gstPercent) / 100;
+    //         $tax += $lineTax;
+    //     }
+
+    //     $discount = 0;
+
+    //     if (session()->has('couponCodeId')) {
+    //         $coupon = Coupon::find(session('couponCodeId'));
+    //         if ($coupon) {
+                
+    //             $discount = $coupon->amount;
+    //         }
+    //     }
+
+
+    //     $total = $subtotal + $tax - $discount;
+
+    //     // Prepare checkout data
+    //     $checkoutData = $request->except('_token');
+    //     $checkoutData['subtotal'] = $subtotal;
+    //     $checkoutData['tax'] = $tax;
+    //     $checkoutData['discount_amount'] = $discount;
+    //     $checkoutData['total'] = $total;
+    //     $checkoutData['cart_items'] = $cartItems;
+
+    //     // Save order
+    //     $order_id = $this->checkoutRepository->create($checkoutData);
+
+    //     if ($order_id) {
+    //         return response()->json([
+    //             'success' => true,
+    //             'redirect_url' => route('front.checkout.payment', $order_id)
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Something went wrong, please try again.'
+    //         ], 500);
+    //     }
+    // }
+
     public function store(Request $request)
     {
-        // Validation rules based on your form
         $rules = [
             'email' => 'required|email|max:255',
             'mobile' => 'required|digits:10',
@@ -108,60 +207,22 @@ class CheckoutController extends Controller
             'shipping_pin.*' => 'Please enter a valid 6 digit pin',
         ];
 
-        $validator = Validator::make($request->all(), $rules);
-
+        $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             if ($request->ajax()) {
-                return response()->json([
-                    'errors' => $validator->errors()
-                ], 422);
+                return response()->json(['errors' => $validator->errors()], 422);
             }
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $userId = auth()->id();
-        $cartItems = Cart::with(['productDetails'])->where('user_id', $userId)->get();
-
-        if ($cartItems->isEmpty()) {
+        $hasCart = Cart::where('user_id', $userId)->exists();
+        if (!$hasCart) {
             return response()->json(['error' => 'Cart is empty'], 422);
         }
 
-        // Calculate totals
-        $subtotal = 0;
-        $tax = 0;
-
-        foreach ($cartItems as $item) {
-            $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
-            $lineSubtotal = $item->qty * $price;
-            $subtotal += $lineSubtotal;
-
-            $gstPercent = $item->productDetails->gst ?? 0;
-            $lineTax = ($lineSubtotal * $gstPercent) / 100;
-            $tax += $lineTax;
-        }
-
-        $discount = 0;
-
-        if (session()->has('couponCodeId')) {
-            $coupon = Coupon::find(session('couponCodeId'));
-            if ($coupon) {
-                
-                $discount = $coupon->amount;
-            }
-        }
-
-
-        $total = $subtotal + $tax - $discount;
-
-        // Prepare checkout data
         $checkoutData = $request->except('_token');
-        $checkoutData['subtotal'] = $subtotal;
-        $checkoutData['tax'] = $tax;
-        $checkoutData['discount_amount'] = $discount;
-        $checkoutData['total'] = $total;
-        $checkoutData['cart_items'] = $cartItems;
 
-        // Save order
         $order_id = $this->checkoutRepository->create($checkoutData);
 
         if ($order_id) {
@@ -169,14 +230,13 @@ class CheckoutController extends Controller
                 'success' => true,
                 'redirect_url' => route('front.checkout.payment', $order_id)
             ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Something went wrong, please try again.'
-            ], 500);
         }
-    }
 
+        return response()->json([
+            'success' => false,
+            'message' => 'Something went wrong, please try again.'
+        ], 500);
+    }
 
 
     public function payment(Request $request,$order_id)
