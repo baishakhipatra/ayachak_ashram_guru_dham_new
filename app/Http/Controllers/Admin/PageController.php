@@ -21,23 +21,15 @@ class PageController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->all());
         $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:pages,slug',
             'content' => 'nullable',
-            'status' => 'nullable|boolean',            
+            'status' => 'nullable',            
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
         ]);
-
-        // $title = $request->title;
-        // $slug = Str::slug($title);
-        // $originalSlug = $slug;
-        // $i = 1;
-
-        // while (Page::where('slug', $slug)->exists()) {
-        //     $slug = $originalSlug . '-' . $i++;
-        // }
 
         Page::create([
             'title' => $request->title,

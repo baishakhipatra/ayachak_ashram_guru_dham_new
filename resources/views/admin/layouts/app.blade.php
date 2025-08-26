@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{asset('admin/css/bootstrap.min.css')}}">
     <link href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/classic/ckeditor.js"></script>
     <link rel="stylesheet" href="{{asset('admin/plugins/croppie/croppie.css')}}">
     <link href="{{asset('admin/css/style.css')}}" rel="stylesheet">
     <link rel="shortcut icon" href="{{asset('frontend/images/favicon.png')}}" type="image/x-icon">
@@ -39,72 +39,29 @@
                 <li class="{{ ( request()->is('admin/home*') ) ? 'active' : '' }}"><a href="{{ route('admin.home') }}"><i class="fi fi-br-home"></i> <span>Dashboard</span></a></li>
 
 
-                <li class="@if(request()->is('admin/admin-user-management*') || request()->is('admin/user-management*') || request()->is    ('admin/cms-module*')) active @endif">
+                <li class="@if(request()->is('admin/admin-user-management*') || request()->is('admin/user-management*') || request()->is    ('admin/designation*')) active @endif">
                     <a href="javascript:void(0)"><i class="fi fi-br-cube"></i> <span>Super Admin Module</span></a>
                     <ul>
                         <li class="{{ request()->is('admin/admin-user-management*') ? 'active' : '' }}">
                             <a href="{{ route('admin.admin-user-management.index') }}">
-                                <i class="fi fi-br-database"></i> <span>Admin User Management</span>
+                                <i class="fi fi-br-database"></i> <span>Role User</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('admin/designation*') ? 'active' : '' }}">
+                            <a href="">
+                                <i class="fi fi-br-database"></i> <span>Designation</span>
                             </a>
                         </li>
                     </ul>
                 </li>
 
-                
-                <li class="@if(request()->is('admin/static-page-management*') || request()->is('admin/menu-manager*') || request()->is    ('admin/cms-module*')) active @endif">
-                    <a href="javascript:void(0)"><i class="fi fi-br-cube"></i> <span>CMS Module</span></a>
-                    <ul>
-                        <li class="{{ request()->is('admin/static-page-management*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.pages.index') }}">
-                                <i class="fi fi-br-database"></i> <span>Static Page Management</span>
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('admin/menu-manager*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.menus.index') }}">
-                                <i class="fi fi-br-database"></i> <span>Menu Manager</span>
-                            </a>
-                        </li>
-                    </ul>
+                <li class="{{ request()->is('admin/donation-management*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.donations.index') }}">
+                        <i class="fi fi-br-database"></i> <span>Donations</span>
+                    </a>
                 </li>
 
-                <li class="@if(request()->is('admin/static-page-management*') || request()->is('admin/menu-manager*') || request()->is    ('admin/cms-module*')) active @endif">
-                    <a href="javascript:void(0)"><i class="fi fi-br-cube"></i> <span>CSR Management</span></a>
-                    <ul>
-                        <li class="{{ request()->is('admin/static-page-management*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.csr_projects.index') }}">
-                                <i class="fi fi-br-database"></i> <span>CSR Module</span>
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('admin/menu-manager*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.tags.index') }}">
-                                <i class="fi fi-br-database"></i> <span>Tag</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                
-                <li class="@if(request()->is('admin/donation-management*')) active @endif">
-                    <a href="javascript:void(0)"><i class="fi fi-br-cube"></i> <span>Donation Management</span></a>
-                    <ul>
-                        <li class="{{ request()->is('admin/admin-user-management*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.donations.index') }}">
-                                <i class="fi fi-br-database"></i> <span>Donations</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="@if(request()->is('admin/events-management*')) active @endif">
-                    <a href="javascript:void(0)"><i class="fi fi-br-cube"></i> <span>Event Management</span></a>
-                    <ul>
-                        <li class="{{ request()->is('admin/admin-event-management*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.events.index') }}">
-                                <i class="fi fi-br-database"></i> <span>Event List</span>
-                            </a>
-                        </li>
-                    </ul>   
-                </li>
+                <li class="{{ ( request()->is('admin/admin/admin-event-management*') ) ? 'active' : '' }}"><a href="{{ route('admin.events.index') }}"><i class="fi fi-br-database"></i> <span>Events</span></a></li>
 
 
                 <li class="@if(request()->is('admin/category*') || request()->is('admin/subcategory*') || request()->is('admin/collection*') || request()->is('admin/color*') || request()->is('admin/size*')) { {{'active'}} }  @endif">
@@ -201,6 +158,38 @@
                         <li class="{{ ( request()->is('admin/mail*') ) ? 'active' : '' }}"><a href="{{ route('admin.franchise.index') }}"><i class="fi fi-br-database"></i> <span>Franchise request</span></a></li>
                     </ul>
                 </li>
+
+                <li class="@if(request()->is('admin/static-page-management*') || request()->is('admin/menu-manager*') || request()->is    ('admin/cms-module*')) active @endif">
+                    <a href="javascript:void(0)"><i class="fi fi-br-cube"></i> <span>CMS Module</span></a>
+                    <ul>
+                        <li class="{{ request()->is('admin/static-page-management*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.pages.index') }}">
+                                <i class="fi fi-br-database"></i> <span>Static Page Management</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('admin/menu-manager*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.menus.index') }}">
+                                <i class="fi fi-br-database"></i> <span>Menu Manager</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="@if(request()->is('admin/static-page-management*') || request()->is('admin/menu-manager*') || request()->is    ('admin/cms-module*')) active @endif">
+                    <a href="javascript:void(0)"><i class="fi fi-br-cube"></i> <span>CSR Management</span></a>
+                    <ul>
+                        <li class="{{ request()->is('admin/static-page-management*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.csr_projects.index') }}">
+                                <i class="fi fi-br-database"></i> <span>CSR Module</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('admin/menu-manager*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.tags.index') }}">
+                                <i class="fi fi-br-database"></i> <span>Tag</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 				{{-- <li class="@if(request()->is('admin/lux/qr*') || request()->is('admin/lux/qr*')) { {{'active'}} }  @endif">
                     <a href="javascript: void(0)"><i class="fi fi-br-cube"></i> <span>Lux QR CODES CMS</span></a>
                     <ul>
@@ -275,7 +264,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+    {{-- <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script> --}}
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{asset('admin/plugins/croppie/croppie.js')}}"></script>
     <script type="text/javascript" src="{{asset('admin/js/custom.js')}}"></script>

@@ -1,15 +1,17 @@
 <?php
 
-use App\Http\Controllers\Admin\{AdminUserManagementController, PageController, MenuController,CSRProjectController, TagController,
-                                DonationController, ProductController, EventController};
+use App\Http\Controllers\Admin\{AdminUserManagementController, PageController, MenuController,CSRProjectController, TagController,DonationController, ProductController, EventController};
 
 // admin guard
 use Illuminate\Support\Facades\Route;
+ // product
+Route::post('/update', 'Admin\ProductController@update')->name('admin.product.update');
 Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->group(function () {
     Route::middleware(['guest:admin'])->group(function () {
         Route::view('/login', 'admin.auth.login')->name('login');
         Route::post('/check', 'Admin\AdminController@check')->name('login.check');
     });
+    
 
     Route::middleware(['auth:admin'])->group(function () {
         // dashboard
@@ -73,6 +75,8 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             Route::get('/', [DonationController::class, 'index'])->name('donations.index');
             Route::get('/create', [DonationController::class, 'create'])->name('donations.create');
             Route::post('/store', [DonationController::class, 'store'])->name('donations.store');
+            Route::get('/show/{id}', [DonationController::class, 'show'])->name('donations.show');
+            Route::get('/export', [DonationController::class, 'Export'])->name('donations.export');
         });
 
         //events
@@ -183,7 +187,6 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             Route::get('/{id}/get-all-orders', 'Admin\UserController@perUserOrder')->name('getPerUserOrder');
         });
 
-        // product
         Route::prefix('product')->name('product.')->group(function () {
             Route::get('/list', 'Admin\ProductController@index')->name('index');
             Route::get('/create', 'Admin\ProductController@create')->name('create');
@@ -191,7 +194,6 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             Route::get('/{id}/view', 'Admin\ProductController@show')->name('view');
             Route::post('/size', 'Admin\ProductController@size')->name('size');
             Route::get('/{id}/edit', 'Admin\ProductController@edit')->name('edit');
-            Route::post('/update', 'Admin\ProductController@update')->name('update');
             Route::get('/{id}/status', 'Admin\ProductController@status')->name('status');
             Route::get('/{id}/sale', 'Admin\ProductController@sale')->name('sale');
             Route::get('/{id}/trending', 'Admin\ProductController@trending')->name('trending');
@@ -210,8 +212,8 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             Route::post('/variation/color/position', 'Admin\ProductController@variationColorPosition')->name('variation.color.position');
             Route::post('/variation/color/status/toggle', 'Admin\ProductController@variationStatusToggle')->name('variation.color.status.toggle');
             Route::post('/variation/color/edit', 'Admin\ProductController@variationColorEdit')->name('variation.color.edit');
-			Route::post('/variation/color/rename', 'Admin\ProductController@variationColorRename')->name('variation.color.rename');
-			Route::post('/variation/color/fabric/upload', 'Admin\ProductController@variationFabricUpload')->name('variation.color.fabric.upload');
+            Route::post('/variation/color/rename', 'Admin\ProductController@variationColorRename')->name('variation.color.rename');
+            Route::post('/variation/color/fabric/upload', 'Admin\ProductController@variationFabricUpload')->name('variation.color.fabric.upload');
             Route::get('/variation/{productId}/color/{colorId}/delete', 'Admin\ProductController@variationColorDestroy')->name('variation.color.delete');
             Route::post('/variation/size/add', 'Admin\ProductController@variationSizeUpload')->name('variation.size.add');   
             Route::post('/variation/size/edit', 'Admin\ProductController@variationSizeEdit')->name('variation.size.edit');
@@ -241,6 +243,8 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
             // Route::get('/sku-list/sync/all/report/{id}', 'Admin\UnicommerceController@syncAllreportDetail')->name('sku_list.sync.all.report.detail');
             // Route::get('/sku-list/sync/all/report/{id}/export', 'Admin\UnicommerceController@syncAllreportDetailExport')->name('sku_list.sync.all.report.detail.export');
         });
+
+       
 
 
         // address

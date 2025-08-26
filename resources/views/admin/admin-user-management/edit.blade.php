@@ -39,6 +39,13 @@
                     @error('name') <p class="text-danger small">{{ $message }}</p> @enderror
                   </div>
                 </div>
+                <div class="col-md-3">
+                  <div class="form-floating form-floating-outline">
+                    <input type="number" name="phone" class="form-control" placeholder="Phone" value="{{ old('phone', $data->phone) }}">
+                    <label>Phone</label>
+                    @error('phone') <p class="text-danger small">{{ $message }}</p> @enderror
+                  </div>
+                </div>
               </div>
               <div class="text-end">
                 <input type="hidden" name="id" value="{{$data->id}}">

@@ -57,7 +57,7 @@
 
 
     <div class="card-footer d-flex justify-content-end">
-        <a href="{{ route('admin.donations.create') }}" class="btn btn-success">Add Donation</a>
+        <a href="{{ route('admin.donations.export', request()->all()) }}" class="btn btn-success">Export</a>
     </div>
 </div>
 
@@ -73,6 +73,7 @@
                     <th>Phone</th>
                     <th>Amount</th>
                     <th>Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -84,6 +85,12 @@
                         <td>{{ $donation->phone_number }}</td>
                         <td>{{ $donation->amount }}</td>
                         <td>{{ $donation->created_at->format('Y-m-d H:i') }}</td>
+                        <td>
+                            <a href="{{ route('admin.donations.show', $donation->id) }}" class="btn btn-primary btn-sm">
+                                <i class="fa fa-eye"></i> 
+                            </a>
+                        </td>
+
                     </tr>
                 @endforeach
             </tbody>

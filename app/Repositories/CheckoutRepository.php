@@ -85,102 +85,6 @@ class CheckoutRepository implements CheckoutInterface
         return Address::where('user_id', Auth::guard('web')->user()->id)->get();
     }
 
-    // public function create(array $data)
-    // {
-    //     DB::beginTransaction();
-    //     try {
-    //         $userId = auth()->id();
-    //         $cartItems = Cart::with('productDetails')->where('user_id', $userId)->get();
-
-    //         if ($cartItems->isEmpty()) {
-    //             return false;
-    //         }
-
-    //         // Determine shipping address
-    //         $sameAddress = $data['address_option'] === 'same';
-
-    //         $order = Order::create([
-    //             'user_id' => $userId,
-    //             'email' => $data['email'],
-    //             'mobile' => $data['mobile'],
-    //             'fname' => $data['first_name'],
-    //             'lname' => $data['last_name'],
-    //             'billing_country' => $data['billing_country'],
-    //             'billing_address' => $data['billing_address'],
-    //             'billing_city' => $data['billing_city'],
-    //             'billing_state' => $data['billing_state'],
-    //             'billing_pin' => $data['billing_pin'],
-
-    //             'shipping_same_as_billing' => $sameAddress ? 1 : 0,
-    //             'shipping_country' => $sameAddress ? $data['billing_country'] : $data['shipping_country'],
-    //             'shipping_address' => $sameAddress ? $data['billing_address'] : $data['shipping_address'],
-    //             'shipping_city' => $sameAddress ? $data['billing_city'] : $data['shipping_city'],
-    //             'shipping_state' => $sameAddress ? $data['billing_state'] : $data['shipping_state'],
-    //             'shipping_pin' => $sameAddress ? $data['billing_pin'] : $data['shipping_pin'],
-    //             'shipping_mobile' => $sameAddress ? $data['mobile'] : $data['shipping_mobile'],
-    //             'shipping_fname' => $sameAddress ? $data['first_name'] : $data['shipping_first_name'],
-    //             'shipping_lname' => $sameAddress ? $data['last_name'] : $data['shipping_last_name'],
-
-    //             'shipping_method' => $data['shipping_method'] ?? 'standard',
-    //             'status' => 1,
-    //             'total_amount' => 0,
-    //             'gst' => 0,
-    //         ]);
-
-    //         $grandTotal = 0;
-    //         $totalGstAmount = 0;
-
-    //         foreach ($cartItems as $item) {
-    //             $product = $item->productDetails;
-    //             if (!$product) continue;
-
-    //             $qty = $item->qty;
-    //             $gstPercent = $product->gst ?? 0;
-
-    //             $unitPrice = $product->offer_price > 0 ? $product->offer_price : $product->price;
-    //             $subtotal = $unitPrice * $qty;
-    //             $gstAmount = ($subtotal * $gstPercent) / 100;
-    //             $total = $subtotal + $gstAmount;
-
-    //             OrderProduct::create([
-    //                 'order_id' => $order->id,
-    //                 'product_id' => $product->id,
-    //                 'product_name' => $product->name,
-    //                 'product_image' => $product->image,
-    //                 'product_slug' => $product->slug,
-    //                 'product_variation_id' => $item->variation_id,
-    //                 'colour_name' => $item->color_name,
-    //                 'size_name' => $item->size_name,
-    //                 'sku_code' => $item->sku,
-    //                 'coupon_code' => null,
-    //                 'qty' => $qty,
-    //                 'gst' => $gstPercent,
-    //                 'price' => $product->price,
-    //                 'offer_price' => $product->offer_price,
-    //                 'gst_amount' => $gstAmount,
-    //                 'total' => $total,
-    //             ]);
-
-    //             $grandTotal += $total;
-    //             $totalGstAmount += $gstAmount;
-    //         }
-
-    //         $order->update([
-    //             'total_amount' => $grandTotal,
-    //             'gst' => $totalGstAmount,
-    //         ]);
-
-    //         Cart::where('user_id', $userId)->delete();
-
-    //         DB::commit();
-    //         return $order->id;
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         \Log::error('Order Creation Failed: ' . $e->getMessage());
-    //         return false;
-    //     }
-    // }
-
     public function create(array $data)
     {
         DB::beginTransaction();
@@ -199,10 +103,16 @@ class CheckoutRepository implements CheckoutInterface
 
             foreach ($cartItems as $item) {
                 $product = $item->productDetails;
+                $variation = $item->variation;
                 if (!$product) continue;
 
                 $qty = (int) $item->qty;
-                $unitPrice = $product->offer_price > 0 ? (float) $product->offer_price : (float) $product->price;
+                //$unitPrice = $product->offer_price > 0 ? (float) $product->offer_price : (float) $product->price;
+                $unitPrice = $variation->offer_price
+                ?? $variation->price
+                ?? $product->offer_price
+                ?? $product->price
+                ?? 0;
 
                 $lineSubtotal = $unitPrice * $qty;
                 $gstPercent  = (float) ($product->gst ?? 0);
@@ -218,7 +128,7 @@ class CheckoutRepository implements CheckoutInterface
 
             if (session()->has('couponCodeId')) {
                 $coupon = Coupon::find(session('couponCodeId'));
-                dd($coupon);
+                //dd($coupon);
                 if ($coupon) {
                     $couponId = (int) $coupon->id;
                     $couponType = $coupon->type ?? null;                
@@ -287,10 +197,15 @@ class CheckoutRepository implements CheckoutInterface
 
             foreach ($cartItems as $item) {
                 $product = $item->productDetails;
+                $variation = $item->variation;
                 if (!$product) continue;
 
                 $qty = (int) $item->qty;
-                $unitPrice = $product->offer_price > 0 ? (float) $product->offer_price : (float) $product->price;
+                $unitPrice = $variation->offer_price
+                ?? $variation->price
+                ?? $product->offer_price
+                ?? $product->price
+                ?? 0;
 
                 $lineSubtotal = $unitPrice * $qty;
                 $gstPercent  = (float) ($product->gst ?? 0);
@@ -303,16 +218,16 @@ class CheckoutRepository implements CheckoutInterface
                     'product_name' => $product->name ?? null,
                     'product_image' => $product->image ?? null,
                     'product_slug' => $product->slug ?? null,
-                    'product_variation_id' => $item->variation_id ?? null,
-                    'colour_name' => $item->color_name ?? null,
-                    'size_name' => $item->size_name ?? null,
-                    'sku_code' => $item->sku ?? null,
+                    'product_variation_id' => $variation->id ?? null,
+                    'colour_name' => $variation->color_name ?? null,
+                    'size_name' => $variation->size_name ?? null,
+                    'sku_code' => $variation->sku ?? null,
                     'qty' => $qty,
                     'gst' => $gstPercent,
-                    'price' => (float) $product->price,
-                    'offer_price' => (float) $product->offer_price,
+                    'price' => $variation->price ?? $product->price ?? 0,
+                    'offer_price' => $variation->offer_price ?? $product->offer_price ?? 0,
                     'gst_amount' => $lineTax,
-                    'total' => $lineTotal,
+                    'total' => $lineSubtotal + $lineTax,
                 ]);
             }
 

@@ -92,7 +92,7 @@
                             </td>
                             <td>{{$product->style_no}}</td>
                             <td>{{$product->category?$product->category->name:''}}</td>
-                            <td>Rs. {{$product->offer_price}}</td>
+                            <td>Rs. {{$product->offer_price && $product->offer_price > 0 ? $product->offer_price : $product->price}}</td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -168,6 +168,27 @@ class UserController extends Controller
         return back()->with('failure', 'Mobile number not found.');
     }
 
+    // public function order(Request $request)
+    // {
+    //     $userId = Auth::id();
+
+    //     $checkout = Checkout::where('user_id', $userId)
+    //         ->latest()
+    //         ->first();
+
+    //     $checkoutProducts->collect();
+
+    //     if($checkout){
+    //         $checkoutProducts = CheckoutProduct::with(['product.category', 'product.variations'])
+    //         ->where('checkout_id', $checkout->id)
+    //         ->get();
+    //     }
+
+        
+
+    //     return view('front.order', compact('checkout','checkoutProducts'));
+    // }
+
     public function order(Request $request)
     {
         $userId = Auth::id();
@@ -176,24 +197,17 @@ class UserController extends Controller
             ->latest()
             ->first();
 
-        if (!$checkout) {
-            abort(404, 'No checkout found for this user');
+        $checkoutProducts = collect();
+
+        if ($checkout) {
+            $checkoutProducts = CheckoutProduct::with(['product.category', 'product.variations'])
+                ->where('checkout_id', $checkout->id)
+                ->get();
         }
 
-        // Fetch only products from that checkout
-        $checkoutProducts = CheckoutProduct::with(['product.category', 'product.variations'])
-            ->where('checkout_id', $checkout->id)
-            ->get();
-            
-
-        return view('front.order', compact('checkout','checkoutProducts'));
+        return view('front.order', compact('checkout', 'checkoutProducts'));
     }
-    // public function order($orderId)
-    // {
-    //     $order = Order::with('products')->findOrFail($orderId);
 
-    //     return view('front.order', compact('order'));
-    // }
 
     public function orderDetails($id)
     {

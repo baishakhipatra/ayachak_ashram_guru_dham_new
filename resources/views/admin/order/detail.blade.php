@@ -92,23 +92,15 @@
                                     &#8377;{{$productValue->offer_price}}
                                 </div>
                             </div>
+                            <div class="row align-items-center">
+                                <div class="col-5">
+                                    <label for="inputPassword6" class="col-form-label text-muted">GST :</label>
+                                </div>
+                                <div class="col-auto">
+                                   {{$productValue->gst}}%
+                                </div>
+                            </div>
                             @if ($productValue->productVariationDetails)
-                            <div class="row align-items-center">
-                                <div class="col-5">
-                                    <label for="inputPassword6" class="col-form-label text-muted">Color :</label>
-                                </div>
-                                <div class="col-auto">
-                                    {{ucwords($productValue->productVariationDetails->colorDetails->name)}}
-                                </div>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-5">
-                                    <label for="inputPassword6" class="col-form-label text-muted">Size :</label>
-                                </div>
-                                <div class="col-auto">
-                                    {{strtoupper($productValue->productVariationDetails->sizeDetails->name)}}
-                                </div>
-                            </div>
                             <div class="row align-items-center">
                                 <div class="col-5">
                                     <label for="inputPassword6" class="col-form-label text-muted">SKU :</label>
@@ -217,7 +209,7 @@
                     <div class="form-group mb-3">
                         <p class="small">Order Time : {{date('j M Y g:i A', strtotime($data->created_at))}}</p>
                         <h5>#{{$data->order_no}}</h5>
-                        <h2>{{$data->fname.' '.$data->lname}}</h2>
+                        <h2>{{ucwords($data->fname.' '.$data->lname)}}</h2>
                         <p class="small text-dark mb-0"> <span class="text-muted">Email : </span> {{$data->email}}</p>
                         <p class="small text-dark mb-0"> <span class="text-muted">Mobile : </span> {{$data->mobile}}</p>
                     </div>
@@ -277,10 +269,10 @@
                                     <td><p class="small text-muted mb-0">Amount : </p></td>
                                     <td><p class="small text-dark mb-0 text-end">&#8377;{{$data->amount}}</p></td>
                                 </tr>
-                                {{-- <tr>
+                                <tr>
                                     <td><p class="small text-muted mb-0">Tax Amount : </p></td>
                                     <td><p class="small text-dark mb-0 text-end">+ &#8377;{{$data->tax_amount}}</p></td>
-                                </tr> --}}
+                                </tr>
                                 <tr>
                                     <td><p class="small text-muted mb-0">Discount : </p></td>
                                     @if ($data->coupon_code_id != 0)

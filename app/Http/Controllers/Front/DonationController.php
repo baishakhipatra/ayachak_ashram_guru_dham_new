@@ -15,10 +15,10 @@ class DonationController extends Controller
     }
 
     public function store(Request $request)
-    {
+    { 
         $validated = $request->validate([
             'full_name'    => 'required|string|max:255',
-            'email'        => 'required|email|max:255|unique:users,email|unique:donations,email',
+            'email'        => 'required|email|max:255',
             'phone_number' => 'required|digits:10',
             'pan_number'   => 'nullable|string|max:20',
             'address'      => 'required|string|max:500',
@@ -49,8 +49,21 @@ class DonationController extends Controller
             auth()->login($user);
         }
 
-        Donation::create($validated);
+        $validated['user_id'] = auth()->id();
 
+        Donation::create($validated);
         return redirect()->route('front.donation.form')->with('success', 'Donation submitted successfully!');
+    }
+
+    public function donationList()
+    {
+        $userId = Auth::id();
+
+        $donations = Donation::where('user_id',$userId)
+        ->orderBy('created_at','desc')
+        ->get();
+
+        return view('front.donation.list',compact('donations'));
+
     }
 }

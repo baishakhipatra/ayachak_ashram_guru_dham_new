@@ -11,8 +11,7 @@
     </div>
     <div class="card-body">
         <form action="{{ route('admin.events.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-
+            @csrf
             <div class="row">
                 <div class="mb-3 col-md-6">
                     <label class="form-label">Title <span class="text-danger">*</span></label>
@@ -23,7 +22,7 @@
                 </div>
 
                 <div class="mb-3 col-md-6">
-                    <label class="form-label">Venue</label>
+                    <label class="form-label">Venue <span class="text-danger">*</span></label>
                     <input type="text" name="venue" class="form-control" value="{{ old('venue') }}">
                     @error('venue')
                         <p class="small text-danger">{{ $message }}</p>
@@ -33,7 +32,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Description</label>
-                <textarea name="description" id="editor" class="form-control" rows="5">{{ old('description') }}</textarea>
+                <textarea name="description" id="content-editor" class="form-control" rows="5">{{ old('description') }}</textarea>
                 @error('description')
                     <p class="small text-danger">{{ $message }}</p>
                 @enderror
@@ -41,7 +40,7 @@
 
             <div class="row">
                 <div class="mb-3 col-md-6">
-                    <label class="form-label">Start Time</label>
+                    <label class="form-label">Start Time<span class="text-danger">*</span></label>
                     <input type="datetime-local" name="start_time" class="form-control" value="{{ old('start_time') }}">
                 </div>
 
@@ -90,9 +89,19 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js"></script>
 <script>
-    CKEDITOR.replace('editor');
+    ClassicEditor
+        .create(document.querySelector('#content-editor'), {
+            toolbar: [
+                'heading', '|',
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                'blockQuote', 'insertTable', 'undo', 'redo'
+            ],
+            height: '400px'
+    })
+    .catch(error => {
+        console.error(error);
+    });
 
     
     $(document).ready(function() {

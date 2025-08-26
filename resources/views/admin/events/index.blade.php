@@ -46,7 +46,8 @@
                     <tr>
                         <th>Image</th>
                         <th>Title</th>                       
-                        <th>Date</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -68,6 +69,7 @@
                             
                             <td>{{ ucwords($event->title) }}</td>
                             <td>{{date('d-m-Y h:i A',strtotime($event->start_time))}}</td>
+                            <td>{{date('d-m-Y h:i A',strtotime($event->end_time))}}</td>
                             <td> 
                                 <div class="form-check form-switch" data-bs-toggle="tooltip" title="Toggle status">
                                     <input class="form-check-input ms-auto" type="checkbox" id="customSwitch{{$event->id}}"

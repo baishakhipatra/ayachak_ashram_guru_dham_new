@@ -28,11 +28,6 @@ class AdminController extends Controller
 
         $adminCreds = $request->only('email', 'password');
 
-        // if ( Auth::guard('admin')->attempt($adminCreds) ) {
-        //     return redirect()->route('admin.home');
-        // } else {
-        //     return redirect()->route('admin.login')->withInputs($request->all())->with('failure', 'Invalid credentials. Try again');
-        // }
         if(Auth::guard('admin')->attempt($adminCreds)) {
             return redirect()->route('admin.home');
         } else {

@@ -220,7 +220,16 @@ class CartController extends Controller
 
                     // If your coupon type is percentage:
                     // $totalDiscount = ($subTotal * $coupon->amount) / 100;
+                }else {
+                    // invalid coupon in session → remove it
+                    session()->forget('couponCodeId');
+                    $coupon = null;
                 }
+            }
+            else {
+                // no coupon applied → make sure session is cleared
+                session()->forget('couponCodeId');
+                $coupon = null;
             }
 
             // Create checkout entry once

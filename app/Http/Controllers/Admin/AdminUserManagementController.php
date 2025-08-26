@@ -38,6 +38,7 @@ class AdminUserManagementController extends Controller
         $validator = Validator::make($request->all(), [
             'name'             => 'required|string|max:255',
             'email'            => 'required|email|unique:admins,email',
+            'phone'            => 'required|digits:10',
             'password'         => 'required|string|min:6',
         ]);
 
@@ -49,18 +50,13 @@ class AdminUserManagementController extends Controller
         Admin::create([
             'name'             => $request->name,
             'email'            => $request->email,
+            'phone'            => $request->phone,
             'password'         => Hash::make($request->password),
             'status'           => 1,
         ]);
         //dd('Hi');
 
         return redirect()->route('admin.admin-user-management.index')->with('success', 'Admin created successfully');
-    }
-
-
-    public function show($id) {
-        $employee = Admin::findOrFail($id);
-        return view('admin.admin-user-management.show', compact('employee'));
     }
 
     public function edit($id) {
@@ -73,6 +69,7 @@ class AdminUserManagementController extends Controller
         $validator = Validator::make($request->all(), [
             'name'      => 'required|string|max:255',
             'email'     => 'required|email|unique:admins,email,' . $request->id,
+            'phone'     => 'required|digits:10'
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -82,6 +79,7 @@ class AdminUserManagementController extends Controller
         $admin->update([
             'name'             => $request->name,
             'email'            => $request->email,
+            'phone'            => $request->phone,
         ]);
         //dd($request->designation_id);
         return redirect()->route('admin.admin-user-management.index')->with('success', 'Admin updated successfully!');

@@ -30,7 +30,7 @@
 
             <div class="mb-3">
                 <label>Page Content</label>
-                <textarea name="content" id="content-editor" class="form-control" value="{{ old('content') }}" rows="6"></textarea>
+                <textarea name="content" id="content-editor" class="form-control" rows="6">{{ old('content') }}</textarea>
             </div>
 
             
@@ -56,7 +56,7 @@
 
             <div class="mb-3">
                 <label>Meta Description</label>
-                <textarea name="meta_description" class="form-control" rows="3" value="{{ old('meta_description') }}"></textarea>
+                <textarea name="meta_description" class="form-control" rows="3">{{ old('meta_description') }}</textarea>
             </div>
 
             <button class="btn btn-primary">Save</button>
@@ -68,7 +68,18 @@
 <!-- CKEditor -->
 @section('script')
 <script>
-    CKEDITOR.replace('content-editor');
+    ClassicEditor
+        .create(document.querySelector('#content-editor'), {
+            toolbar: [
+                'heading', '|',
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                'blockQuote', 'insertTable', 'undo', 'redo'
+            ],
+            height: '400px'
+    })
+    .catch(error => {
+        console.error(error);
+    });
 
     const title = document.getElementById('title');
     const slug = document.getElementById('slug');

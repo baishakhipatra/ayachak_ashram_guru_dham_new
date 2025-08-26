@@ -9,141 +9,157 @@
                 <div class="col-lg-3 mb-4 mb-md-5 mb-lg-0">
                     @include('front/sidebar_profile')
                 </div>
-                <div class="col-lg-9">
-                    <div class="profile-right">
-                        <div class="profile-heading-group">
-                            <h2 class="mb-0">Order Summery</h2>
-                            <a href="#" class="bton btn-fill">Download Invoice</a>
-                        </div>
+                @if($checkout)
+                    <div class="col-lg-9">
+                        <div class="profile-right">
+                            <div class="profile-heading-group">
+                                <h2 class="mb-0">Order Summery</h2>
+                                <a href="#" class="bton btn-fill">Download Invoice</a>
+                            </div>
 
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="summery-list">
-                                    <ul class="cart-item-list">
-                                        @foreach($checkoutProducts as $item)
-                                            <li>
-                                                <div class="inner-wrap">
-                                                    <figure>
-                                                        <img src="{{ $item->product->image 
-                                                                    ? asset($item->product->image) 
-                                                                    : asset('assets/images/placeholder-product.jpg') }}" 
-                                                            alt="{{ $item->product->name }}">
-                                                    </figure>
-                                                    <figcaption>
-                                                        <div class="product-details-cart">
-                                                            <a href="#">
-                                                                <h3>{{ ucwords($item->product->name) }}</h3>
-                                                            </a>
-                                                            <div class="pro-meta">
-                                                                <span>Category:</span> 
-                                                                {{ $item->product->category->name ?? 'N/A' }}
-                                                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="summery-list">
+                                        <ul class="cart-item-list">
+                                            {{-- @if(!$checkout || $checkoutProducts->isEmpty()) --}}
+                                                {{-- <div class="alert alert-info">
+                                                    You don’t have any orders yet.
+                                                </div> --}}
+                                            {{-- @else --}}
+                                                @foreach($checkoutProducts as $item)
+                                                    <li>
+                                                        <div class="inner-wrap">
+                                                            <figure>
+                                                                <img src="{{ $item->product->image 
+                                                                            ? asset($item->product->image) 
+                                                                            : asset('assets/images/placeholder-product.jpg') }}" 
+                                                                    alt="{{ $item->product->name }}">
+                                                            </figure>
+                                                            <figcaption>
+                                                                <div class="product-details-cart">
+                                                                    <a href="#">
+                                                                        <h3>{{ ucwords($item->product->name) }}</h3>
+                                                                    </a>
+                                                                    <div class="pro-meta">
+                                                                        <span>Category:</span> 
+                                                                        {{ $item->product->category->name ?? 'N/A' }}
+                                                                    </div>
 
-                                                            <div class="pro-meta">
-                                                                <span>Quantity:</span> 
-                                                                {{ $item->qty ?? 'N/A' }}
-                                                            </div>
+                                                                    <div class="pro-meta">
+                                                                        <span>Quantity:</span> 
+                                                                        {{ $item->qty ?? 'N/A' }}
+                                                                    </div>
 
-                                                            @if(!empty($item->product->variation->weight))
-                                                                <div class="pro-meta">
-                                                                    <span>Weight:</span> 
-                                                                    {{ $item->product->variation->weight }}
+                                                                    @if(!empty($item->product->variation->weight))
+                                                                        <div class="pro-meta">
+                                                                            <span>Weight:</span> 
+                                                                            {{ $item->product->variation->weight }}
+                                                                        </div>
+                                                                    @endif
                                                                 </div>
-                                                            @endif
+                                                                {{-- <span class="cart-price">
+                                                                    ₹{{ number_format($item->offer_price * $item->qty, 2) }}
+                                                                </span> --}}
+                                                                <span class="cart-price">
+                                                                    ₹{{ number_format((!empty($item->offer_price) && $item->offer_price > 0 
+                                                                        ? $item->offer_price 
+                                                                        : $item->price) * $item->qty, 2) }}
+                                                                </span>
+                                                            </figcaption>
                                                         </div>
-                                                        {{-- <span class="cart-price">
-                                                            ₹{{ number_format($item->offer_price * $item->qty, 2) }}
-                                                        </span> --}}
-                                                        <span class="cart-price">
-                                                            ₹{{ number_format((!empty($item->offer_price) && $item->offer_price > 0 
-                                                                ? $item->offer_price 
-                                                                : $item->price) * $item->qty, 2) }}
-                                                        </span>
-                                                    </figcaption>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <div class="col-lg-9">
-                                <div class="detail-summery">
-                                    <h3 class="mb-5">Billing Details</h3>
-
-                                    <div class="cart-row">
-                                        <span>Subtotal</span>
-                                        ₹{{ number_format($checkout->sub_total_amount, 2) }}
-                                    </div>
-
-                                    @if($checkout->discount_amount > 0)
-                                        <div class="cart-row">
-                                            <span>Discount</span>
-                                            - ₹{{ number_format($checkout->discount_amount, 2) }}
-                                        </div>
-                                    @endif
-
-                                    <div class="cart-row">
-                                        <span>Shipping</span>
-                                        FREE
-                                    </div>
-
-                                    <div class="cart-row">
-                                        <span>GST</span>
-                                        ₹{{ number_format($checkout->gst_amount, 2) }}
-                                    </div>
-
-                                    <div class="cart-total">
-                                        <span>
-                                            Total
-                                        </span>
-                                        ₹{{ number_format($checkout->final_amount, 2) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <div class="col-lg-9">
-                                <div class="detail-summery">
-                                    <h3 class="mb-5">Order Details</h3>
-                                    <div class="cart-row">
-                                        <span>Order ID</span>
-                                        #B457687
-                                    </div>
-                                    <div class="cart-row">
-                                        <span>Payment</span>
-                                        VISA******234
-                                    </div>
-                                    <div class="cart-row">
-                                        <span>Deliver to</span>
-                                        <div class="address">5, Amratala St, Bara Bazar, Barabazar Market, Kolkata, West Bengal 700001</div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <div class="col-lg-9">
-                                <div class="detail-summery">
-                                    <h3 class="mb-5">Order Tracking</h3>
-                                    <div class="tracking-wrap">
-                                        <ul>
-                                            <li class="active"><span>Processing</span></li>
-                                            <li><span>Packing</span></li>
-                                            <li><span>Shipping</span></li>
-                                            <li><span>Delivered</span></li>
+                                                    </li>
+                                                @endforeach
+                                            {{-- @endif --}}
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
+                            {{-- @if($checkout) --}}
+                                <div class="row mb-2">
+                                    <div class="col-lg-9">
+                                        <div class="detail-summery">
+                                            <h3 class="mb-5">Billing Details</h3>
+
+                                            <div class="cart-row">
+                                                <span>Subtotal</span>
+                                                ₹{{ number_format($checkout->sub_total_amount, 2) }}
+                                            </div>
+
+                                            @if($checkout->discount_amount > 0)
+                                                <div class="cart-row">
+                                                    <span>Discount</span>
+                                                    - ₹{{ number_format($checkout->discount_amount, 2) }}
+                                                </div>
+                                            @endif
+
+                                            <div class="cart-row">
+                                                <span>Shipping</span>
+                                                FREE
+                                            </div>
+
+                                            <div class="cart-row">
+                                                <span>GST</span>
+                                                ₹{{ number_format($checkout->gst_amount, 2) }}
+                                            </div>
+
+                                            <div class="cart-total">
+                                                <span>
+                                                    Total
+                                                </span>
+                                                ₹{{ number_format($checkout->final_amount, 2) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{-- @else
+                                <p>No checkout found for this user.</p>
+                            @endif --}}
+
+                            <div class="row mb-2">
+                                <div class="col-lg-9">
+                                    <div class="detail-summery">
+                                        <h3 class="mb-5">Order Details</h3>
+                                        <div class="cart-row">
+                                            <span>Order ID</span>
+                                            #B457687
+                                        </div>
+                                        <div class="cart-row">
+                                            <span>Payment</span>
+                                            VISA******234
+                                        </div>
+                                        <div class="cart-row">
+                                            <span>Deliver to</span>
+                                            <div class="address">5, Amratala St, Bara Bazar, Barabazar Market, Kolkata, West Bengal 700001</div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-lg-9">
+                                    <div class="detail-summery">
+                                        <h3 class="mb-5">Order Tracking</h3>
+                                        <div class="tracking-wrap">
+                                            <ul>
+                                                <li class="active"><span>Processing</span></li>
+                                                <li><span>Packing</span></li>
+                                                <li><span>Shipping</span></li>
+                                                <li><span>Delivered</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="d-flex justify-content-center align-items-center">
+                        <p class="text-muted fs-5">You don’t have any orders yet.</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

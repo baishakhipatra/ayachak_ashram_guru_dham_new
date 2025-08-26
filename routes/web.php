@@ -112,6 +112,7 @@ Route::name('front.')->group(function () {
     Route::name('donation.')->group(function () {
         Route::get('/donation', 'Front\DonationController@DonationForm')->name('form');
         Route::post('/store', 'Front\DonationController@store')->name('store');
+        Route::get('/list', 'Front\DonationController@donationList')->name('list');
     });
 
     Route::prefix('events')->group(function () {

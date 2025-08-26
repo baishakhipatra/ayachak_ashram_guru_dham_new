@@ -111,9 +111,19 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js"></script>
 <script>
-    CKEDITOR.replace('editor');
+    ClassicEditor
+        .create(document.querySelector('#content-editor'), {
+            toolbar: [
+                'heading', '|',
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                'blockQuote', 'insertTable', 'undo', 'redo'
+            ],
+            height: '400px'
+    })
+    .catch(error => {
+        console.error(error);
+    });
 
     
     $(document).ready(function() {

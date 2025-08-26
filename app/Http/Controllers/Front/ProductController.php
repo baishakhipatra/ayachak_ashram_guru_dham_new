@@ -30,6 +30,10 @@ class ProductController extends Controller
         if ($request->filled('category')) {
             $category = Category::where('slug', $request->category)->first();
 
+        if (!$category) {
+            $category = Category::whereRaw('LOWER(REPLACE(name," ","-")) = ?', [$request->category])->first();
+        }
+
             if ($category) {
                 $query->where('cat_id', $category->id);
             }

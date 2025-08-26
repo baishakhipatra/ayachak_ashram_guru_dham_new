@@ -64,6 +64,17 @@
 
 @section('script')
 <script>
-    CKEDITOR.replace('description-editor');
+    ClassicEditor
+        .create(document.querySelector('#content-editor'), {
+            toolbar: [
+                'heading', '|',
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                'blockQuote', 'insertTable', 'undo', 'redo'
+            ],
+            height: '400px'
+    })
+    .catch(error => {
+        console.error(error);
+    });
 </script>
 @endsection

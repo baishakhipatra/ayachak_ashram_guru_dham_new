@@ -59,7 +59,7 @@
             {{-- <th>Employee ID</th> --}}
             <th>Name</th>
             <th>Email</th>
-            {{-- <th>Date of Joining</th> --}}
+            <th>Phone</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -70,8 +70,7 @@
               {{-- <td>{{ $item->user_id }}</td> --}}
               <td>{{ ucfirst($item->name) }}</td>
               <td>{{ $item->email }}</td>
-              {{-- <td>{{ $item->mobile }}</td> --}}
-              {{-- <td>{{ $item->date_of_joining }}</td> --}}
+              <td>{{ $item->phone }}</td>
               <td>
                  <div class="form-check form-switch" data-bs-toggle="tooltip" title="Toggle status">
                     <input class="form-check-input ms-auto" type="checkbox" id="customSwitch{{$item->id}}"
@@ -82,15 +81,6 @@
               {{-- View, Edit and delete --}}
               <td>
                 <div class="btn-group" role="group" aria-label="Action Buttons">
-                  {{-- @if (hasPermissionByChild('employee_details')) --}}
-                    <div>
-                      <a href="{{ route('admin.admin-user-management.show', $item->id) }}"  class="btn btn-sm btn-icon btn-outline-success"         
-                        data-bs-toggle="tooltip" title="View">                  
-                        <i class="fa fa-eye"></i>
-                      </a>
-                    </div>
-                  {{-- @endif --}}
-                  
                   {{-- @if (hasPermissionByChild('edit_employee')) --}}
                     <div>
                       <a href="{{ route('admin.admin-user-management.edit', $item->id) }}" class="btn btn-sm btn-icon btn-outline-dark"                     

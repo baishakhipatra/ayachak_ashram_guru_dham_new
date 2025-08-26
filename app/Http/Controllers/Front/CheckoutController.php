@@ -62,6 +62,8 @@ class CheckoutController extends Controller
                 // Or if your coupon is percentage based:
                 // $discount = ($subtotal * $coupon->discount_percentage) / 100;
             }
+            } else {
+            $discount = 0;
         }
 
         // Calculate total after discount

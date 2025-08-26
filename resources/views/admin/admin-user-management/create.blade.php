@@ -37,6 +37,16 @@
 
       <div class="row mb-3">
         <div class="col-md-4">
+          <div class="form-floating form-floating-outline">
+            <input type="number" name="phone" class="form-control" placeholder="Phone" value="{{ old('phone') }}">
+            <label>Phone<span class="text-danger">*</span></label>
+            @error('phone') <p class="text-danger small">{{ $message }}</p> @enderror
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-4">
           <div class="form-password-toggle">
             <div class="input-group input-group-merge">
               <div class="form-floating form-floating-outline flex-grow-1">

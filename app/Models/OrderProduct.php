@@ -19,7 +19,7 @@ class OrderProduct extends Model
     }
 
     public function productVariationDetails() {
-        return $this->belongsTo('App\Models\ProductColorSize', 'product_variation_id', 'id');
+        return $this->belongsTo('App\Models\ProductVariation', 'product_variation_id', 'id');
     }
 }
 

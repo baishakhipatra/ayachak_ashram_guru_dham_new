@@ -72,7 +72,18 @@
 
 @section('script')
 <script>
-    CKEDITOR.replace('content-editor');
+    ClassicEditor
+        .create(document.querySelector('#content-editor'), {
+            toolbar: [
+                'heading', '|',
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                'blockQuote', 'insertTable', 'undo', 'redo'
+            ],
+            height: '400px'
+    })
+    .catch(error => {
+        console.error(error);
+    });
 
 
     const title = document.getElementById('title');

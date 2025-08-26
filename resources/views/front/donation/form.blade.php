@@ -19,75 +19,6 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    {{-- <form action="">
-                        <div class="form-group"> 
-                            <input type="text" class="form-control input-style" placeholder=" " id="email" name="email">
-                            <label class="placeholder-text">Full Name*</label>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group"> 
-                                    <input type="email" class="form-control input-style" placeholder=" " id="" name="">
-                                    <label class="placeholder-text">Email*</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group"> 
-                                    <input type="tel" class="form-control input-style" placeholder=" " id="" name="">
-                                    <label class="placeholder-text">Phone Number*</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group"> 
-                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="">
-                                    <label class="placeholder-text">Enter Your Pan Number*</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group"> 
-                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="">
-                                    <label class="placeholder-text">Enter Your Address*</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group"> 
-                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="">
-                                    <label class="placeholder-text">Enter City/Village*</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group"> 
-                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="">
-                                    <label class="placeholder-text">Enter District*</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group"> 
-                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="">
-                                    <label class="placeholder-text">Enter State*</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group"> 
-                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="">
-                                    <label class="placeholder-text">Enter Zipcode*</label>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group"> 
-                            <input type="text" class="form-control input-style" placeholder=" " id="" name="">
-                            <label class="placeholder-text">Enter Country*</label>
-                        </div>
-
-                        <div class="form-group"> 
-                            <input type="text" class="form-control input-style" placeholder=" " id="" name="">
-                            <label class="placeholder-text">Enter amount*</label>
-                        </div>
-
-                        <input type="submit" class="bton btn-full-pink" value="Donate Now">
-                    </form> --}}
                     <form action="{{ route('front.donation.store') }}" method="POST">
                         @csrf
 
@@ -170,8 +101,6 @@
 
                         <input type="submit" class="bton btn-full-pink" value="Donate Now">
                     </form>
-
-
                 </div>
             </div>
         </div>
