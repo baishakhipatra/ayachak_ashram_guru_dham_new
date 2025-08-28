@@ -82,26 +82,49 @@
                             <span>Shipping</span>
                             FREE
                         </div>
-                        <div class="cart-row" id="discount_row" style="display: none;">
-                            <span>Discount
+                        <div class="cart-row" id="discount_row" style="{{ isset($coupon) ? '' : 'display: none;' }}">
+                            <span>
+                                Discount
                                 <a href="javascript:void(0)" id="remove_coupon" class="text-success" style="font-size: 12px; margin-left: 8px;">
                                     Remove
                                 </a>
                             </span>
-                            <span class="discount-amount">- ₹0.00</span>
+                            <span class="discount-amount">
+                                @if(isset($coupon) && $coupon)
+                                    @if($coupon->type == 1)
+                                        - {{ $coupon->amount }}% (₹{{ number_format($totalDiscount, 2) }})
+                                    @elseif($coupon->type == 2)
+                                        - ₹{{ number_format($totalDiscount, 2) }} (Flat)
+                                    @endif
+                                @else
+                                    - ₹0.00
+                                @endif
+                            </span>
                         </div>
-                        <div class="cart-total">
+
+                        {{-- <div class="cart-total">
                             <span>Total</span>
                             <span class="total-amount">₹{{ number_format($subtotal, 2) }}</span>
+                        </div> --}}
+                        <div class="cart-total">
+                            <span>Total</span>
+                            @php
+                                $grandTotal = $subtotal - ($totalDiscount ?? 0);
+                                if ($grandTotal < 0) $grandTotal = 0;
+                            @endphp
+                            <span class="total-amount">₹{{ number_format($grandTotal, 2) }}</span>
                         </div>
 
-                        <input type="hidden" id="applied_coupon_amount" value="0">
-                        <input type="hidden" id="applied_coupon_id" value="">
 
-
-                        {{-- <a href="{{ route('front.checkout.index') }}" class="bton btn-full mt-5">Proceed to Checkout</a> --}}
+                       
                         <form action="{{ route('front.cart.add_to_checkoout') }}" method="POST">
-                            @csrf
+                            @csrf 
+                            <input type="hidden" name="coupon_amount" id="applied_coupon_amount" value="">
+                            <input type="hidden" name="coupon_id" id="applied_coupon_id" value="">
+                            <input type="hidden" id="applied_coupon_type" value="">
+                            <input type="hidden" id="applied_coupon_value" value="">
+
+                            
                             <button type="submit" class="bton btn-full mt-5">Proceed to Checkout</button>
                         </form>
                     </div>
@@ -215,21 +238,33 @@
             subtotal += parseFloat($(this).text().replace(/,/g, '')) || 0;
         });
 
-        const discount = parseFloat($('#applied_coupon_amount').val()) || 0;
+        // read applied coupon info
+        const cType  = ($('#applied_coupon_type').val() || '').toString(); // "1" or "2"
+        const cValue = parseFloat($('#applied_coupon_value').val()) || 0;
 
-        $('.subtotal-amount').text('₹' + subtotal.toFixed(2));
+        let discount = 0;
 
-        if (discount > 0) {
+        if (cType === '1') {
+            // Percentage
+            discount = (subtotal * cValue) / 100;
             $('#discount_row').show();
-            $('.discount-amount').text('- ₹' + discount.toFixed(2));
+            $('.discount-amount').html(`- ${cValue}% (₹${discount.toFixed(2)})`);
+        } else if (cType === '2') {
+            // Flat
+            discount = cValue;
+            $('#discount_row').show();
+            $('.discount-amount').html(`- ₹${discount.toFixed(2)} (Flat)`);
         } else {
+            // No coupon
             $('#discount_row').hide();
             $('.discount-amount').text('- ₹0.00');
         }
 
+        $('.subtotal-amount').text('₹' + subtotal.toFixed(2));
         const total = Math.max(subtotal - discount, 0);
         $('.total-amount').text('₹' + total.toFixed(2));
     }
+
 
     $(document).ready(function () {
         $(document).on('click', '.increment, .decrement', function () {
@@ -293,6 +328,8 @@
         });
     });
 
+
+
     $(document).on('click', '#apply_coupon', function () {
         let code = $('#coupon_code').val().trim();
         if (!code) {
@@ -303,18 +340,20 @@
         $.ajax({
             url: "{{ route('front.cart.coupon.check') }}",
             type: "POST",
-            data: {
-                _token: "{{ csrf_token() }}",
-                code: code
-            },
+            data: { _token: "{{ csrf_token() }}", code },
             success: function(res){
                 if (res && res.type === 'success') {
                     $('#coupon_message').html('<span class="text-success">'+res.message+'</span>');
 
-                    const discount = parseFloat(res.coupon_discount) || 0;
-                    $('#applied_coupon_amount').val(discount);
+                    // set id, type, value
                     $('#applied_coupon_id').val(res.id || '');
+                    $('#applied_coupon_type').val((res.coupon_type ?? '').toString());
+                    $('#applied_coupon_value').val(res.coupon_value ?? 0);
 
+                    // show the row and recalc from live subtotal
+                   // $('#discount_row').show();
+                        let discount = parseFloat(res.coupon_discount) || 0;
+                        $('#applied_coupon_amount').val(discount.toFixed(2));
                     recalculateCartTotals();
                 } else {
                     $('#coupon_message').html('<span class="text-danger">'+(res?.message || 'Unable to apply coupon')+'</span>');
@@ -327,6 +366,7 @@
         });
     });
 
+
     $(document).on('click', '#remove_coupon', function () {
         $.ajax({
             url: "{{ route('front.cart.coupon.remove') }}",
@@ -335,13 +375,12 @@
             success: function(res){
                 if (res && res.type === 'success') {
                     $('#coupon_message').html('<span class="text-success">'+res.message+'</span>');
-
-                    // reset discount locally
-                    $('#applied_coupon_amount').val(0);
+                    // clear stored coupon info
                     $('#applied_coupon_id').val('');
-
-                    recalculateCartTotals();
+                    $('#applied_coupon_type').val('');
+                    $('#applied_coupon_value').val('');
                     $('#coupon_code').val('');
+                    recalculateCartTotals();
                 } else {
                     $('#coupon_message').html('<span class="text-danger">'+(res?.message || 'Failed to remove coupon')+'</span>');
                 }
@@ -352,11 +391,7 @@
             }
         });
     });
-
-
-
-
-        
+     
 </script>
 
 @endsection

@@ -11,7 +11,7 @@ class Order extends Model
     'billing_country', 'billing_state', 'billing_city', 'billing_pin', 
     'shipping_address_id', 'shipping_address', 'shipping_landmark', 'shipping_country', 
     'shipping_state', 'shipping_city', 'shipping_pin', 'amount', 'tax_amount', 'discount_amount', 
-    'coupon_code_id', 'final_amount', 'gst_no', 'is_paid', 'txn_id'];
+    'coupon_code_id','coupon_code_discount_type', 'final_amount', 'gst_no', 'is_paid', 'txn_id'];
 
     public function orderProducts() {
         return $this->hasMany('App\Models\OrderProduct', 'order_id', 'id');

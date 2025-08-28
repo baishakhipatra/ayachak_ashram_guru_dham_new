@@ -30,19 +30,19 @@
                                                     <li>
                                                         <div class="inner-wrap">
                                                             <figure>
-                                                                <img src="{{ $item->product->image 
-                                                                            ? asset($item->product->image) 
+                                                                <img src="{{ $item->productDetails->image 
+                                                                            ? asset($item->productDetails->image) 
                                                                             : asset('assets/images/placeholder-product.jpg') }}" 
-                                                                    alt="{{ $item->product->name }}">
+                                                                    alt="{{ $item->productDetails->name }}">
                                                             </figure>
                                                             <figcaption>
                                                                 <div class="product-details-cart">
                                                                     <a href="#">
-                                                                        <h3>{{ ucwords($item->product->name) }}</h3>
+                                                                        <h3>{{ ucwords($item->productDetails->name) }}</h3>
                                                                     </a>
                                                                     <div class="pro-meta">
                                                                         <span>Category:</span> 
-                                                                        {{ $item->product->category->name ?? 'N/A' }}
+                                                                        {{ $item->productDetails->category->name ?? 'N/A' }}
                                                                     </div>
 
                                                                     <div class="pro-meta">
@@ -50,10 +50,10 @@
                                                                         {{ $item->qty ?? 'N/A' }}
                                                                     </div>
 
-                                                                    @if(!empty($item->product->variation->weight))
+                                                                    @if(!empty($item->productDetails->variation->weight))
                                                                         <div class="pro-meta">
                                                                             <span>Weight:</span> 
-                                                                            {{ $item->product->variation->weight }}
+                                                                            {{ $item->productDetails->variation->weight }}
                                                                         </div>
                                                                     @endif
                                                                 </div>
@@ -83,7 +83,7 @@
 
                                             <div class="cart-row">
                                                 <span>Subtotal</span>
-                                                ₹{{ number_format($checkout->sub_total_amount, 2) }}
+                                                ₹{{ number_format($checkout->amount, 2) }}
                                             </div>
 
                                             @if($checkout->discount_amount > 0)
@@ -100,7 +100,7 @@
 
                                             <div class="cart-row">
                                                 <span>GST</span>
-                                                ₹{{ number_format($checkout->gst_amount, 2) }}
+                                                ₹{{ number_format($checkout->tax_amount, 2) }}
                                             </div>
 
                                             <div class="cart-total">

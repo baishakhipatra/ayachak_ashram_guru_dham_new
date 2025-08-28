@@ -193,15 +193,15 @@ class UserController extends Controller
     {
         $userId = Auth::id();
 
-        $checkout = Checkout::where('user_id', $userId)
+        $checkout = Order::where('user_id', $userId)
             ->latest()
             ->first();
 
         $checkoutProducts = collect();
 
         if ($checkout) {
-            $checkoutProducts = CheckoutProduct::with(['product.category', 'product.variations'])
-                ->where('checkout_id', $checkout->id)
+            $checkoutProducts = OrderProduct::with(['productDetails.category', 'productDetails.variations'])
+                ->where('order_id', $checkout->id)
                 ->get();
         }
 

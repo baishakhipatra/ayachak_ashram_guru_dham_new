@@ -27,15 +27,17 @@ class ProductController extends Controller
         $query = Product::where('status', 1);
 
         // If category filter is present
+        $selected_category = null;
         if ($request->filled('category')) {
             $category = Category::where('slug', $request->category)->first();
 
-        if (!$category) {
-            $category = Category::whereRaw('LOWER(REPLACE(name," ","-")) = ?', [$request->category])->first();
-        }
+            if (!$category) {
+                $category = Category::whereRaw('LOWER(REPLACE(name," ","-")) = ?', [$request->category])->first();
+            }
 
             if ($category) {
                 $query->where('cat_id', $category->id);
+                $selected_category = $category->id;
             }
         }
 
@@ -46,9 +48,8 @@ class ProductController extends Controller
             ->distinct()
             ->pluck('weight');
 
-        $categoryIds = $categories->pluck('id')->toArray(); 
-
-        return view('front.hotDealList', compact('data', 'categories', 'weights', 'categoryIds'));
+        $categoryIds = $categories->pluck('id')->toArray();
+        return view('front.hotDealList', compact('data', 'categories', 'weights', 'categoryIds','selected_category'));
     }
 
 

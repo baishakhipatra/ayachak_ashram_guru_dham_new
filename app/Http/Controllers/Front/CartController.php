@@ -36,41 +36,7 @@ class CartController extends Controller
         return $couponData;
     }
 
-    // public function add(Request $request) 
-    // {
-    //     //dd($request->all());
-    //     $request->validate([
-    //         'product_id' => 'required|exists:products,id',
-    //         'variation_id' => 'nullable|exists:product_variation,id',
-    //         'quantity' => 'required|integer|min:1',
-    //     ]);
-
-    //     $product = Product::findOrFail($request->product_id);
-    //     $variation = ProductVariation::findOrFail($request->variation_id);
-
-    //     // Check for existing cart item (based only on product + variation)
-    //     $existingCart = Cart::where('product_id', $request->product_id)
-    //         ->where('product_variation_id', $request->variation_id)
-    //         ->first();
-
-    //     if ($existingCart) {
-    //         $existingCart->qty += $request->quantity;
-    //         $existingCart->save();
-    //     } else {
-    //         Cart::create([
-    //             'product_id' => $product->id,
-    //             'product_name' => $product->name,
-    //             'product_slug' => $product->slug,
-    //             'product_image' => $product->thumbnail,
-    //             'product_variation_id' => $variation->id,
-    //             'price' => $variation->price,
-    //             'offer_price' => $variation->offer_price,
-    //             'qty' => $request->quantity,
-    //         ]);
-    //     }
-
-    //     return back()->with('success', 'Product added to cart!');
-    // }
+    
     public function add(Request $request) 
     {
         $product = Product::findOrFail($request->product_id);
@@ -102,7 +68,7 @@ class CartController extends Controller
 
         $existingCart = $existingCart->first();
 
-        // If product already exists in cart, don't update quantity — just return warning
+        
         if ($existingCart) {
             return back()->with('warning', 'Product already in cart!');
         }
@@ -147,7 +113,6 @@ class CartController extends Controller
         $userId = auth()->id(); 
         //dd(auth()->id());
         $cartItems = Cart::where('user_id', $userId)->with(['productDetails','variation'])->get();
-        //dd($cartItems);
         return view('front.cartList', compact('cartItems'));
     }
 
@@ -195,109 +160,124 @@ class CartController extends Controller
     public function add_to_checkoout(Request $request)
     {
         $userId = Auth::guard('web')->id();
-       
+
         DB::beginTransaction();
 
         try {
             $cartItems = Cart::with(['productDetails', 'variation'])
                 ->where('user_id', $userId)
                 ->get();
-            if (count($cartItems)==0) {
+
+            if ($cartItems->isEmpty()) {
                 return back()->with('error', 'Your cart is empty.');
             }
 
+           
             $subTotal = 0;
             $totalDiscount = 0;
             $totalGst = 0;
             $finalTotal = 0;
-            $totalDiscount = 0;
+            $couponId = null;
 
-            if (session()->has('couponCodeId')) {
-                $coupon = Coupon::find(session('couponCodeId'));
-                if ($coupon) {
-                    // If your coupon type is 'fixed amount'
-                    $totalDiscount = $coupon->amount;
-
-                    // If your coupon type is percentage:
-                    // $totalDiscount = ($subTotal * $coupon->amount) / 100;
-                }else {
-                    // invalid coupon in session → remove it
-                    session()->forget('couponCodeId');
-                    $coupon = null;
-                }
-            }
-            else {
-                // no coupon applied → make sure session is cleared
-                session()->forget('couponCodeId');
-                $coupon = null;
-            }
-
-            // Create checkout entry once
-            $checkout = Checkout::create([
-                'user_id' => $userId,
-                'sub_total_amount' => 0,
-                'discount_amount' => 0,
-                'gst_amount' => 0,
-                'final_amount' => 0,
-            ]);
-
+            
             foreach ($cartItems as $item) {
                 $variation = $item->variation;
                 $product = $item->productDetails;
-
-                // Use variation price if exists, else product base price
                 $price = $variation->offer_price
                     ?? $variation->price
                     ?? $product->offer_price
                     ?? $product->price
                     ?? 0;
 
-                // GST from product details if available
-                $gstPercent = $product->gst ?? 0;
-                $gstAmount = ($price * $gstPercent) / 100;
-
-                $discount = 0;
-                $finalPrice = ($price - $discount) + $gstAmount;
-
                 $subTotal += $price * $item->qty;
-                $totalDiscount += $discount;
-                $totalGst += $gstAmount * $item->qty;
+            }
+
+            
+            $coupon = null;
+            if ($request->coupon_id) {
+                $coupon = Coupon::find($request->coupon_id);
+            } elseif (session()->has('couponCodeId')) {
+                $coupon = Coupon::find(session('couponCodeId'));
+            }
+
+            if ($coupon) {
+                $couponId = $coupon->id;
+                if ($coupon->type == 2) {
+                    // Flat discount
+                    $totalDiscount = $coupon->amount;
+                    $couponDiscountType = '2';
+                } elseif ($coupon->type == 1) {
+                    // Percentage discount
+                    $totalDiscount = ($subTotal * $coupon->amount) / 100;
+                    $couponDiscountType = '1';
+                }
+            }
+
+            //dd($coupon);
+
+            $checkout = Checkout::create([
+                'user_id'          => $userId,
+                'sub_total_amount' => 0,
+                'discount_amount'  => 0,
+                'gst_amount'       => 0,
+                'final_amount'     => 0,
+                'coupon_id'        => $couponId,
+            ]);
+
+           // dd($checkout);
+
+            foreach ($cartItems as $item) {
+                $variation = $item->variation;
+                $product = $item->productDetails;
+
+                $price = $variation->offer_price
+                    ?? $variation->price
+                    ?? $product->offer_price
+                    ?? $product->price
+                    ?? 0;
+
+                $gstPercent = $product->gst ?? 0;
+                $gstAmount  = ($price * $gstPercent) / 100;
+
+                $finalPrice = $price + $gstAmount;
+
+                $totalGst   += $gstAmount * $item->qty;
                 $finalTotal += $finalPrice * $item->qty;
 
                 CheckoutProduct::create([
-                    'checkout_id' => $checkout->id,
-                    'product_id' => $variation->product_id ?? $product->id,
-                    'user_id' => $userId,
-                    'product_name' => $product->name ?? '',
-                    'product_image' => $product->image ?? null,
-                    'product_slug' => $product->slug ?? '',
+                    'checkout_id'          => $checkout->id,
+                    'product_id'           => $variation->product_id ?? $product->id,
+                    'user_id'              => $userId,
+                    'product_name'         => $product->name ?? '',
+                    'product_image'        => $product->image ?? null,
+                    'product_slug'         => $product->slug ?? '',
                     'product_variation_id' => $variation->id ?? null,
-                    'colour_name' => $variation->color_name ?? null,
-                    'size_name' => $variation->size_name ?? null,
-                    'sku_code' => $variation->code ?? null,
-                    'coupon_code' => null,
-                    'price' => $variation->price ?? $product->price ?? 0,
-                    'offer_price' => $variation->offer_price ?? $product->offer_price ?? 0,
-                    'gst' => $gstAmount,
-                    'qty' => $item->qty,
+                    'colour_name'          => $variation->color_name ?? null,
+                    'size_name'            => $variation->size_name ?? null,
+                    'sku_code'             => $variation->code ?? null,
+                    'coupon_code'          => $coupon ? $coupon->coupon_code : null,
+                    'price'                => $variation->price ?? $product->price ?? 0,
+                    'offer_price'          => $variation->offer_price ?? $product->offer_price ?? 0,
+                    'gst'                  => $gstAmount,
+                    'qty'                  => $item->qty,
                 ]);
             }
 
+            //dd($cartItems);
+
+            // 🔹 Final total after discount
             $finalTotal = ($subTotal + $totalGst) - $totalDiscount;
+            //dd($finalTotal);
 
+            // 🔹 Update checkout totals
             $checkout->update([
                 'sub_total_amount' => $subTotal,
-                'discount_amount' => $totalDiscount,
-                'gst_amount' => $totalGst,
-                'final_amount' => $finalTotal,
-            ]);
-
-            // Update totals after loop
-            $checkout->update([
-                'sub_total_amount' => $subTotal,
-                'discount_amount' => $totalDiscount,
-                'gst_amount' => $totalGst,
-                'final_amount' => $finalTotal,
+                'discount_amount'  => $totalDiscount,
+                'gst_amount'       => $totalGst,
+                'final_amount'     => $finalTotal,
+                'coupon_id'        => $couponId,
+                'coupon_type'      => $coupon ? $coupon->type : null, 
+                'coupon_value'     => $coupon ? $coupon->amount : null,
             ]);
 
             DB::commit();
@@ -306,10 +286,10 @@ class CartController extends Controller
                 ->with('success', 'Items successfully added.');
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
             return back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
+
 
 
 

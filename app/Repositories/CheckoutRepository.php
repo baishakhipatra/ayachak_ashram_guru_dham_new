@@ -17,6 +17,7 @@ use App\Models\ProductColorSize;
 use App\Models\ThirdPartyPayload;
 use App\Models\CartOffer;
 use App\Models\OrderOffer;
+use App\Models\Checkout;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -124,19 +125,41 @@ class CheckoutRepository implements CheckoutInterface
 
             $discount = 0.0;
             $couponId = 0;
-            $couponDiscountType = '';          
+            $couponType = null;  
+            $couponValue = 0;   
+            $couponDiscountType = null;          
 
-            if (session()->has('couponCodeId')) {
-                $coupon = Coupon::find(session('couponCodeId'));
-                //dd($coupon);
+            $latestCheckout = Checkout::where('user_id', $userId)->latest()->first();
+
+            if ($latestCheckout && $latestCheckout->coupon_id) {
+                $coupon = Coupon::find($latestCheckout->coupon_id);
                 if ($coupon) {
                     $couponId = (int) $coupon->id;
-                    $couponType = $coupon->type ?? null;                
-                    $couponDiscountType = $coupon->discount_type ?? '';  
-                    $discount = (float) ($coupon->amount ?? 0);
+                    $couponType = $coupon->type;   
+                    $couponValue = (float) ($coupon->amount ?? 0);
+
+                    // if ($couponType == 2) {
+                    //     // Fixed discount
+                    //     $discount = $couponValue;
+                    //     $couponDiscountType = 2;
+                    // } elseif ($couponType == 1) {
+                    //     // Percentage discount
+                    //     $discount = ($subtotal * $couponValue) / 100;
+                    //     $couponDiscountType = 1;
+                    // }
+                    
+                    if ($couponType == 1) {
+                        // Percentage discount
+                        $discount = ($subtotal * $couponValue) / 100;
+                        $couponDiscountType = '1';   // store 1 in DB
+                    } elseif ($couponType == 2) {
+                        // Flat discount
+                        $discount = $couponValue;
+                        $couponDiscountType = '2';   // store 2 in DB
+                    }
                 }
             }
-          
+
             $shippingCharges = 0.00;
 
             $finalAmount = max(0, ($subtotal + $taxTotal + $shippingCharges) - $discount);
@@ -181,7 +204,8 @@ class CheckoutRepository implements CheckoutInterface
 
                 'coupon_code_id' => $couponId,
                 'coupon_code_type' => $couponType,                 
-                'coupon_code_discount_type' => $couponDiscountType, 
+                'coupon_code_discount_type' => $couponDiscountType,
+                'coupon_value' => $couponValue, 
                 'amount' => $subtotal,
                 'discount_amount' => $discount,
                 'tax_amount' => $taxTotal,
@@ -194,6 +218,7 @@ class CheckoutRepository implements CheckoutInterface
                 'orderCancelledBy' => 0,
                 'orderCancelledReason' => null,
             ]);
+            //dd($order);
 
             foreach ($cartItems as $item) {
                 $product = $item->productDetails;
@@ -238,6 +263,7 @@ class CheckoutRepository implements CheckoutInterface
 
         } catch (\Throwable $e) {
             DB::rollBack();
+            dd($e->getMessage());
             \Log::error('Order Creation Failed: '.$e->getMessage(), ['trace' => $e->getTraceAsString()]);
             return false;
         }
@@ -389,9 +415,16 @@ class CheckoutRepository implements CheckoutInterface
             $settings = Settings::all();
 
             // shipping charge fetch
-            $shippingChargeJSON = json_decode($settings[22]->content);
-            $minOrderAmount = $shippingChargeJSON->min_order;
-            $shippingCharge = $shippingChargeJSON->shipping_charge;
+            $shippingChargeJSON = null;
+            $minOrderAmount = 0;
+            $shippingCharge = 0;
+
+            if (isset($settings[22])) {
+                $shippingChargeJSON = json_decode($settings[22]->content);
+                $minOrderAmount = $shippingChargeJSON->min_order ?? 0;
+                $shippingCharge = $shippingChargeJSON->shipping_charge ?? 0;
+            }
+
 
             $newEntry = Order::findOrFail($order_id);
             if (isset($data['payment_method'])) {

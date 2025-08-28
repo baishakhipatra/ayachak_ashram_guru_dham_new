@@ -11,6 +11,7 @@ use App\Models\CartOffer;
 use App\Models\Order;
 use App\Models\Cart;
 use App\Models\Coupon; 
+use App\Models\Checkout;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use Razorpay\Api\Api;
@@ -27,6 +28,7 @@ class CheckoutController extends Controller
     public function index(Request $request)
     {
         $userId = auth()->id();
+
         $cartItems = Cart::with(['productDetails', 'variation', 'productDetails.category'])
             ->where('user_id', $userId)
             ->get();
@@ -35,43 +37,88 @@ class CheckoutController extends Controller
             return redirect()->route('front.cart.index')->with('warning', 'Your cart is empty.');
         }
 
-        $subtotal = 0;
-        $tax = 0;
 
+        $subtotal = 0;
         foreach ($cartItems as $item) {
             $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
-            $lineSubtotal = $item->qty * $price;
-            $subtotal += $lineSubtotal;
-
-            $gstPercent = $item->productDetails->gst ?? 0;
-            $lineTax = ($lineSubtotal * $gstPercent) / 100;
-            $tax += $lineTax;
+            $subtotal += ($price * $item->qty);
         }
 
-        // Default discount
+    
+        $latestCheckout = Checkout::where('user_id', $userId)->latest()->first();
+
         $discount = 0;
+        $coupon = null;
 
-        // Check if a coupon is stored in the session
-        if (session()->has('couponCodeId')) {
-            $coupon = Coupon::find(session('couponCodeId'));
-
+        if ($latestCheckout && $latestCheckout->coupon_id) {
+            $coupon = Coupon::find($latestCheckout->coupon_id);
             if ($coupon) {
-                // If your coupon is a fixed amount
-                $discount = $coupon->amount;
                 
-                // Or if your coupon is percentage based:
-                // $discount = ($subtotal * $coupon->discount_percentage) / 100;
+                $couponType = $coupon->coupon_type ?? $coupon->type ?? null;
+
+                if ($couponType == 2) {
+                    // Fixed amount coupon
+                    $discount = floatval($coupon->amount);
+                } elseif ($couponType == 1) {
+                    // Percentage coupon -> compute currency discount on subtotal
+                    $discount = ($subtotal * floatval($coupon->amount)) / 100;
+                }
             }
-            } else {
-            $discount = 0;
         }
 
-        // Calculate total after discount
-        $total = $subtotal + $tax - $discount;
+        $applyDiscountBeforeTax = false; 
 
-        return view('front.checkout.index', compact('cartItems', 'subtotal', 'tax', 'discount', 'total'));
+        $tax = 0;
+        if ($applyDiscountBeforeTax) {
+           
+            $discountPercent = $subtotal > 0 ? ($discount / $subtotal) : 0;
+            foreach ($cartItems as $item) {
+                $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
+                $lineSubtotal = $price * $item->qty;
+                $lineDiscount = $lineSubtotal * $discountPercent;
+                $lineTaxable = $lineSubtotal - $lineDiscount;
+                $gstPercent = $item->productDetails->gst ?? 0;
+                $tax += ($lineTaxable * $gstPercent) / 100;
+            }
+            $total = $subtotal - $discount + $tax;
+        } else {
+            
+            foreach ($cartItems as $item) {
+                $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
+                $lineSubtotal = $price * $item->qty;
+                $gstPercent = $item->productDetails->gst ?? 0;
+                $tax += ($lineSubtotal * $gstPercent) / 100;
+            }
+            $total = $subtotal + $tax - $discount;
+        }
+
+       
+        $subtotal = round($subtotal, 2);
+        $tax = round($tax, 2);
+        $discount = round($discount, 2);
+        $total = round($total, 2);
+
+        // $api = new Api(env('RAZORPAY_KEY_ID'), env('RAZORPAY_KEY_SECRET'));
+
+        // $razorpayOrder = $api->order->create([
+        //     'receipt'         => 'order_' . uniqid(),
+        //     'amount'          => $total  * 100,
+        //     'currency'        => 'INR',
+        //     'payment_capture' => 1 
+        // ]);
+
+        // $razorpayOrderId = $razorpayOrder['id']; 
+
+        return view('front.checkout.index', compact(
+            'cartItems',
+            'subtotal',
+            'tax',
+            'discount',
+            'total',
+            'coupon',
+            //'razorpayOrderId'
+        ));
     }
-
 
     public function coupon(Request $request)
     {
@@ -79,108 +126,9 @@ class CheckoutController extends Controller
         return $couponData;
     }
 
-    // public function store(Request $request)
-    // {
-    //     // Validation rules based on your form
-    //     $rules = [
-    //         'email' => 'required|email|max:255',
-    //         'mobile' => 'required|digits:10',
-    //         'first_name' => 'required|string|max:255',
-    //         'last_name' => 'required|string|max:255',
-    //         'billing_country' => 'required|string|max:255',
-    //         'billing_address' => 'required|string|max:1000',
-    //         'billing_city' => 'required|string|max:255',
-    //         'billing_state' => 'required|string|max:255',
-    //         'billing_pin' => 'required|string|max:6',
-
-    //         'address_option' => 'required|in:same,different',
-    //         'shipping_country' => 'nullable|string|max:255',
-    //         'shipping_first_name' => 'nullable|string|max:255',
-    //         'shipping_last_name' => 'nullable|string|max:255',
-    //         'shipping_address' => 'nullable|string|max:500',
-    //         'shipping_city' => 'nullable|string|max:255',
-    //         'shipping_state' => 'nullable|string|max:255',
-    //         'shipping_pin' => 'nullable|string|max:6',
-    //         'shipping_mobile' => 'nullable|digits:10',
-    //     ];
-
-    //     $messages = [
-    //         'mobile.*' => 'Please enter a valid 10 digit mobile number',
-    //         'billing_pin.*' => 'Please enter a valid 6 digit pin',
-    //         'shipping_pin.*' => 'Please enter a valid 6 digit pin',
-    //     ];
-
-    //     $validator = Validator::make($request->all(), $rules);
-
-    //     if ($validator->fails()) {
-    //         if ($request->ajax()) {
-    //             return response()->json([
-    //                 'errors' => $validator->errors()
-    //             ], 422);
-    //         }
-    //         return redirect()->back()->withErrors($validator)->withInput();
-    //     }
-
-    //     $userId = auth()->id();
-    //     $cartItems = Cart::with(['productDetails'])->where('user_id', $userId)->get();
-
-    //     if ($cartItems->isEmpty()) {
-    //         return response()->json(['error' => 'Cart is empty'], 422);
-    //     }
-
-    //     // Calculate totals
-    //     $subtotal = 0;
-    //     $tax = 0;
-
-    //     foreach ($cartItems as $item) {
-    //         $price = $item->offer_price > 0 ? $item->offer_price : $item->price;
-    //         $lineSubtotal = $item->qty * $price;
-    //         $subtotal += $lineSubtotal;
-
-    //         $gstPercent = $item->productDetails->gst ?? 0;
-    //         $lineTax = ($lineSubtotal * $gstPercent) / 100;
-    //         $tax += $lineTax;
-    //     }
-
-    //     $discount = 0;
-
-    //     if (session()->has('couponCodeId')) {
-    //         $coupon = Coupon::find(session('couponCodeId'));
-    //         if ($coupon) {
-                
-    //             $discount = $coupon->amount;
-    //         }
-    //     }
-
-
-    //     $total = $subtotal + $tax - $discount;
-
-    //     // Prepare checkout data
-    //     $checkoutData = $request->except('_token');
-    //     $checkoutData['subtotal'] = $subtotal;
-    //     $checkoutData['tax'] = $tax;
-    //     $checkoutData['discount_amount'] = $discount;
-    //     $checkoutData['total'] = $total;
-    //     $checkoutData['cart_items'] = $cartItems;
-
-    //     // Save order
-    //     $order_id = $this->checkoutRepository->create($checkoutData);
-
-    //     if ($order_id) {
-    //         return response()->json([
-    //             'success' => true,
-    //             'redirect_url' => route('front.checkout.payment', $order_id)
-    //         ]);
-    //     } else {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Something went wrong, please try again.'
-    //         ], 500);
-    //     }
-    // }
-
     public function store(Request $request)
     {
+        
         $rules = [
             'email' => 'required|email|max:255',
             'mobile' => 'required|digits:10',
@@ -243,14 +191,15 @@ class CheckoutController extends Controller
 
     public function payment(Request $request,$order_id)
     {
+        //  $order_id = $request->input('order_id');
         //dd($order_id);
         if (auth()->guard('web')->check()) {
             $data = Order::where('id',$order_id)->orderby('id','desc')->first();
         } else {
-            $data = Order::where('id',$order_id)->orderby('id','desc')->first();
-            //dd($data);
+            $data = Order::where('id',$order_id)->orderby('id','desc')->first(); 
         }
-            if ($data) {
+        //dd($data);
+        if ($data) {
             return view('front.checkout.payment', compact('data'));
         }
     }

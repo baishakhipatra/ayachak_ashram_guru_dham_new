@@ -38,15 +38,6 @@
 	}
 </style>
 
-<section class="cart-header mb-3 mb-sm-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                <h4>Shopping Checkout</h4>
-            </div>
-        </div>
-    </div>
-</section>
 
 <section class="cart-wrapper">
     <div class="container">
@@ -55,15 +46,19 @@
             <div class="row justify-content-between flex-sm-row-reverse">
                 <div class="col-md-5 col-lg-4 mb-3 mb-sm-0">
                     <h4 class="cart-heading">Cart Summary</h4>
-                    <ul class="cart-summary">
+                    {{-- <ul class="cart-summary">
                         @php
                             $subTotal = $grandTotal = $couponCodeDiscount = $shippingCharges = $taxPercent = 0;
+                            $shippingChargeJSON = null;
+                            $minOrderAmount = 0;
+                            $shippingCharge = 0;
 
-                            // shipping charge fetch
-                            $shippingChargeJSON = json_decode($settings[22]->content);
-                            $minOrderAmount = $shippingChargeJSON->min_order;
-                            $shippingCharge = $shippingChargeJSON->shipping_charge;
-                            
+                            if (isset($settings[22])) {
+                                $shippingChargeJSON = json_decode($settings[22]->content);
+                                $minOrderAmount = $shippingChargeJSON->min_order ?? 0;
+                                $shippingCharge = $shippingChargeJSON->shipping_charge ?? 0;
+                            }
+
                         @endphp
                         
                         
@@ -72,17 +67,8 @@
                         </li>
 
                         @php
-                            // subtotal calculation
                             $subTotal += (int) $data->amount;
-
-                            // coupon code calculation
-                            // if (!empty($cartData[0]->coupon_code_id)) {
-                            //     $couponCodeDiscount = (int) $cartData[0]->couponDetails->amount;
-                            // }
-
-                            // coupon code calculation
                             if (!empty($data->coupon_code_id)) {
-                                // 1 is coupon, else voucher
                                 if (($data->couponDetails->is_coupon == 1)) {
                                     if($data->couponDetails->type == 1){
                                         $couponCodeDiscount = (int) ($subTotal * ($data->couponDetails->amount / 100));
@@ -97,8 +83,6 @@
                                     }
                                 }
                             }
-
-                            // grand total calculation
                             $grandTotalWithoutCoupon = $subTotal;
                             $grandTotal = ($subTotal + $shippingCharges) - $couponCodeDiscount;
 
@@ -106,12 +90,7 @@
                                 $grandTotal = 0;
                             }
                         @endphp
-
-                       
-                    </ul>
-
-                    
-                    {{-- cart offer --}}
+                    </ul> --}}
 
                     <div class="w-100">
                         <div class="cart-total">
@@ -119,14 +98,11 @@
                                 Subtotal
                             </div>
                             <div class="cart-total-value">
-                                &#8377;<span id="subTotalAmount">{{$subTotal}}</span>
+                                &#8377;<span id="subTotalAmount">{{$data->amount}}</span>
                             </div>
-                            {{-- <div class="cart-total-value">
-                                &#8377;{{number_format($subTotal)}}
-                            </div> --}}
                         </div>
 
-                      <div id="appliedCouponHolder" style="border-bottom: 1px solid #eee;">
+                        {{-- <div id="appliedCouponHolder" style="border-bottom: 1px solid #eee;">
                             @if (!empty($data->coupon_code_id))
                                 @if ($data->couponDetails)
                                     <div class="cart-total">
@@ -149,12 +125,21 @@
                                                 }
                                             @endphp
                                             {{ $typeDisplay }} APPLIED - <strong>{{$data->couponDetails->coupon_code}}</strong><br/>
-                                            <a href="javascript:void(0)" onclick="removeAppliedCoupon()"><small class="text-danger">Remove this {{ ($data->couponDetails->is_coupon == 1) ? 'coupon' : 'voucher' }}</small></a>
+                                           
                                         </div>
                                         <div class="cart-total-value">{!! $amountDisplay !!}</div>
                                     </div>
                                 @endif
                             @endif
+                        </div> --}}
+
+                        <div class="cart-total">
+                            <div class="cart-total-label">
+                                Coupon
+                            </div>
+                            <div class="cart-total-value">
+                                &#8377;<span id="subTotalAmount">-{{$data->discount_amount}}</span>
+                            </div>
                         </div>
 
                         <div class="cart-total-label mt-3 mb-3">
@@ -169,22 +154,6 @@
                                     </label>
                                 </div>
                             </li>
-                            {{-- <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="shipping_method" id="flexRadioDefault2" value="standard_cod">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Standard Shipping (Cash on Delivery)
-                                    </label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="shipping_method" id="flexRadioDefault3" value="express">
-                                    <label class="form-check-label" for="flexRadioDefault3">
-                                        Express
-                                    </label>
-                                </div>
-                            </li> --}}
                         </ul>
 
                         <div class="cart-total">
@@ -192,7 +161,7 @@
                                 Shipping Charges
                                 <span id="shippingMore"></span>
                             </div>
-                            <div class="cart-total-value">
+                            {{-- <div class="cart-total-value">
                                 @php
                                    // if ((int) $minOrderAmount >= (int) $grandTotal ) {
 								    if($data->address_type=='ho'){
@@ -208,65 +177,25 @@
                                     
                                 @endphp
                                 &#8377;{{$shippingCharges}}
-                            </div>
+                            </div> --}}
                         </div>
-                        {{-- <div class="cart-total">
+                        <div class="cart-total">
                             <div class="cart-total-label">
-                                Tax and Others - <strong>{{$taxPercent}}%</strong><br/>
+                                GST - &#8377;<strong>{{$data->tax_amount}}</strong><br/>
                                 <small>(Inclusive of all taxes)</small>
                             </div>
                             <div class="cart-total-value"></div>
-                        </div> --}}
+                        </div>
 
                         <div class="cart-total">
                             <div class="cart-total-label">
                                 Total
                             </div>
                             <div class="cart-total-value">
-                                <input type="hidden" value="{{$grandTotalWithoutCoupon}}" name="grandTotalWithoutCoupon">
-                                &#8377;<span id="displayGrandTotal">{{number_format($grandTotal)}}</span>
+                                <input type="hidden"  name="grandTotalWithoutCoupon">
+                                &#8377;<span id="displayGrandTotal">{{$data->final_amount}}</span>
                             </div>
                         </div>
-                        {{-- <div class="cart-total-label mt-3 mb-3">
-                            Payment Method
-                        </div>
-                        <ul class="checkout-meta mb-2">
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="payment_method" id="payment_method_cod" value="cash_on_delivery" checked>
-                                    <label class="form-check-label" for="payment_method_cod">
-                                        Cash on Delivery (COD)
-                                    </label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="payment_method" id="payment_method_online" value="online_payment">
-                                    <label class="form-check-label" for="payment_method_online">
-                                        Razorpay (Cards, UPI, NetBanking, Wallets, Paypal)
-                                    </label>
-                                </div>
-                            </li>
-                        </ul> --}}
-
-                        {{-- <div class="col-sm-12">
-                            <ul class="cart-summary-list">
-                                <li>
-                                    <img src="img/delivery-truck.png" />
-                                    <h5><span>&#8377;60</span> Apply Below order &#8377;499</h5>
-                                    <a href="{{route('front.content.shipping')}}">See all Shipping charges and policies</a>
-                                </li>
-                                <li>
-                                    <img src="img/coupon.png" />
-                                    <div class="coupon-block">
-                                        <input type="text" class="coupon-text" name="couponText" id="couponText" placeholder="Enter coupon code here">
-                                        <button id="applyCouponBtn">Apply</button>
-                                    </div>
-                                    @error('lname')<p class="small text-danger mb-0 mt-2">{{$message}}</p>@enderror
-                                    <a href="{{route('front.user.coupon')}}" class="d-inline-block mt-2">Get latest coupon from here</a>
-                                </li>
-                            </ul>
-                        </div> --}}
                     </div>
                 </div>
                 <div class="col-md-7 col-lg-6">
@@ -300,7 +229,7 @@
                             <input type="hidden" name="razorpay_method" value="">
                             <input type="hidden" name="razorpay_callback_url" value="">
                             <div id="method1" class="method">
-                                <button type="submit" class="btn checkout-btn">
+                                <button type="submit" id="rzp-button1" class="btn checkout-btn">
                                     Place order
                                     <!-- <p class="small mb-0" style="font-weight: 800">Cash on delivery</p> -->
                                 </button>
@@ -325,6 +254,7 @@
     </div>
 </section>
 
+
 <div class="modal fade seeDetailsModal" id="userOfferModal" tabindex="-1" aria-labelledby="userOfferModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -347,8 +277,12 @@
 @section('script')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
 
-    <script>
+
+    {{-- <script>
         function fetchEmail() {
             alert('email>>'+$('#checkoutEmail').val());
             return $('#checkoutEmail').val();
@@ -361,7 +295,7 @@
             // razorpay payment options
             var paymentOptions = {
                 // "key": "rzp_test_FUwg5zjKBrNRVm",
-                "key": "{{ $settings[20]->content }}",
+                "key": "{{ $settings[20]->content ?? ' ' }}",
                 "amount": '{{intval($grandTotal*100)}}',
                 "currency": "INR",
                 "name": "ONN",
@@ -471,5 +405,5 @@
        
         
        
-    </script>
+    </script> --}}
 @endsection

@@ -61,192 +61,6 @@
             <div class="row">
                 <div class="col-lg-6 p-0 order-lg-1 order-2">
                     <div class="cart-form-stack">
-                        {{-- <form id="checkoutForm" action="{{ route('front.checkout.store') }}" method="POST">
-                            @csrf
-                            <div class="login-checkout">
-                                <h3 class="checkout-heading">Contact information</h3>
-                                <p>We'll use this email to send you details and updates about your order.</p>
-
-                                <div class="form-group"> 
-                                    <input type="email" class="form-control input-style" placeholder=" " value="{{ auth()->user()->email ?? '' }}" id="email" name="email">
-                                    <label class="placeholder-text">Enter Email</label>
-                                </div>
-                            </div>
-
-                            <div class="billing-place">
-                                <h3 class="checkout-heading mb-4">Billing information</h3>
-                                <div class="form-group">
-                                    <select name="billing_country" class="form-select select-style">
-                                        <option value="">Select Country</option>
-                                        <option value="India" selected>India</option>
-                                    </select>
-                                    <span class="text-danger error-text billing_country_error"></span>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <input type="text" name="first_name" class="form-control" placeholder="" value="{{ explode(' ', auth()->user()->name)[0] ?? '' }}">
-                                            <span class="text-danger error-text first_name_error"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group"> 
-                                            <input type="text" name="last_name" class="form-control" placeholder="" value="{{ explode(' ', auth()->user()->name)[1] ?? '' }}">
-                                            <span class="text-danger error-text last_name_error"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group"> 
-                                    <input type="text" class="form-control input-style" placeholder=" " id="" name="billing_address">
-                                    <label class="placeholder-text">Address</label>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="form-group"> 
-                                            <input type="text" class="form-control input-style" placeholder=" " id="" name="billing_city">
-                                            <label class="placeholder-text">City</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group"> 
-                                            <select name="billing_state" class="form-select select-style">
-                                                <option>Select State</option>
-                                                <option>West Bengal</option>
-                                                <option>Andhra Pradesh</option>
-                                                <option>Arunachal Pradesh</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group"> 
-                                            <input type="text" class="form-control input-style" placeholder=" " id="" name="billing_pin">
-                                            <label class="placeholder-text">Pin Code</label>
-                                        </div> 
-                                    </div>
-                                </div>
-
-                                <div class="form-group"> 
-                                    <input type="tel" class="form-control input-style" placeholder=" " id="" name="mobile" value="{{ auth()->user()->mobile ?? '' }}">
-                                    <label class="placeholder-text">Phone Number</label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="check2" name="option2" value="something">
-                                    <label class="form-check-label" for="check2">Save this information for next time</label>
-                                </div>
-
-                            </div>
-
-                            <div class="shipping-place">
-                                <h3 class="checkout-heading mb-4">Shipping method</h3>
-
-                                <div class="ship-stack">
-                                    <span>Standard</span>
-                                    <strong>Free</strong>
-                                </div>
-                            </div>
-
-                            <div class="payment-place">
-                                <h3 class="checkout-heading">Shipping method</h3>
-                                <p>All transactions are secure and encrypted.</p>
-                            </div>
-
-                            <div class="billing-place">
-                                <h3 class="checkout-heading mb-4">Billing address</h3>
-                                <div class="billing-group-place">
-                                    <div class="billing-group">
-                                        <div class="form-check">
-                                            <input type="radio" class="form-check-input" id="radio1" name="shippingSameAsBilling" value="1" checked>
-                                            <label class="form-check-label" for="radio1">Same as shipping address</label>
-                                        </div>
-                                    </div>
-                                
-                                    <div class="billing-group">
-                                        <div class="form-check">
-                                            <input type="radio" class="form-check-input" id="radio2" name="shippingSameAsBilling" value="0">
-                                            <label class="form-check-label" for="radio2">Use a different billing address</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="billing-form" style="display:none;">
-                                        <div class="form-group">
-                                            <select class="form-select select-style" name="alt_country">
-                                            <option value="">Select Country</option>
-                                            <option>India</option>
-                                            <option>USA</option>
-                                            <option>Canada</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control input-style" name="alt_fname" placeholder=" ">
-                                                <label class="placeholder-text">First Name</label>
-                                            </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control input-style" name="alt_lname" placeholder=" ">
-                                                <label class="placeholder-text">Last Name</label>
-                                            </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <input type="text" class="form-control input-style" name="alt_address" placeholder=" ">
-                                            <label class="placeholder-text">Address</label>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control input-style" name="alt_city" placeholder=" ">
-                                                <label class="placeholder-text">City</label>
-                                            </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <select class="form-select select-style" name="alt_state">
-                                                <option value="">Select State</option>
-                                                <option>West Bengal</option>
-                                                <option>Andhra Pradesh</option>
-                                                <option>Arunachal Pradesh</option>
-                                                </select>
-                                            </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control input-style" name="alt_pin" placeholder=" ">
-                                                <label class="placeholder-text">Pin Code</label>
-                                            </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <input type="tel" class="form-control input-style" name="alt_phone" placeholder=" ">
-                                            <label class="placeholder-text">Phone Number</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-
-                            <input type="submit" class="bton btn-full-pink" id="" value="Pay Now">
-
-                            <ul class="legal-list">
-                                <li>
-                                    <a href="#">Privacy Statement</a>
-                                </li>
-                                <li>
-                                    <a href="#">Terms and conditions</a>
-                                </li>
-                                <li>
-                                    <a href="#">Refund and Cancellation Policy</a>
-                                </li>
-                            </ul>
-                        </form> --}}
                         <form id="checkoutForm" action="{{ route('front.checkout.store') }}" method="POST">
                             @csrf
                             <div class="login-checkout">
@@ -434,7 +248,6 @@
                                 </li>
                             </ul>
                         </form>
-
                     </div>
                 </div>
                 <div class="col-lg-6 p-0 order-lg-2 order-1">
@@ -490,12 +303,37 @@
                                 <span>GST</span>
                                 ₹{{ number_format($tax, 2) }}
                             </div>
-                            @if($discount > 0)
+                            {{-- @if($discount > 0)
                             <div class="cart-row">
                                 <span>Discount</span>
                                 - ₹{{ number_format($discount, 2) }}
                             </div>
+                            @endif --}}
+                            @if($coupon)
+                                @php $couponType = $coupon->type ?? $coupon->type ?? null; @endphp
+
+                                <div class="cart-row">
+                                    <span>Coupon Applied</span>
+                                    {{ $coupon->code ?? '' }}
+                                </div>
+
+                                <div class="cart-row">
+                                    <span>Coupon Type</span>
+                                    {{ $couponType == 1 ? 'Percentage' : 'Discount' }}
+                                </div>
+
+                                <div class="cart-row">
+                                    <span>Coupon Discount</span>
+                                    @if($couponType == 2)
+                                        - ₹{{ number_format($discount, 2) }}
+                                    @else
+                                        {{-- Show percent + actual currency discount --}}
+                                        - {{ number_format($coupon->amount, 1) }}% (₹{{ number_format($discount, 2) }})
+                                    @endif
+                                </div>
                             @endif
+
+
                             <div class="cart-total">
                                 <span>Total</span>
                                 ₹{{ number_format($total, 2) }}
@@ -664,11 +502,10 @@
                     method: "POST",
                     data: $('#checkoutForm').serialize(),
                     success: function (response) {
-                        if (response.status == 1) {
-                            alert(response.message);
-                            location.reload();
-                            $('#checkoutForm')[0].reset();
-                            $("#shippingAddressForm").hide();
+                        if (response.success) {
+                            window.location.href = response.redirect_url;
+                        } else {
+                            alert(response.message || "Something went wrong, please try again.");
                         }
                     }
                 });

@@ -28,7 +28,7 @@
                             <li>
                                 <label>
                                     <div class="style-stack">
-                                        <input type="checkbox" id="cat_{{ $category->id }}" name="categories[]" value="{{ $category->id }}">
+                                        <input type="checkbox" id="cat_{{ $category->id }}" name="categories[]" value="{{ $category->id }}" {{$selected_category==$category->id?"checked":""}}>
                                         <i class="fa-solid fa-check"></i>
                                     </div>
                                     <span>{{ ucwords($category->name) }}</span>
