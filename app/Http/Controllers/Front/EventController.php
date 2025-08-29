@@ -12,7 +12,7 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
-        $query = Event::query()->with('eventImage')->latest();
+        $query = Event::query()->with('eventImage')->orderBy('start_time', 'desc');
 
         if ($request->filled('term')) {
             $search = $request->term;

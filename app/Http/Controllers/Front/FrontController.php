@@ -33,7 +33,7 @@ class FrontController extends Controller
 
         $latestEvents = Event::with('eventImage')
         ->where('status',1)
-        ->orderBy('created_at','desc')
+        ->orderBy('start_time','desc')
         ->take(3)
         ->get();
 

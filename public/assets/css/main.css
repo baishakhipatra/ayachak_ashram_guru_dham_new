@@ -2790,3 +2790,9 @@ input[type="range"]::-moz-range-thumb {
     100% { transform: rotate(360deg); }
 }
 
+.small {
+    font-size: 12px;
+    position: absolute;
+    left: 0;
+    top: 100%;
+}

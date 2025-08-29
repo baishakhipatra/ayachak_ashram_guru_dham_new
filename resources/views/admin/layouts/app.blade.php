@@ -119,28 +119,8 @@
                 </li>
 
                 <li class="{{ ( request()->is('admin/coupon*') ) ? 'active' : '' }}"><a href="{{ route('admin.coupon.index') }}"><i class="fi fi-br-database"></i> <span>Coupon</span></a></li>
-
-                {{-- Promotions --}}
-                <li class="{{ ( request()->is('admin/promotions*') ) ? 'active' : '' }}"><a href="{{ route('admin.promotion.index') }}"><i class="fi fi-br-database"></i> <span>Promotion</span></a></li>
-
-                <li class="{{ ( request()->is('admin/voucher*') ) ? 'active' : '' }}"><a href="{{ route('admin.voucher.index') }}"><i class="fi fi-br-database"></i> <span>Voucher</span></a></li>
-
                 <li class="{{ ( request()->is('admin/transaction*') ) ? 'active' : '' }}"><a href="{{ route('admin.transaction.index') }}"><i class="fi fi-br-database"></i> <span>Online Transactions</span></a></li>
                 <li class="{{ ( request()->is('admin/transaction*') ) ? 'active' : '' }}"><a href="#"><i class="fi fi-br-database"></i> <span>Online Events</span></a></li>
-				{{-- <li class="@if(request()->is('admin/scanandwin/Qr*') || request()->is('admin/scanandwin/customers*') || request()->is('admin/scanandwin/gift*') || request()->is('admin/scanandwin/cms*') || request()->is('admin/scanandwin/terms*')) { {{'active'}} }  @endif">
-                    <a href="javascript: void(0)"><i class="fi fi-br-cube"></i> <span>Scan and Win</span></a>
-                    <ul>
-						<li class="{{ ( request()->is('admin/scanandwin/Qr*') ) ? 'active' : '' }}"><a href="{{ route('admin.scanandwin.index') }}"><i class="fi fi-br-database"></i> <span>Qrcode generate</span></a></li>
-
-                       <li class="{{ ( request()->is('admin/scanandwin/gift*') ) ? 'active' : '' }}"><a href="{{ route('admin.gift.index') }}"><i class="fi fi-br-database"></i> <span>Gift</span></a></li>
-
-                         <li class="{{ ( request()->is('admin/scanandwin/customers*') ) ? 'active' : '' }}"><a href="{{ route('admin.customers.index') }}"><i class="fi fi-br-database"></i> <span>User Request</span></a></li>
-						<li class="{{ ( request()->is('admin/scanandwin/cms*') ) ? 'active' : '' }}"><a href="{{ route('admin.cms.index') }}"><i class="fi fi-br-database"></i> <span>Text Message</span></a></li>
-
-						<li class="{{ ( request()->is('admin/scanandwin/terms*') ) ? 'active' : '' }}"><a href="{{ route('admin.terms.index') }}"><i class="fi fi-br-database"></i> <span>Terms and Condition</span></a></li>
-
-                    </ul>
-                </li> --}}
 
                 <li class="@if(request()->is('admin/settings*') || request()->is('admin/banner*') || request()->is('admin/faq*') || request()->is('admin/gallery*') || request()->is('admin/subscription*') || request()->is('admin/franchise*')) { {{'active'}} }  @endif">
                     <a href="javascript: void(0)"><i class="fi fi-br-cube"></i> <span>Settings</span></a>

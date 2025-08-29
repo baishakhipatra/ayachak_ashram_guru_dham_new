@@ -21,6 +21,7 @@
                                             <div class="form-group"> 
                                                 <input type="text" class="form-control input-style" placeholder=" " name="fname" id="fname"
                                                 value="{{ucwords(Auth::guard('web')->user()->fname)}}" required>
+                                                <label class="placeholder-text">First Name</label>
                                                 @error('fname')
                                                     <p class="small text-danger">{{$message}}</p>
                                                 @enderror
@@ -30,6 +31,7 @@
                                             <div class="form-group"> 
                                                 <input type="text" class="form-control input-style" placeholder=" " name="lname" id="lname"
                                                 value="{{ucwords(Auth::guard('web')->user()->lname)}}" required>
+                                                <label class="placeholder-text">Last Name</label>
                                                 @error('lname')
                                                     <p class="small text-danger">{{$message}}</p>
                                                 @enderror
@@ -40,6 +42,7 @@
                                     <div class="form-group"> 
                                         <input type="tel" class="form-control input-style" placeholder="Mobile No" name="mobile" id="mobile"
                                         value="{{Auth::guard('web')->user()->mobile}}" required>
+                                        <label class="placeholder-text">Phone Number</label>
                                         @error('mobile')
                                         <p class="small text-danger">{{$message}}</p>
                                         @enderror
@@ -48,6 +51,7 @@
                                     <div class="form-group"> 
                                         <input type="email" class="form-control input-style" placeholder="Email Address" name="email" id="email"
                                         value="{{Auth::guard('web')->user()->email}}" required>
+                                        <label class="placeholder-text">Email ID</label>
                                         @error('email')
                                             <p class="small text-danger">{{$message}}</p>
                                         @enderror

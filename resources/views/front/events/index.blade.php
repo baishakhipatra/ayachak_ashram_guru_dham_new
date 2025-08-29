@@ -17,17 +17,26 @@
     <div class="container">
         <div class="search-events">
             <div class="search-stack">
-                <form action="{{ route('front.event.index') }}" method="GET">
-                    <div class="form-group">
-                        <input type="search" name="term" value="{{ request('term') }}" placeholder=" " class="search-input form-control input-style">
+                <form action="{{ route('front.event.index') }}" method="GET" class="position-relative">
+                    <div class="form-group position-relative">
+                        <input type="search" name="term" value="{{ request('term') }}" placeholder=" "
+                            class="search-input form-control input-style pe-5">
                         <label class="placeholder-text">Search Events</label>
-                        <span class="search-icon">
+                        <span class="search-icon position-absolute top-50 end-0 translate-middle-y me-5">
                             <img src="{{ asset('assets/images/search.svg') }}" alt="">
                         </span>
+
+                        @if(request('term'))
+                            <a href="{{ route('front.event.index') }}" 
+                            class="position-absolute top-50 end-0 translate-middle-y me-2 text-decoration-none text-dark">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        @endif
                     </div>
                 </form>
             </div>
         </div>
+
 
         <div class="event-stack-listing">
             <ul class="event-list">

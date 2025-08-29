@@ -112,7 +112,7 @@
                 <img src="{{asset('assets/images/cross.svg')}}">
             </div>
             <video  controls id="modalVideo">
-                <source src="{{asset('assets/images/𝐀𝐲𝐚𝐜𝐡𝐚𝐤𝐀𝐬𝐡𝐫𝐚𝐦𝐚𝐏𝐨𝐝𝐜𝐚𝐬𝐭 - 𝐏𝐚𝐫𝐭 𝟏.mp4')}}" type="video/mp4">
+                <source src="{{asset('assets/images/intro_video.mp4')}}" type="video/mp4">
             </video>
         </div>
     </div>

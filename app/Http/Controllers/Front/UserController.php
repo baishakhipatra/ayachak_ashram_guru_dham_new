@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use PDF;
 
 class UserController extends Controller
 {
@@ -263,14 +264,16 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
+        $userId = auth()->id();
         // dd($request->all());
         $request->validate([
             "fname" => "required|string|max:255",
             "lname" => "required|string|max:255",
-            "email" => "required|unique:users,email,".$request->id,
-            "mobile" => "required|integer|digits:10|unique:users,mobile,".$request->id,
+            "email" => "required|unique:users,email,".$userId,
+            "mobile" => "required|integer|digits:10|unique:users,mobile,".$userId,
         ], [
-            "mobile.*" => "Please enter a valid 10 digit mobile number"
+            "mobile.unique" => "This mobile number is already in use.",
+            "mobile.digits" => "Please enter a valid 10 digit mobile number"
         ]);
         
         $params = $request->except('_token');
@@ -321,8 +324,11 @@ class UserController extends Controller
 
     public function invoice(Request $request, $id)
     {
-        $data = $this->orderRepository->listById($id);
-        return view('front.profile.invoice', compact('data'));
+       $order = Order::with(['orderProducts.productDetails.category'])->findOrFail($id);
+
+       $pdf = PDF::loadview('front.invoices.invoice-pdf', compact('order'));
+
+       return $pdf->download('invoice-'.$order->id.'.pdf');
     }
 
     public function orderCancel(Request $request)

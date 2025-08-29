@@ -55,9 +55,10 @@ Route::name('front.')->group(function () {
         Route::post('password/update', 'Front\UserController@updatePassword')->name('password.update');
         Route::get('order', 'Front\UserController@order')->name('order');
         Route::get('/order/details/{id}', 'Front\UserController@orderDetails')->name('order.details');
+        Route::get('/order/invoice/{id}/download', 'Front\UserController@invoice')->name('order.invoice');
         Route::post('order/cancel', 'Front\UserController@orderCancel')->name('order.cancel');
         Route::post('order/return', 'Front\UserController@orderReturn')->name('order.return');
-        Route::get('order/{id}/invoice', 'Front\UserController@invoice')->name('invoice');
+       // Route::get('order/{id}/invoice', 'Front\UserController@invoice')->name('invoice');
         Route::get('coupon', 'Front\UserController@coupon')->name('coupon');
         Route::get('address', 'Front\UserController@address')->name('address');
         Route::view('address/add', 'front.profile.address-add')->name('address.add');

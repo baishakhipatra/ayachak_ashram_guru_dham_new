@@ -14,18 +14,13 @@
                         <div class="profile-right">
                             <div class="profile-heading-group">
                                 <h2 class="mb-0">Order Summery</h2>
-                                <a href="#" class="bton btn-fill">Download Invoice</a>
+                                <a href="{{ route('front.order.invoice', $checkout->id) }}" class="bton btn-fill">Download Invoice</a>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="summery-list">
                                         <ul class="cart-item-list">
-                                            {{-- @if(!$checkout || $checkoutProducts->isEmpty()) --}}
-                                                {{-- <div class="alert alert-info">
-                                                    You don’t have any orders yet.
-                                                </div> --}}
-                                            {{-- @else --}}
                                                 @foreach($checkoutProducts as $item)
                                                     <li>
                                                         <div class="inner-wrap">
