@@ -14,7 +14,7 @@
                         @if($data[0]->image)
                             <img src="{{asset($data[0]->image)}}" alt="" style="height: 50px" class="mr-4">
                         @else
-                            <img src="{{asset('admin/images/placeholder-image.jpg')}}" alt="" class="mr-4" style="width: 50px;height: 50px;border-radius: 50%;">
+                            <img src="{{asset('backend_asset/images/placeholder-image.jpg')}}" alt="" class="mr-4" style="width: 50px;height: 50px;border-radius: 50%;">
                         @endif
                         </div>
                         <div class="col-md-10">

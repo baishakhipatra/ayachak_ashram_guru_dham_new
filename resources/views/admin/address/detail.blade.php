@@ -14,7 +14,7 @@
                                 @if($data->user->image)
                                     <img src="{{asset($data->user->image)}}" alt="" style="height: 100px" class="mr-4">
                                 @else
-                                    <img src="{{asset('admin/images/placeholder-image.jpg')}}" alt="" class="me-4" style="width: 65px;height: 65px;border-radius: 50%;">
+                                    <img src="{{asset('backend_asset/images/placeholder-image.jpg')}}" alt="" class="me-4" style="width: 65px;height: 65px;border-radius: 50%;">
                                 @endif
                                 <div>
                                     <h5>{{$data->user->fname.' '.$data->user->lname}}</h5>

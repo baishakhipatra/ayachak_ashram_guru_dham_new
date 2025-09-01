@@ -120,7 +120,7 @@
                                         @if($item->image)
                                             <img src="{{asset($item->image)}}" alt="" style="height: 100px" class="mr-4">
                                         @else
-                                            <img src="{{asset('admin/images/placeholder-image.jpg')}}" alt="" class="mr-4" style="width: 100px;height: 100px;border-radius: 50%;">
+                                            <img src="{{asset('backend_asset/images/placeholder-image.jpg')}}" alt="" class="mr-4" style="width: 100px;height: 100px;border-radius: 50%;">
                                         @endif
                                     </td>
                                     <td>
