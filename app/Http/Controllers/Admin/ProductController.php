@@ -857,7 +857,7 @@ class ProductController extends Controller
                                     "wash_care" => isset($importData[9]) ? $importData[9] : null,
                                     "short_desc" => isset($importData[10]) ? $importData[10] : null,
                                     "status" => isset($importData[11]) ? $importData[11] : 1,
-                                    "image" => 'admin/images/defaul-product-image.png',
+                                    "image" => 'backend_asset/images/defaul-product-image.png',
                                     "slug"=>$slug,
                                     "created_at" => now(),
                                     "updated_at"=> now(),

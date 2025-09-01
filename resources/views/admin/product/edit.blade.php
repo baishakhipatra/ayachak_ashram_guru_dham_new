@@ -682,7 +682,7 @@
                         <div class="col-sm-2">
                             <div class="text-center">
                                 <div class="color-fabric-image-holder position-relative mb-3">
-                                    <img class="color-fabric-image" src="{{ ($productColorGroupVal->color_fabric) ? asset($productColorGroupVal->color_fabric) : asset('admin/images/square-placeholder-image.jpg') }}" alt="profile-picture" id="fabric_id_{{ $productColorGroupVal->color }}">
+                                    <img class="color-fabric-image" src="{{ ($productColorGroupVal->color_fabric) ? asset($productColorGroupVal->color_fabric) : asset('backend_asset/images/square-placeholder-image.jpg') }}" alt="profile-picture" id="fabric_id_{{ $productColorGroupVal->color }}">
 
                                     <div class="change-image">
                                         <label for="upload_image_{{ $productColorGroupVal->color }}" class="badge badge-primary upload-image-label" data-bs-toggle="tooltip" title="Browse image" onclick="fabricUploadFunc({{ $productColorGroupVal->color }})">

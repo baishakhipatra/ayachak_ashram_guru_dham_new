@@ -186,7 +186,7 @@
                                         <div class="card-header p-0 mb-3">Icon <span class="text-danger">*</span></div>
                                         <div class="card-body p-0">
                                             <div class="w-100 product__thumb">
-                                                <label for="icon"><img id="iconOutput" src="{{ asset('admin/images/placeholder-image.jpg') }}" /></label>
+                                                <label for="icon"><img id="iconOutput" src="{{ asset('backend_asset/images/placeholder-image.jpg') }}" /></label>
                                             </div>
                                             <input type="file" name="icon_path" id="icon" accept="image/*" onchange="loadIcon(event)" class="d-none">
                                             <script>
@@ -206,7 +206,7 @@
                                         <div class="card-header p-0 mb-3">Sketch Icon <span class="text-danger">*</span></div>
                                         <div class="card-body p-0">
                                             <div class="w-100 product__thumb">
-                                                <label for="sketch_icon"><img id="sketchOutput" src="{{ asset('admin/images/placeholder-image.jpg') }}" /></label>
+                                                <label for="sketch_icon"><img id="sketchOutput" src="{{ asset('backend_asset/images/placeholder-image.jpg') }}" /></label>
                                             </div>
                                             <input type="file" name="sketch_icon" id="sketch_icon" accept="image/*" onchange="loadSketch(event)" class="d-none">
                                             <script>
@@ -228,7 +228,7 @@
                                         <div class="card-header p-0 mb-3">Thumbnail <span class="text-danger">*</span></div>
                                         <div class="card-body p-0">
                                             <div class="w-100 product__thumb">
-                                                <label for="thumbnail"><img id="output" src="{{ asset('admin/images/placeholder-image.jpg') }}" /></label>
+                                                <label for="thumbnail"><img id="output" src="{{ asset('backend_asset/images/placeholder-image.jpg') }}" /></label>
                                             </div>
                                             <input type="file" name="image_path" id="thumbnail" accept="image/*" onchange="loadFile(event)" class="d-none">
                                             <script>
@@ -248,7 +248,7 @@
                                         <div class="card-header p-0 mb-3">Banner <span class="text-danger">*</span></div>
                                         <div class="card-body p-0">
                                             <div class="w-100 product__thumb">
-                                                <label for="banner"><img id="bannerOutput" src="{{ asset('admin/images/placeholder-image.jpg') }}" /></label>
+                                                <label for="banner"><img id="bannerOutput" src="{{ asset('backend_asset/images/placeholder-image.jpg') }}" /></label>
                                             </div>
                                             <input type="file" name="banner_image" id="banner" accept="image/*" onchange="loadBanner(event)" class="d-none">
                                             <script>

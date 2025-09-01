@@ -122,7 +122,7 @@
                                     <div class="card-header p-0 mb-3">Image <span class="text-danger">*</span></div>
                                     <div class="card-body p-0">
                                         <div class="w-100 product__thumb">
-                                            <label for="icon"><img id="iconOutput" src="{{ asset('admin/images/placeholder-image.jpg') }}" /></label>
+                                            <label for="icon"><img id="iconOutput" src="{{ asset('backend_asset/images/placeholder-image.jpg') }}" /></label>
                                         </div>
                                         <input type="file" name="image" id="icon" accept="image/*" onchange="loadIcon(event)" class="d-none">
                                         <script>
