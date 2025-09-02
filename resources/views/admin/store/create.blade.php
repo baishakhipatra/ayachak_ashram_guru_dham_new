@@ -101,7 +101,7 @@
                                 <div class="card-body p-0">
                                     <div class="w-100 product__thumb">
                                         <label for="thumbnail"><img id="output"
-                                                src="{{ asset('admin/images/placeholder-image.jpg') }}" /></label>
+                                                src="{{ asset('backend_asset/images/placeholder-image.jpg') }}" /></label>
                                     </div>
                                     <input type="file" name="image" id="thumbnail" accept="image/*"
                                         onchange="loadFile(event)" class="d-none">

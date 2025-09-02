@@ -6,6 +6,12 @@ use App\Http\Controllers\Admin\{AdminUserManagementController, PageController, M
 use Illuminate\Support\Facades\Route;
  // product
 Route::post('/update', 'Admin\ProductController@update')->name('admin.product.update');
+
+Route::get('/admin', function () {
+    if (auth('admin')->check()) {
+        return redirect()->route('admin.login');
+    }   
+});
 Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->group(function () {
     Route::middleware(['guest:admin'])->group(function () {
         Route::view('/login', 'admin.auth.login')->name('login');
@@ -15,6 +21,9 @@ Route::prefix('admin')->name('admin.')->middleware('prevent-back-history')->grou
 
     Route::middleware(['auth:admin'])->group(function () {
         // dashboard
+        Route::get('/', function () {
+            return redirect()->route('admin.home');
+        });
         Route::get('/home', 'Admin\AdminController@home')->name('home');
         Route::post('/logout', 'Admin\AdminController@logout')->name('logout');
 

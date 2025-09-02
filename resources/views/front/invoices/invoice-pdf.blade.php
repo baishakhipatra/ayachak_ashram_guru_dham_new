@@ -53,7 +53,7 @@
                                         @endif
                                     </td>
                                     <td style=" vertical-align: top; padding: 8px;">
-                                        <span style="font-size: 14px; display: block; color:#383838; margin-bottom: 2px; font-weight: 600; text-align: right;">₹{{ number_format(($item->offer_price > 0 ? $item->offer_price : $item->price) * $item->qty, 2) }}</span>
+                                        <span style="font-size: 14px; display: block; color:#383838; margin-bottom: 2px; font-weight: 600; text-align: right;"><img style="margin-top:20px;" src="assets/images/rupee.png" height="15" alt="">{{ number_format(($item->offer_price > 0 ? $item->offer_price : $item->price) * $item->qty, 2) }}</span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -63,12 +63,12 @@
                                     <table style=" width:75%; float: right;">
                                         <tr>
                                             <td style="color: #000; padding: 8px; margin-bottom: 5px;">Subtotal</td>
-                                            <td style="font-weight: 600; text-align: right;">₹{{ number_format($order->amount, 2) }}</td>
+                                            <td style="font-weight: 600; text-align: right;"><img style="margin-top:20px;" src="assets/images/rupee.png" height="15" alt="">{{ number_format($order->amount, 2) }}</td>
                                         </tr>
                                         @if($order->discount_amount > 0)
                                         <tr>
                                             <td style="padding:8px;">Discount</td>
-                                            <td style="font-weight:600; text-align:right;">-₹{{ number_format($order->discount_amount, 2) }}</td>
+                                            <td style="font-weight:600; text-align:right;">-<img style="margin-top:20px;" src="assets/images/rupee.png" height="15" alt="">{{ number_format($order->discount_amount, 2) }}</td>
                                         </tr>
                                         @endif
                                         <tr>
@@ -79,11 +79,11 @@
                                             <td style="font-weight:600; font-size:15px; padding:8px;">
                                                 Total 
                                                 <span style="display:block; font-size:13px; color:#454545;">
-                                                    Including ₹{{ number_format($order->tax_amount, 2) }} in taxes
+                                                    Including <img style="margin-top:20px;" src="assets/images/rupee.png" height="15" alt="">{{ number_format($order->tax_amount, 2) }} in taxes
                                                 </span>
                                             </td>
                                             <td style="font-weight:600; font-size:15px; text-align:right;">
-                                                ₹{{ number_format($order->final_amount, 2) }}
+                                                <img style="margin-top:20px;" src="assets/images/rupee.png" height="15" alt="">{{ number_format($order->final_amount, 2) }}
                                             </td>
                                         </tr>
                                     </table>
@@ -107,7 +107,7 @@
                                                 <p style="font-weight: 300; line-height: 20px; margin-top:0; margin-bottom:3px;">{{ $order->mobile }}</p>
                                                 <p style="font-weight: 300; line-height: 20px; margin-top: 0; margin-bottom: 3px;">{{ $order->email }}</p>
                                             </td>
-                                            <td style="width:50%; vertical-align: top;">
+                                            <td style="width:50%; padding-top:50px; text-align:right;">
                                                 <h3 style="color:#D0217C;">Shipping Address</h3>
                                                 <p style="font-weight: 300; line-height: 20px; margin-top:0; margin-bottom:3px;">
                                                     {{ $order->shipping_address ?? 'Same as billing address' }}

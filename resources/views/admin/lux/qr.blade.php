@@ -78,7 +78,7 @@
 </section>
 @endsection
 @section('script')
-<script src="{{ asset('admin/js/printThis.js') }}"></script>
+<script src="{{ asset('backend_asset/js/printThis.js') }}"></script>
 <script>
  $('#basic').on("click", function () {
       $('.print-code').printThis();

@@ -94,7 +94,7 @@
                 <form method="post" action="{{ route('admin.gift.csvupload') }}" enctype="multipart/form-data" id="borrowerCsvUpload">@csrf
                     <input type="file" name="file" class="form-control" accept=".csv">
                     <br>
-                    <a href="{{ asset('admin/gift.csv') }}">Download Sample CSV</a>
+                    <a href="{{ asset('backend_asset/gift.csv') }}">Download Sample CSV</a>
                     <br>
                     <button type="submit" class="btn btn-danger mt-3" id="csvImportBtn">Import <i class="fas fa-upload"></i></button>
                 </form>

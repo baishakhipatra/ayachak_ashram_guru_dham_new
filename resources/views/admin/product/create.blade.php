@@ -240,7 +240,7 @@
                     </div>
                     <div class="card-body">
                         <div class="w-100 product__thumb">
-                        <label for="thumbnail"><img id="output" src="{{ asset('admin/images/placeholder-image.jpg') }}"/></label>
+                        <label for="thumbnail"><img id="output" src="{{ asset('backend_asset/images/placeholder-image.jpg') }}"/></label>
                         @error('image') <p class="small text-danger">{{ $message }}</p> @enderror
                         </div>
                         <input type="file" id="thumbnail" accept="image/*" name="image" onchange="loadFile(event)" class="d-none">

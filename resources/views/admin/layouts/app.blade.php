@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
-    {{-- <link href="{{$base_url}}admin/css/bootstrap.min.css" rel="stylesheet"> --}}
-    <link rel="stylesheet" href="{{asset('admin/css/bootstrap.min.css')}}">
+    {{-- <link href="{{$base_url}}backend_asset/css/bootstrap.min.css" rel="stylesheet"> --}}
+    <link rel="stylesheet" href="{{asset('backend_asset/css/bootstrap.min.css')}}">
     <link href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/classic/ckeditor.js"></script>
-    <link rel="stylesheet" href="{{asset('admin/plugins/croppie/croppie.css')}}">
-    <link href="{{asset('admin/css/style.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('backend_asset/plugins/croppie/croppie.css')}}">
+    <link href="{{asset('backend_asset/css/style.css')}}" rel="stylesheet">
     <link rel="shortcut icon" href="{{asset('frontend/images/favicon.png')}}" type="image/x-icon">
     <title>Ayachak Ashrama | Admin @yield('page')</title>
 </head>
@@ -237,7 +237,7 @@
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{asset('admin/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('backend_asset/js/bootstrap.bundle.min.js')}}"></script>
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
@@ -246,8 +246,8 @@
     -->
     {{-- <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script> --}}
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{asset('admin/plugins/croppie/croppie.js')}}"></script>
-    <script type="text/javascript" src="{{asset('admin/js/custom.js')}}"></script>
+    <script src="{{asset('backend_asset/plugins/croppie/croppie.js')}}"></script>
+    <script type="text/javascript" src="{{asset('backend_asset/js/custom.js')}}"></script>
 
     <script>
         // $(document).ready(function() {

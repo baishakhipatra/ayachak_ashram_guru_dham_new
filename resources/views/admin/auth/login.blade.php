@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
-    <link href="{{$base_url}}admin/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{$base_url}}admin/css/style.css" rel="stylesheet">
+    <link href="{{$base_url}}backend_asset/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{$base_url}}backend_asset/css/style.css" rel="stylesheet">
 
     {{-- <title>Luxcozi | admin panel1254</title> --}}
     <title>Ayachak Ashrama</title>
@@ -14,12 +14,12 @@
   <body>
     <main class="login">
       <div class="login__left">
-        <img src="{{ asset('admin/images/men.png') }}">
+        <img src="{{asset('backend_asset/images/men.png') }}">
       </div>
       <div class="login__right">
         <div class="login__block">
           <div class="logo__block">
-            <img src="{{ asset('admin/images/logo.png') }}">
+            <img src="{{asset('backend_asset/images/logo.png') }}">
           </div>
 
           @if (Session::get('success'))<div class="alert alert-success">{{ Session::get('success') }}</div>@endif
@@ -70,7 +70,7 @@
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="{{$base_url}}admin/js/bootstrap.bundle.min.js"></script>
+    <script src="{{$base_url}}backend_asset/js/bootstrap.bundle.min.js"></script>
 <script>
 // $(document).ready(function() {
 //     // Update href attributes of all <a> tags

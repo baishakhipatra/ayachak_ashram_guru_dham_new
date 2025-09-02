@@ -113,7 +113,7 @@
                             <div class="card-header p-0 mb-2">Banner Image <span class="text-danger">*</span></div>
                             <div class="card-body p-0">
                                 <div class="w-100 product__thumb mb-2">
-                                    <label for="banner_image"><img id="bannerImagePreview" src="{{ asset('admin/images/placeholder-image.jpg') }}" height="120"/></label>
+                                    <label for="banner_image"><img id="bannerImagePreview" src="{{ asset('backend_asset/images/placeholder-image.jpg') }}" height="120"/></label>
                                 </div>
                                 <input type="file" name="banner_image" id="banner_image" accept="image/*" onchange="previewBannerImage(event)" class="form-control d-none">
                                 <p class="small text-muted">Click above to browse image</p>
