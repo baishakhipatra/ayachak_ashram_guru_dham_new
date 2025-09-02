@@ -342,15 +342,23 @@
                             <content>
                                 <div class="row mb-2 align-items-center">
                                     <div class="col-3">
-                                        <label for="inputPassword6" class="col-form-label">Style No</label>
+                                        <label for="inputPassword6" class="col-form-label">Product No</label>
                                     </div>
                                     <div class="col-9">
                                         <input type="text" id="inputprice6" class="form-control" aria-describedby="priceHelpInline" name="style_no" value="{{$data->style_no}}">
                                         @error('style_no') <p class="small text-danger">{{ $message }}</p> @enderror
                                     </div>
-
                                     <div class="col-3">
-                                        <label for="inputPassword6" class="col-form-label">Gst</label>
+                                        <label class="col-form-label">GST Applicable</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="gstToggle" checked>
+                                            <label class="form-check-label" for="gstToggle">Yes</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="inputPassword6" class="col-form-label">Gst(%)</label>
                                     </div>
                                     <div class="col-9">
                                         <input type="number" id="gst" class="form-control" aria-describedby="priceHelpInline" name="gst" value="{{old('gst')}}" step="0.01">
@@ -1168,6 +1176,24 @@
         // bulk action
         $('select[name="bulkAction"]').on('change', function() {
             $('#bulkActionForm').submit();
+        });
+
+        $(document).ready(function () {
+            function toggleGstField() {
+                if ($('#gstToggle').is(':checked')) {
+                    $('#gst').prop('disabled', false).prop('required', true);
+                } else {
+                    $('#gst').val('').prop('disabled', true).prop('required', false);
+                }
+            }
+
+            // Run on load
+            toggleGstField();
+
+            // Run on toggle change
+            $('#gstToggle').on('change', function () {
+                toggleGstField();
+            });
         });
 
         // bulk select all checkbox

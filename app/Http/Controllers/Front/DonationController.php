@@ -66,4 +66,11 @@ class DonationController extends Controller
         return view('front.donation.list',compact('donations'));
 
     }
+
+    public function show($id)
+    {
+        $donation = Donation::findOrFail($id);
+        return response()->json($donation);
+    }
+
 }
