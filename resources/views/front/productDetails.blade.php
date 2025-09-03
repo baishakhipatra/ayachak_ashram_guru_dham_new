@@ -92,7 +92,7 @@
                     <h1>{{ ucwords($data->name) }}</h1>
 
                     <div class="description">
-                        {!! $data->desc !!}
+                        {{ ucfirst(strtolower(strip_tags($data->short_desc))) }}
                     </div>
 
                     <form action="{{ route('front.cart.add') }}" method="POST" id="addToCartForm">
@@ -141,6 +141,10 @@
                             <input type="submit" class="bton btn-fill" value="Add to Cart">
                         </div>
                     </form>
+                    
+                    <div class="description">
+                        {{ ucfirst(strtolower(strip_tags($data->desc))) }}
+                    </div>
                 </div>
             </div>
         </div>

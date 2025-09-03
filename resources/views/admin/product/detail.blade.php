@@ -35,50 +35,8 @@
                         <div class="form-group mb-3">
                             <p>
 								@if($data->category) <span class="text-muted">Category : </span>{{$data->category->name}} @endif
-								@if($data->subCategory) | <span class="text-muted">Sub-category : </span>{{$data->subCategory->name}} @endif
-								@if($data->collection) | <span class="text-muted">Collection : </span>{{$data->collection->name}} @endif
 							</p>
                         </div>
-
-                        @if ($data->colorSize)
-                            @php
-                            $uniqueColors = [];
-
-                            // custom function multi-dimensional in_array
-                            /* function in_array_r($needle, $haystack, $strict = false) {
-                                foreach ($haystack as $item) {
-                                    if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && in_array_r($needle, $item, $strict))) {
-                                        return true;
-                                    }
-                                }
-                                return false;
-                            } */
-
-                            foreach ($data->colorSize as $variantKey => $variantValue) {
-                                if (in_array_r($variantValue->colorDetails->code, $uniqueColors)) continue;
-
-                                $uniqueColors[] = [
-                                    'id' => $variantValue->colorDetails->id,
-                                    'code' => $variantValue->colorDetails->code,
-                                    'name' => $variantValue->colorDetails->name,
-                                ];
-                            }
-
-                            // echo '<pre>';print_r($uniqueColors);
-
-                            echo '<hr><div class="d-flex">';
-
-                            foreach($uniqueColors as $colorCode) {
-                                echo '<div onclick="sizeCheck('.$data->id.', '.$colorCode['id'].')" style="text-align:center;height: 70px;width: 40px;margin-right: 20px;"><div class="btn btn-sm rounded-circle" style="background-color: '.$colorCode['code'].';height: 40px;width: 40px;"></div><p class="small text-muted mb-0 mt-2">'.ucwords($colorCode['name']).'</p></div>';
-                            }
-
-                            echo '</div>';
-
-                            echo '<p class="small text-dark">Tap on color to get sizes</p>';
-
-                            echo '<div id="sizeContainer"></div>';
-                            @endphp
-                        @endif
                         
                         <hr>
                         <div class="form-group mb-3">
@@ -88,15 +46,25 @@
                             </h4>
                         </div>
                         <hr>
+                        @if(!empty($data->gst) && $data->gst > 0)
+                            <div class="form-group mb-3">
+                                <h4>
+                                    <span class="text-small">GST:{{ $data->gst }}%</span>
+                                </h4>
+                            </div>
+                        @endif
+                        <hr>
                         <div class="form-group mb-3">
                             <p class="small">Short Description</p>
-                            {!! $data->short_desc !!}
+                            {{ ucfirst(html_entity_decode(strip_tags($data->short_desc))) }}
+
                         </div>
                         <hr>
-                        {{-- <div class="form-group mb-3">
+                        <div class="form-group mb-3">
                             <p class="small">Description</p>
-                            {!! $data->desc !!}
-                        </div> --}}
+                            {{ ucfirst(html_entity_decode(strip_tags($data->desc))) }}
+
+                        </div>
 
                         <div class="admin__content">
                             <aside>

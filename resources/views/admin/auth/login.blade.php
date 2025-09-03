@@ -13,9 +13,9 @@
   </head>
   <body>
     <main class="login">
-      <div class="login__left">
+      {{-- <div class="login__left">
         <img src="{{asset('backend_asset/images/men.png') }}">
-      </div>
+      </div> --}}
       <div class="login__right">
         <div class="login__block">
           <div class="logo__block">

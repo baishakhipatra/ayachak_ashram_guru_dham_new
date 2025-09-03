@@ -118,8 +118,12 @@ class UserController extends Controller
                     }else {
                         return redirect()->back()->with('failure', 'Failed to create User')->withInput($request->all());
                     }
-
         }else{
+            if ($existsNumber->status == 0) {
+                return redirect()->route('front.login')
+                ->withInput($request->all())
+                ->with('failure', 'Your account is inactive. Please contact support.');
+            }
 
             $request->validate([
                 'mobile' => 'required|numeric|exists:users,mobile',
@@ -137,6 +141,7 @@ class UserController extends Controller
             }
         }
     }
+    
     public function logout(Request $request)
     {
         Auth::logout();

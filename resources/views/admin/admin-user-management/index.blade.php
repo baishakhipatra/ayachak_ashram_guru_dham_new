@@ -148,30 +148,6 @@
     });
   }
 
-  function statusToggle(url, checkbox) {
-      const status = checkbox.checked ? 1 : 0;
-
-      fetch(url, {
-          method: 'GET',
-          headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-              'X-CSRF-TOKEN': '{{ csrf_token() }}'
-          },
-      })
-      .then(response => response.json())
-      .then(data => {
-          if (data.status === 200) {
-              toastFire('success', data.message);
-              location.reload();
-          } else {
-              toastFire('error', data.message);
-          }
-      })
-      .catch(error => {
-          toastFire('error', 'Something went wrong!');
-          console.error(error);
-      });
-  }
 </script>
 
 @endsection
