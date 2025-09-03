@@ -110,10 +110,13 @@ Route::name('front.')->group(function () {
         Route::get('/size', 'Front\ProductController@size')->name('shop.size');
     });
 
+
+
     Route::name('donation.')->group(function () {
         Route::get('/donation', 'Front\DonationController@DonationForm')->name('form');
         Route::post('/store', 'Front\DonationController@store')->name('store');
         Route::get('/list', 'Front\DonationController@donationList')->name('list');
+        Route::get('/show/{id}', 'Front\DonationController@show')->name('show');
     });
 
     Route::prefix('events')->group(function () {

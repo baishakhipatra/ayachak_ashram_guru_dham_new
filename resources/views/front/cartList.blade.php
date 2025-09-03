@@ -31,9 +31,11 @@
                                                 <div class="pro-meta">
                                                     <span>Weight:</span> {{ $item->variation->weight ?? '-' }}
                                                 </div>
+                                                @if($item->productDetails->gst)
                                                 <div class="pro-meta">
                                                     <span>GST:</span> {{ $item->productDetails->gst ?? 0 }}%
                                                 </div>
+                                                @endif
                                                 <div class="number-input" data-id="{{ $item->id }}" data-price="{{ $item->offer_price > 0 ? $item->offer_price : $item->price }}">
                                                     <button type="button" class="decrement">-</button>
                                                     <input type="number" class="quantity" name="quantity" min="1" max="10" value="{{ $item->qty }}" step="1" readonly>

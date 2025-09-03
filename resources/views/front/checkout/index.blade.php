@@ -299,10 +299,7 @@
                                 <span>Shipping</span>
                                 FREE
                             </div>
-                            <div class="cart-row">
-                                <span>GST</span>
-                                ₹{{ number_format($tax, 2) }}
-                            </div>
+                            
                             {{-- @if($discount > 0)
                             <div class="cart-row">
                                 <span>Discount</span>
@@ -332,7 +329,10 @@
                                     @endif
                                 </div>
                             @endif
-
+                            <div class="cart-row">
+                                <span>GST</span>
+                                ₹{{ number_format($tax, 2) }}
+                            </div>
 
                             <div class="cart-total">
                                 <span>Total</span>
