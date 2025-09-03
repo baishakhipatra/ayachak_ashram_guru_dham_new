@@ -42,96 +42,19 @@
 <section class="cart-wrapper">
     <div class="container">
         <form class="checkout-form" method="POST" action="{{route('front.checkout.payment.store')}}">@csrf
-            <input type="hidden" name="order_id" value="{{$data->id}}">
+            <input type="hidden" name="checkout_id" value="{{$data->id}}">
             <div class="row justify-content-between flex-sm-row-reverse">
                 <div class="col-md-5 col-lg-4 mb-3 mb-sm-0">
                     <h4 class="cart-heading">Cart Summary</h4>
-                    {{-- <ul class="cart-summary">
-                        @php
-                            $subTotal = $grandTotal = $couponCodeDiscount = $shippingCharges = $taxPercent = 0;
-                            $shippingChargeJSON = null;
-                            $minOrderAmount = 0;
-                            $shippingCharge = 0;
-
-                            if (isset($settings[22])) {
-                                $shippingChargeJSON = json_decode($settings[22]->content);
-                                $minOrderAmount = $shippingChargeJSON->min_order ?? 0;
-                                $shippingCharge = $shippingChargeJSON->shipping_charge ?? 0;
-                            }
-
-                        @endphp
-                        
-                        
-                        <li>
-                           
-                        </li>
-
-                        @php
-                            $subTotal += (int) $data->amount;
-                            if (!empty($data->coupon_code_id)) {
-                                if (($data->couponDetails->is_coupon == 1)) {
-                                    if($data->couponDetails->type == 1){
-                                        $couponCodeDiscount = (int) ($subTotal * ($data->couponDetails->amount / 100));
-                                    }else {
-                                        $couponCodeDiscount = (int) $data->couponDetails->amount;
-                                    }
-                                } else {
-                                    if($data->couponDetails->type == 1){
-                                        $couponCodeDiscount = (int) ($subTotal * ($data->couponDetails->amount / 100));
-                                    }else {
-                                        $couponCodeDiscount = (int) $data->couponDetails->amount;
-                                    }
-                                }
-                            }
-                            $grandTotalWithoutCoupon = $subTotal;
-                            $grandTotal = ($subTotal + $shippingCharges) - $couponCodeDiscount;
-
-                            if($grandTotal < 0){
-                                $grandTotal = 0;
-                            }
-                        @endphp
-                    </ul> --}}
-
                     <div class="w-100">
                         <div class="cart-total">
                             <div class="cart-total-label">
                                 Subtotal
                             </div>
                             <div class="cart-total-value">
-                                &#8377;<span id="subTotalAmount">{{$data->amount}}</span>
+                                &#8377;<span id="subTotalAmount">{{$data->sub_total_amount}}</span>
                             </div>
                         </div>
-
-                        {{-- <div id="appliedCouponHolder" style="border-bottom: 1px solid #eee;">
-                            @if (!empty($data->coupon_code_id))
-                                @if ($data->couponDetails)
-                                    <div class="cart-total">
-                                        <div class="cart-total-label">
-                                            @php
-                                                if (($data->couponDetails->is_coupon == 1)) {
-                                                    $typeDisplay = 'COUPON';
-                                                    if($data->couponDetails->type == 1){
-                                                        $amountDisplay = '- '.$data->couponDetails->amount.'%';
-                                                    }else{
-                                                        $amountDisplay = '- &#8377; '.$data->couponDetails->amount;
-                                                    }
-                                                } else {
-                                                    $typeDisplay = 'VOUCHER';
-                                                    if($data->couponDetails->type == 1){
-                                                        $amountDisplay = '- '.$data->couponDetails->amount.'%';
-                                                    }else{
-                                                        $amountDisplay = '- &#8377; '.$data->couponDetails->amount;
-                                                    }
-                                                }
-                                            @endphp
-                                            {{ $typeDisplay }} APPLIED - <strong>{{$data->couponDetails->coupon_code}}</strong><br/>
-                                           
-                                        </div>
-                                        <div class="cart-total-value">{!! $amountDisplay !!}</div>
-                                    </div>
-                                @endif
-                            @endif
-                        </div> --}}
 
                         <div class="cart-total">
                             <div class="cart-total-label">
@@ -161,27 +84,10 @@
                                 Shipping Charges
                                 <span id="shippingMore"></span>
                             </div>
-                            {{-- <div class="cart-total-value">
-                                @php
-                                   // if ((int) $minOrderAmount >= (int) $grandTotal ) {
-								    if($data->address_type=='ho'){
-                                        $shippingCharges = 0;
-                                    }else if($data->address_type=='dankuni'){
-                                        $shippingCharges = 0;
-                                    }else{
-                                        $shippingCharges = $data->shipping_charges;
-                                    }
-                                    $grandTotal = $grandTotal + $shippingCharges;
-                                     //   $shippingCharges = $shippingCharge;
-                                       // $grandTotal = $grandTotal + $shippingCharges;
-                                    
-                                @endphp
-                                &#8377;{{$shippingCharges}}
-                            </div> --}}
                         </div>
                         <div class="cart-total">
                             <div class="cart-total-label">
-                                GST - &#8377;<strong>{{$data->tax_amount}}</strong><br/>
+                                GST - &#8377;<strong>{{$data->gst_amount}}</strong><br/>
                                 <small>(Inclusive of all taxes)</small>
                             </div>
                             <div class="cart-total-value"></div>
@@ -205,14 +111,14 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group custom_radio">
-                                <input type="radio" name="paymentMethod" id="cod" value="1">
+                                <input type="radio" name="paymentMethod" id="cod" value="cash_on_delivery" checked>
                                 <label for="cod">Cash on delivery</label>
                             </div>
                         </div>
                         @if($data->final_amount != 0)
                         <div class="col-12">
                             <div class="form-group custom_radio">
-                                <input type="radio" name="paymentMethod" id="online" value="2">
+                                <input type="radio" name="paymentMethod" id="online" value="pay_online">
                                 <label for="online">Pay online</label>
                             </div>
                         </div>
@@ -229,23 +135,21 @@
                             <input type="hidden" name="razorpay_method" value="">
                             <input type="hidden" name="razorpay_callback_url" value="">
                             <div id="method1" class="method">
-                                <button type="submit" id="rzp-button1" class="btn checkout-btn">
+                                <button type="submit" id="rzp-button1" class="btn checkout-btn btn-success">
                                     Place order
-                                    <!-- <p class="small mb-0" style="font-weight: 800">Cash on delivery</p> -->
                                 </button>
                             </div>
                             @if($data->final_amount != 0)
                             <!-- <strong>OR</strong> -->
                             <div id="method2" class="method">
-                                <button type="button" id="rzp-button1" class="btn checkout-btn">
+                                <button type="button" id="rzp-button1" class="btn checkout-btn btn-secondary mt-2">
                                     Pay Online
-                                    <!-- <p class="small mb-0" style="font-weight: 800">Secure payment</p> -->
                                 </button>
                             </div>
                             @endif
                         </div>
                         <div class="col-sm-12 mt-3 mt-sm-0">
-                            <a href="{{route('front.cart.index')}}">Return to Cart</a>
+                            <a class="btn btn-danger mt-2" href="{{route('front.cart.index')}}">Return to Cart</a>
                         </div>
                     </div>
                 </div>

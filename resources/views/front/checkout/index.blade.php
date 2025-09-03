@@ -63,6 +63,7 @@
                     <div class="cart-form-stack">
                         <form id="checkoutForm" action="{{ route('front.checkout.store') }}" method="POST">
                             @csrf
+                            <input type="hidden" name="checkout_id" value="{{$checkoutId}}">
                             <div class="login-checkout">
                                 <h3 class="checkout-heading">Contact information</h3>
                                 <p>We'll use this email to send you details and updates about your order.</p>

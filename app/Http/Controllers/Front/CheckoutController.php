@@ -46,6 +46,8 @@ class CheckoutController extends Controller
 
     
         $latestCheckout = Checkout::where('user_id', $userId)->latest()->first();
+        //dd($latestCheckout->id);
+        $checkoutId = $latestCheckout->id;
 
         $discount = 0;
         $coupon = null;
@@ -116,6 +118,7 @@ class CheckoutController extends Controller
             'discount',
             'total',
             'coupon',
+            'checkoutId'
             //'razorpayOrderId'
         ));
     }
@@ -128,6 +131,8 @@ class CheckoutController extends Controller
 
     public function store(Request $request)
     {
+        $checkoutId = $request->checkout_id;
+        //dd($checkoutId);
         
         $rules = [
             'email' => 'required|email|max:255',
@@ -171,32 +176,65 @@ class CheckoutController extends Controller
             return response()->json(['error' => 'Cart is empty'], 422);
         }
 
-        $checkoutData = $request->except('_token');
+        $billingAddress = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'country' => $request->billing_country,
+            'address' => $request->billing_address,
+            'city' => $request->billing_city,
+            'state' => $request->billing_state,
+            'pin' => $request->billing_pin,
+        ];
 
-        $order_id = $this->checkoutRepository->create($checkoutData);
-
-        if ($order_id) {
-            return response()->json([
-                'success' => true,
-                'redirect_url' => route('front.checkout.payment', $order_id)
-            ]);
+ 
+        if ($request->address_option == 'same') {
+            $shippingAddress = $billingAddress; // Same as billing
+        } else {
+            $shippingAddress = [
+                'first_name' => $request->shipping_first_name,
+                'last_name' => $request->shipping_last_name,
+                'mobile' => $request->shipping_mobile,
+                'country' => $request->shipping_country,
+                'address' => $request->shipping_address,
+                'city' => $request->shipping_city,
+                'state' => $request->shipping_state,
+                'pin' => $request->shipping_pin,
+            ];
         }
 
+        $checkoutData = [
+            'user_id' => $userId,
+            'billing_address' => json_encode($billingAddress),
+            'shipping_address' => json_encode($shippingAddress),
+        ];
+
+        //dd($checkoutData);
+
+
+        if ($checkoutId) {
+            Checkout::where('id', $checkoutId)->update($checkoutData);
+        } else {
+            $checkoutId = Checkout::create($checkoutData)->id;
+        }
+        
+
         return response()->json([
-            'success' => false,
-            'message' => 'Something went wrong, please try again.'
-        ], 500);
+            'success' => true,
+            'redirect_url' => route('front.checkout.payment', [
+                'checkoutId' => $checkoutId,
+            ])
+        ]);
     }
 
 
-    public function payment(Request $request,$order_id)
+    public function payment(Request $request,$checkoutId)
     {
-        //  $order_id = $request->input('order_id');
-        //dd($order_id);
         if (auth()->guard('web')->check()) {
-            $data = Order::where('id',$order_id)->orderby('id','desc')->first();
+            $data = Checkout::where('id',$checkoutId)->orderby('id','desc')->first();
         } else {
-            $data = Order::where('id',$order_id)->orderby('id','desc')->first(); 
+            $data = Checkout::where('id',$checkoutId)->orderby('id','desc')->first(); 
         }
         //dd($data);
         if ($data) {
@@ -207,25 +245,41 @@ class CheckoutController extends Controller
 
     public function paymentStore(Request $request)
     {
-        //dd($request->all());
 
-        $request->validate([
-           
-            'shipping_method' => 'nullable',
-        
-        ]);
-		
-        $order_no = $this->checkoutRepository->paymentCreate($request->order_id,$request->except('_token'));
-       // dd($order_no);
-        if ($order_no) {
-            // return redirect()->route('front.checkout.complete')->with('success', 'Order No: '.$order_no);
-            return view('front.checkout.complete', compact('order_no'))->with('success', 'Thank you for you order');
-            //return view('front.checkout.payment', compact('order_no'))->with('success', 'Please complete your payment');
-        } else {
-            $request->shippingSameAsBilling = 0;
-            return redirect()->back()->with('failure', 'Something happened. Try again.')->withInput($request->all());
+        $checkoutId = $request->checkout_id;
+        $paymentMethod = $request->paymentMethod;
+        // $checkoutData = json_decode($request->checkoutData);
+        // $checkoutData = json_decode($request->checkoutData)->except('_token');
+        // $checkoutData = json_decode($request->checkoutData, true); // decode as array
+        // unset($checkoutData['_token']); // remove _token
+        //    dd($checkoutData);
+
+        $checkoutData = Checkout::where('id',$checkoutId)->firstOrFail()->toArray();
+       // dd($checkoutData);
+
+        if($paymentMethod == 'cash_on_delivery')
+        {
+            // $checkoutData = $request->except('_token');
+            $order_id = $this->checkoutRepository->create($checkoutData);
+            return view('front.checkout.complete', compact('order_id'))->with('success', 'Thank you for you order');
+
+        }else{
+            return redirect()->back()->with('failure', 'Something happened.Try again.');
         }
+		
+    //     $order_no = $this->checkoutRepository->paymentCreate($request->order_id,$request->except('_token'));
+    //    // dd($order_no);
+    //     if ($order_no) {
+    //         // return redirect()->route('front.checkout.complete')->with('success', 'Order No: '.$order_no);
+    //         return view('front.checkout.complete', compact('order_no'))->with('success', 'Thank you for you order');
+    //         //return view('front.checkout.payment', compact('order_no'))->with('success', 'Please complete your payment');
+    //     } else {
+    //         $request->shippingSameAsBilling = 0;
+    //         return redirect()->back()->with('failure', 'Something happened. Try again.')->withInput($request->all());
+    //     }
     }
+
+
     // New Payment Gateway
     public function createOrder(Request $request){
         // dd($request->all());

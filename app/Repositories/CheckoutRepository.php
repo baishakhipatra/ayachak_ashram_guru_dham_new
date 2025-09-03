@@ -137,25 +137,13 @@ class CheckoutRepository implements CheckoutInterface
                     $couponId = (int) $coupon->id;
                     $couponType = $coupon->type;   
                     $couponValue = (float) ($coupon->amount ?? 0);
-
-                    // if ($couponType == 2) {
-                    //     // Fixed discount
-                    //     $discount = $couponValue;
-                    //     $couponDiscountType = 2;
-                    // } elseif ($couponType == 1) {
-                    //     // Percentage discount
-                    //     $discount = ($subtotal * $couponValue) / 100;
-                    //     $couponDiscountType = 1;
-                    // }
                     
                     if ($couponType == 1) {
-                        // Percentage discount
                         $discount = ($subtotal * $couponValue) / 100;
-                        $couponDiscountType = '1';   // store 1 in DB
+                        $couponDiscountType = '1';   
                     } elseif ($couponType == 2) {
-                        // Flat discount
                         $discount = $couponValue;
-                        $couponDiscountType = '2';   // store 2 in DB
+                        $couponDiscountType = '2';   
                     }
                 }
             }
@@ -167,6 +155,25 @@ class CheckoutRepository implements CheckoutInterface
             
             $orderNo = 'ORD-' . date('YmdHis') . '-' . mt_rand(100, 999);
             $ipAddr  = request()->ip() ?? '0.0.0.0';
+
+
+            $billing = json_decode($data['billing_address'], true);
+            $data['first_name'] = $billing['first_name'] ?? null;
+            $data['last_name'] = $billing['last_name'] ?? null;
+            $data['email'] = $billing['email'] ?? null;
+            $data['mobile'] = $billing['mobile'] ?? null;
+            $data['billing_address'] = $billing['address'] ?? null;
+            $data['billing_city']    = $billing['city'] ?? null;
+            $data['billing_state']   = $billing['state'] ?? null;
+            $data['billing_country'] = $billing['country'] ?? null;
+            $data['billing_pin']     = $billing['pin'] ?? null;
+
+            $shipping = json_decode($data['shipping_address'], true);
+            $data['shipping_address'] = $shipping['address'] ?? null;
+            $data['shipping_city']    = $shipping['city'] ?? null;
+            $data['shipping_state']   = $shipping['state'] ?? null;
+            $data['shipping_country'] = $shipping['country'] ?? null;
+            $data['shipping_pin']     = $shipping['pin'] ?? null;
 
             $order = Order::create([
                 'order_sequence_int' => 0,                      
@@ -210,7 +217,7 @@ class CheckoutRepository implements CheckoutInterface
                 'discount_amount' => $discount,
                 'tax_amount' => $taxTotal,
                 'final_amount' => $finalAmount,
-                'payment_method' => '',
+                'payment_method' => 'cash_on_delivery',
                 'is_paid' => 0,
                 'txn_id' => 0,
                 'status' => 1,
@@ -268,9 +275,6 @@ class CheckoutRepository implements CheckoutInterface
             return false;
         }
     }
-
-
-
 
 
     public function NewCreate(array $data){
@@ -356,7 +360,7 @@ class CheckoutRepository implements CheckoutInterface
                         if($item->coupon_code){
                             $coupon = Coupon::where('coupon_code', $item->coupon_code)->first();
                             if($coupon){
-                                $coupon->status = 2;//Inactive
+                                $coupon->status = 2;
                                 $coupon->save();
                             }
                         }

@@ -3,6 +3,10 @@
 
 @section('content')
 
+<div class="alert alert-success">
+<h2> Order Placed Successfull </h2>
+</div>
+{{-- 
     @php
         $orderData = \App\Models\Order::where('order_no', $order_no)->first();
         $orderProductsData = \App\Models\OrderProduct::where('order_id', $orderData->id)->get();
@@ -11,10 +15,10 @@
         if($orderData->coupon_code_id != 0) {
             $couponData = \App\Models\Coupon::where('id', $orderData->coupon_code_id)->first();
         }
-    @endphp
+    @endphp --}}
 
 {{-- @if(Session::get('success')) --}}
-    <section class="cart-header mb-3 mb-sm-5"></section>
+    {{-- <section class="cart-header mb-3 mb-sm-5"></section>
     <section class="cart-wrapper">
         <div class="container">
             <div class="complele-box">
@@ -84,13 +88,13 @@
                 </figcaption>
             </div>
         </div>
-    </section>
+    </section> --}}
 {{-- @else
     <script>window.location = "{{route('front.home')}}";</script>
 @endif --}}
 
 @endsection
-
+{{-- 
 @section('script')
     <script>
         $(window).on('load', function() {
@@ -142,4 +146,4 @@
 		}
 	  });
 	</script>
-@endsection
+@endsection --}}
