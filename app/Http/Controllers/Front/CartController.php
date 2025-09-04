@@ -90,9 +90,32 @@ class CartController extends Controller
 
     public function index(Request $request){
         $userId = auth()->id(); 
-        //dd(auth()->id());
         $cartItems = Cart::where('user_id', $userId)->with(['productDetails','variation'])->get();
-        return view('front.cartList', compact('cartItems'));
+
+        $categories = $cartItems->pluck('productDetails.category.name')->unique()->toArray();
+        $Books = in_array('Book', $categories);
+        $Medicines = in_array('Medicine', $categories);
+        $Waters = in_array('water', $categories);
+
+        $checkoutRestricted = false;
+        if ($Books && ($Medicines || $Waters)) {
+            $checkoutRestricted = true;
+        }
+
+        return view('front.cartList', compact('cartItems','checkoutRestricted'));
+    }
+
+    private function checkRestrictedCategories()
+    {
+        $cartItems = Cart::where('user_id', auth()->id())
+            ->with(['productDetails.category'])
+            ->get();
+
+        $categories = $cartItems->pluck('productDetails.category.name')->unique()->toArray();
+        $restrictedCategories = ['Book', 'Medicine', 'water'];
+        $restrictedInCart = array_intersect($categories, $restrictedCategories);
+
+        return count($restrictedInCart) > 1; 
     }
 
     public function updateQuantity(Request $request)
@@ -114,7 +137,7 @@ class CartController extends Controller
 
             return response()->json([
                 'success' => true,
-                'updated_qty' => $cart->qty
+                'updated_qty' => $cart->qty,
             ]);
         }
 
@@ -132,7 +155,7 @@ class CartController extends Controller
 
         $cart->delete();
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'checkout_restricted' => $this->checkRestrictedCategories()]);
     }
 
 
@@ -176,9 +199,6 @@ class CartController extends Controller
             if ($request->coupon_id) {
                 $coupon = Coupon::find($request->coupon_id);
             }
-            // } elseif (session()->has('couponCodeId')) {
-            //     $coupon = Coupon::find(session('couponCodeId'));
-            // }
 
             if ($coupon) {
                 $couponId = $coupon->id;
@@ -273,24 +293,6 @@ class CartController extends Controller
         }
     }
 
-
-
-
-    /*
-    public function viewByIp(Request $request)
-    {
-        $data = $this->cartRepository->viewByIp();
-
-        $currentDate = date('Y-m-d');
-        $cartOffers = CartOffer::where('status', 1)->whereRaw("date(valid_from) <= '$currentDate' AND date(valid_upto) >= '$currentDate'")->orderBy('min_cart_order', 'desc')->get();
-
-        if ($data) {
-            return view('front.cart.index', compact('data', 'cartOffers'));
-        } else {
-            return view('front.404');
-        }
-    }
-    */
 
     public function delete(Request $request, $id)
     {

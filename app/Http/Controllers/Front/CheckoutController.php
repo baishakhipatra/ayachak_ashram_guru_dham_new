@@ -259,7 +259,9 @@ class CheckoutController extends Controller
         {
             // $checkoutData = $request->except('_token');
             $order_id = $this->checkoutRepository->create($checkoutData);
-            return view('front.checkout.complete', compact('order_id'))->with('success', 'Thank you for you order');
+            $order = Order::with(['orderProducts.productDetails.category'])->findOrFail($order_id);
+            //dd($order);
+            return view('front.checkout.complete', compact('order_id','order'))->with('success', 'Thank you for you order');
 
         }else{
             return redirect()->back()->with('failure', 'Something happened.Try again.');

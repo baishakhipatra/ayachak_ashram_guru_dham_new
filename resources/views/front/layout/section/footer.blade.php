@@ -41,16 +41,16 @@
                                 <a href="{{route('front.home')}}">Home</a>
                             </li>
                             <li>
-                                <a href="">About Us</a>
+                                <a href="{{route('front.about-us.index')}}">About Us</a>
                             </li>
                             <li>
-                                <a href="">Books</a>
+                                <a href="{{ route('front.shop.list', ['category' => 'Book']) }}">Books</a>
                             </li>
                             <li>
-                                <a href="">Medicines</a>
+                                <a href="{{ route('front.shop.list', ['category' => 'Medicine']) }}">Medicines</a>
                             </li>
                             <li>
-                                <a href="">Events</a>
+                                <a href="{{route('front.event.index')}}">Events</a>
                             </li>
                             <li>
                                 <a href="">Centre</a>

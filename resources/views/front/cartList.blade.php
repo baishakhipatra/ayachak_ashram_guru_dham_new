@@ -24,7 +24,7 @@
                                         </figure>
                                         <figcaption>
                                             <div class="product-details-cart">
-                                                <a href="#"><h3>{{ $item->productDetails->name }}</h3></a>
+                                                <a href="#"><h3>{{ ucwords($item->productDetails->name) }}</h3></a>
                                                 <div class="pro-meta">
                                                     <span>Category:</span> {{ $item->productDetails->category->name ?? '-' }}
                                                 </div>
@@ -80,10 +80,12 @@
                             @endphp
                             <span class="subtotal-amount">₹{{ number_format($subtotal, 2) }}</span>
                         </div>
+
                         <div class="cart-row">
                             <span>Shipping</span>
                             FREE
                         </div>
+
                         <div class="cart-row" id="discount_row" style="{{ isset($coupon) ? '' : 'display: none;' }}">
                             <span>
                                 Discount
@@ -103,7 +105,7 @@
                                 @endif
                             </span>
                         </div>
-                        
+
                         <div class="cart-total">
                             <span>Total</span>
                             @php
@@ -121,9 +123,14 @@
                             <input type="hidden" name="coupon_id" id="applied_coupon_id" value="">
                             <input type="hidden" id="applied_coupon_type" value="">
                             <input type="hidden" id="applied_coupon_value" value="">
-
-                            
-                            <button type="submit" class="bton btn-full mt-5">Proceed to Checkout</button>
+                            <div class="checkout-warning-container">
+                                @if($checkoutRestricted)
+                                    <div class="alert alert-danger checkout-warning mt-3">
+                                        You cannot order Books, Medicines, and Waters together. Please order them separately.
+                                    </div>
+                                @endif
+                            </div>
+                            <button type="submit" class="bton btn-full mt-5" {{ $checkoutRestricted ? 'disabled' : '' }}>Proceed to Checkout</button>
                         </form>
                     </div>
                 </div>
@@ -209,7 +216,7 @@
             });
         });
 
-        // Handle decrement buttons
+        
         document.querySelectorAll(".decrement").forEach(button => {
             button.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -263,6 +270,26 @@
         $('.total-amount').text('₹' + total.toFixed(2));
     }
 
+    function toggleCheckoutWarning(isRestricted) {
+        let warningBox = $(".checkout-warning");
+        let checkoutBtn = $(".bton.btn-full");
+
+        if (isRestricted) {
+            if (warningBox.length === 0) {
+                $(".cart-value-wrap form").prepend(`
+                    <div class="alert alert-danger checkout-warning mt-3">
+                        You cannot order Books, Medicines, and Waters together. Please order them separately.
+                    </div>
+                `);
+            }
+            checkoutBtn.prop("disabled", true);
+        } else {
+            warningBox.remove();
+            checkoutBtn.prop("disabled", false);
+        }
+    }
+
+
 
     $(document).ready(function () {
         $(document).on('click', '.increment, .decrement', function () {
@@ -315,6 +342,7 @@
                         $row.remove();
                         toastr.success("Item removed from cart");
                         recalculateCartTotals();
+                        toggleCheckoutWarning(res.checkout_restricted);
                     } else {
                         toastr.warning(res.message || "Failed to remove item");
                     }

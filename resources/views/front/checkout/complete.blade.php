@@ -1,97 +1,87 @@
 @extends('layouts.app')
 @section('page', 'Order Complete')
-
 @section('content')
 
-<div class="alert alert-success">
+{{-- <div class="alert alert-success">
 <h2> Order Placed Successfull </h2>
-</div>
-{{-- 
-    @php
-        $orderData = \App\Models\Order::where('order_no', $order_no)->first();
-        $orderProductsData = \App\Models\OrderProduct::where('order_id', $orderData->id)->get();
+</div> --}}
 
-        $couponData = [];
-        if($orderData->coupon_code_id != 0) {
-            $couponData = \App\Models\Coupon::where('id', $orderData->coupon_code_id)->first();
-        }
-    @endphp --}}
+<section class="main">
+    <div class="container">
+        <div class="order-complete-stack">
+            <figure>
+                <img src="./assets/images/check.svg" alt="">
+            </figure>
 
-{{-- @if(Session::get('success')) --}}
-    {{-- <section class="cart-header mb-3 mb-sm-5"></section>
-    <section class="cart-wrapper">
-        <div class="container">
-            <div class="complele-box">
-                <figure>
-                    <img src="{{asset('img/box.png')}}">
-                </figure>
-                <figcaption>
-                    <h2>Your order is complete</h2>
-                    <p>{{Session::get('success')}}</p>
-                    <p>You will receive an email confirmation shortly.</p>
+            <h2 class="section-heading">Thank you for your purchase</h2>
+            <p>We’ve received your order will ship in 5 - 7 business days. <span>Your Order number is {{$order->id}}</span></p>
+            <div class="summery-stack">
+                <h4>Order Summery</h4>
+                <div class="summery-list">
+                    <ul class="cart-item-list">
+                        {{-- @foreach($order->orderProducts as $item)
+                            <li>
+                                <div class="inner-wrap">
+                                    <figure>
+                                        <img src="{{ $item->productDetails->product_image ?? asset('assets/images/placeholder-product.jpg') }}" alt="">
+                                    </figure>
+                                    <figcaption>
+                                        <div class="product-details-cart">
+                                            <a href="#">
+                                                <h3>{{ $item->productDetails->product_name }}</h3>
+                                            </a>
+                                            <div class="pro-meta">
+                                                <span>Category:</span> {{ $item->productDetails->category->name ?? 'N/A' }}
+                                            </div>
+                                            <div class="pro-meta">
+                                                <span>Weight:</span> {{ $item->productDetails->weight ?? 'N/A' }}
+                                            </div>
+                                        </div>
+                                        <span class="cart-price">₹{{ number_format($item->amount, 2) }}</span>
+                                        <span class="cart-price">₹{{ number_format($item->discount_amount, 2) }}</span>
+                                        <span class="cart-price">₹{{ number_format($item->tax_amount, 2) }}</span>
+                                    </figcaption>
+                                </div>
+                            </li>
+                        @endforeach --}}
+                        @foreach($order->orderProducts as $item)
+                            <li>
+                                <div class="inner-wrap">
+                                    <figure>
+                                        <img src="{{ $item->productDetails->product_image ?? asset('assets/images/placeholder-product.jpg') }}" alt="">
+                                    </figure>
+                                    <figcaption>
+                                        <div class="product-details-cart">
+                                            <a href="#">
+                                                <h3>{{ $item->productDetails->product_name ?? 'No Name' }}</h3>
+                                            </a>
+                                            <div class="pro-meta">
+                                                <span>Category:</span> {{ $item->productDetails->category->name ?? 'N/A' }}
+                                            </div>
+                                            <div class="pro-meta">
+                                                <span>Weight:</span> {{ $item->productDetails->weight ?? 'N/A' }}
+                                            </div>
+                                        </div>
+                                        <span class="cart-price">₹{{ number_format($item->amount, 2) }}</span>
+                                        <span class="cart-price">₹{{ number_format($item->discount_amount, 2) }}</span>
+                                        <span class="cart-price">₹{{ number_format($item->tax_amount, 2) }}</span>
+                                    </figcaption>
+                                </div>
+                            </li>
+                        @endforeach
 
-                    <table class="table table-bordered table-sm">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category</th>
-                                <th>Title</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($orderProductsData as $item)
-                                <tr>
-                                    <td>{{$item->sku_code}}</td>
-                                    <td>{{$item->productDetails->category->name}}</td>
-                                    <td>{{$item->product_name}}</td>
-                                    <td>{{$item->offer_price}}</td>
-                                    <td>{{$item->qty}}</td>
-                                    <td>{{$item->qty * $item->offer_price}}</td>
-                                </tr>
-                            @endforeach
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>Shipping charge</td>
-								@if($orderData->address_type=='ho')
-									<td>0</td>
-								@elseif($orderData->address_type=='dankuni')
-									<td>0</td>
-								@else
-                                	<td>{{(int) $orderData->shipping_charges}}</td>
-								@endif
-								
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>Order value</td>
-								@if($orderData->address_type=='ho')
-									<td>{{(int) ($orderData->final_amount)-($orderData->shipping_charges)}}</td>
-								@elseif($orderData->address_type=='dankuni')
-									<td>{{(int) ($orderData->final_amount)-($orderData->shipping_charges)}}</td>
-								@else
-                                <td>{{(int) $orderData->final_amount}}</td>
-								@endif
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <a href="{{route('front.user.order')}}">View all orders</a>
-                </figcaption>
+                    </ul>
+                </div>
+                <div class="cart-total">
+                    <span>Total</span>
+                    ₹{{ number_format($order->final_amount, 2) }}
+                </div>
             </div>
         </div>
-    </section> --}}
-{{-- @else
-    <script>window.location = "{{route('front.home')}}";</script>
-@endif --}}
+        
+    </div>
+</section>
+
 
 @endsection
 {{-- 
