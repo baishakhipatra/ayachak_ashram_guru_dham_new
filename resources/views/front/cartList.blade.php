@@ -103,11 +103,7 @@
                                 @endif
                             </span>
                         </div>
-
-                        {{-- <div class="cart-total">
-                            <span>Total</span>
-                            <span class="total-amount">₹{{ number_format($subtotal, 2) }}</span>
-                        </div> --}}
+                        
                         <div class="cart-total">
                             <span>Total</span>
                             @php

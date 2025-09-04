@@ -264,6 +264,7 @@ class CheckoutRepository implements CheckoutInterface
             }
 
             Cart::where('user_id', $userId)->delete();
+            Checkout::where('user_id',$userId)->delete();
 
             DB::commit();
             return $order->id;

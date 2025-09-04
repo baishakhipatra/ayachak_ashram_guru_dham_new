@@ -29,6 +29,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
   <script>
+   toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-right", // 🔥 Change position here
+        "timeOut": "5000"
+    }
       @if(session('success'))
         toastr.success("{{ session('success') }}");
       @endif

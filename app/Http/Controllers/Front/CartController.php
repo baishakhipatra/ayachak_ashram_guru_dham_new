@@ -88,27 +88,6 @@ class CartController extends Controller
         return back()->with('success', 'Product added to cart!');
     }
 
-
-    // public function index(Request $request)
-    // {
-    //    if(Auth::guard('web')->check()){
-    //        $total_price_excluding = 0;
-    //         $userId =Auth::guard('web')->user()->id;
-    //         $mobile = Auth::guard('web')->user()->mobile;
-    //         $cartProductDetails = Cart::with('productDetails')->latest()->where('user_id',$userId)->get();
-    //         $couponData = Coupon::where('user_mobile', $mobile)->take(5)->where('status', 1)->get();
-    //         if(count($cartProductDetails)){
-    //             foreach($cartProductDetails as $key =>$item){
-    //                  $price = $item->offer_price?$item->offer_price:$item->price;
-    //                  $total_price_excluding += $price;
-    //             }
-    //         }
-    //         return view('front.cartList',compact('cartProductDetails','couponData', 'total_price_excluding'));
-    //    }else{
-    //         return redirect()->route('front.user.login');
-    //    }
-    // }
-
     public function index(Request $request){
         $userId = auth()->id(); 
         //dd(auth()->id());
@@ -116,7 +95,7 @@ class CartController extends Controller
         return view('front.cartList', compact('cartItems'));
     }
 
-   public function updateQuantity(Request $request)
+    public function updateQuantity(Request $request)
     {
         $cart = Cart::find($request->cart_id);
 
@@ -196,9 +175,10 @@ class CartController extends Controller
             $coupon = null;
             if ($request->coupon_id) {
                 $coupon = Coupon::find($request->coupon_id);
-            } elseif (session()->has('couponCodeId')) {
-                $coupon = Coupon::find(session('couponCodeId'));
             }
+            // } elseif (session()->has('couponCodeId')) {
+            //     $coupon = Coupon::find(session('couponCodeId'));
+            // }
 
             if ($coupon) {
                 $couponId = $coupon->id;
@@ -213,17 +193,20 @@ class CartController extends Controller
                 }
             }
 
-            //dd($coupon);
-
-            $checkout = Checkout::create([
-                'user_id'          => $userId,
+        $checkout = Checkout::firstOrCreate(
+            ['user_id' => $userId],
+            [
                 'sub_total_amount' => 0,
                 'discount_amount'  => 0,
                 'gst_amount'       => 0,
                 'final_amount'     => 0,
                 'coupon_id'        => $couponId,
-            ]);
+            ]
+        );
 
+        $checkoutId = Checkout::where('user_id', $userId)->first();
+        //dd($checkoutId->id);
+        CheckoutProduct::where('checkout_id',$checkoutId->id)->delete();
            // dd($checkout);
 
             foreach ($cartItems as $item) {

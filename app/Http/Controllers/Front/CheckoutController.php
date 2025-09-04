@@ -212,12 +212,15 @@ class CheckoutController extends Controller
 
         //dd($checkoutData);
 
+        
 
         if ($checkoutId) {
             Checkout::where('id', $checkoutId)->update($checkoutData);
         } else {
+            
             $checkoutId = Checkout::create($checkoutData)->id;
         }
+
         
 
         return response()->json([
@@ -248,11 +251,6 @@ class CheckoutController extends Controller
 
         $checkoutId = $request->checkout_id;
         $paymentMethod = $request->paymentMethod;
-        // $checkoutData = json_decode($request->checkoutData);
-        // $checkoutData = json_decode($request->checkoutData)->except('_token');
-        // $checkoutData = json_decode($request->checkoutData, true); // decode as array
-        // unset($checkoutData['_token']); // remove _token
-        //    dd($checkoutData);
 
         $checkoutData = Checkout::where('id',$checkoutId)->firstOrFail()->toArray();
        // dd($checkoutData);
@@ -266,17 +264,6 @@ class CheckoutController extends Controller
         }else{
             return redirect()->back()->with('failure', 'Something happened.Try again.');
         }
-		
-    //     $order_no = $this->checkoutRepository->paymentCreate($request->order_id,$request->except('_token'));
-    //    // dd($order_no);
-    //     if ($order_no) {
-    //         // return redirect()->route('front.checkout.complete')->with('success', 'Order No: '.$order_no);
-    //         return view('front.checkout.complete', compact('order_no'))->with('success', 'Thank you for you order');
-    //         //return view('front.checkout.payment', compact('order_no'))->with('success', 'Please complete your payment');
-    //     } else {
-    //         $request->shippingSameAsBilling = 0;
-    //         return redirect()->back()->with('failure', 'Something happened. Try again.')->withInput($request->all());
-    //     }
     }
 
 

@@ -21,13 +21,13 @@
 
                         <ul class="social-list">
                             <li>
-                                <a href="">
+                                <a href="https://www.facebook.com/ayachakashrama/" target="_blank">
                                     <i class="fa-brands fa-square-facebook"></i>
                                     <span>Facebook</span>
                                 </a>
                             </li>
                            <li>
-                                <a href="">
+                                <a href="https://www.youtube.com/channel/UC3MwGwjIiybZEfcYFogMSAg" target="_blank">
                                     <i class="fa-brands fa-youtube"></i>
                                     <span>Youtube</span>
                                 </a>
@@ -98,7 +98,7 @@
     </div>
     <div class="copyright-place">
         <div class="container">
-            © Ayachak Ashram 2025. All Rights Reserved.
+            © The information to be given is as per discretion of "Ayachak Ashrama" and "The Multiversity".
         </div>
     </div>
 </footer>
