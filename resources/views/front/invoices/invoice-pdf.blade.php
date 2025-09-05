@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Invoice #{{ $order->id }}</title>
+  <title>Invoice #{{ $order->order_no }}</title>
   <meta charset="utf-8">
 </head>
 <body>
@@ -24,9 +24,9 @@
                 <tr>
                     <td style="padding-left:20px; padding-right:20px;">
                         <p style="font-weight: 300; line-height: 20px;">Hi {{ ucwords($order->fname . ' ' . $order->lname) }},</p>
-                        <p style="font-weight: 300; line-height: 20px;">Just to let you know — we've received your order #{{ $order->id }}, and it is now being processed:</p>
+                        <p style="font-weight: 300; line-height: 20px;">Just to let you know — we've received your order #{{ $order->order_no }}, and it is now being processed:</p>
                         <p style="font-weight: 300; line-height: 20px;">
-                            Thank you for choosing Us!  We’ve received your order, #{{ $order->id }}, and our team is now processing everything to ensure you receive your order. 
+                            Thank you for choosing Us!  We’ve received your order, #{{ $order->order_no }}, and our team is now processing everything to ensure you receive your order. 
                             If you have any questions or need support, don’t hesitate to reach out. We're here every step of the way to help you achieve your goals.
                         </p>
                     </td>

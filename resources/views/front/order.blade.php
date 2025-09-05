@@ -71,42 +71,42 @@
                             </div>
 
                             {{-- @if($checkout) --}}
-                                <div class="row mb-2">
-                                    <div class="col-lg-9">
-                                        <div class="detail-summery">
-                                            <h3 class="mb-5">Billing Details</h3>
+                            <div class="row mb-2">
+                                <div class="col-lg-9">
+                                    <div class="detail-summery">
+                                        <h3 class="mb-5">Billing Details</h3>
 
+                                        <div class="cart-row">
+                                            <span>Subtotal</span>
+                                            ₹{{ number_format($checkout->amount, 2) }}
+                                        </div>
+
+                                        @if($checkout->discount_amount > 0)
                                             <div class="cart-row">
-                                                <span>Subtotal</span>
-                                                ₹{{ number_format($checkout->amount, 2) }}
+                                                <span>Discount</span>
+                                                - ₹{{ number_format($checkout->discount_amount, 2) }}
                                             </div>
+                                        @endif
 
-                                            @if($checkout->discount_amount > 0)
-                                                <div class="cart-row">
-                                                    <span>Discount</span>
-                                                    - ₹{{ number_format($checkout->discount_amount, 2) }}
-                                                </div>
-                                            @endif
+                                        <div class="cart-row">
+                                            <span>Shipping</span>
+                                            FREE
+                                        </div>
 
-                                            <div class="cart-row">
-                                                <span>Shipping</span>
-                                                FREE
-                                            </div>
+                                        <div class="cart-row">
+                                            <span>GST</span>
+                                            ₹{{ number_format($checkout->tax_amount, 2) }}
+                                        </div>
 
-                                            <div class="cart-row">
-                                                <span>GST</span>
-                                                ₹{{ number_format($checkout->tax_amount, 2) }}
-                                            </div>
-
-                                            <div class="cart-total">
-                                                <span>
-                                                    Total
-                                                </span>
-                                                ₹{{ number_format($checkout->final_amount, 2) }}
-                                            </div>
+                                        <div class="cart-total">
+                                            <span>
+                                                Total
+                                            </span>
+                                            ₹{{ number_format($checkout->final_amount, 2) }}
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             {{-- @else
                                 <p>No checkout found for this user.</p>
                             @endif --}}
@@ -117,17 +117,47 @@
                                         <h3 class="mb-5">Order Details</h3>
                                         <div class="cart-row">
                                             <span>Order ID</span>
-                                            #B457687
+                                            {{ $checkout->order_no }}
                                         </div>
                                         <div class="cart-row">
                                             <span>Payment</span>
-                                            VISA******234
+                                            {{ $checkout->payment_method }}
                                         </div>
+                                        {{-- <div class="cart-row">
+                                            <span>Deliver to</span>
+                                            <div class="address"></div>
+                                        </div> --}}
                                         <div class="cart-row">
                                             <span>Deliver to</span>
-                                            <div class="address">5, Amratala St, Bara Bazar, Barabazar Market, Kolkata, West Bengal 700001</div>
+                                            <div class="address">
+                                                @if($checkout->shippingSameAsBilling)
+                                                    {{-- If shipping = billing --}}
+                                                    {{ $checkout->billing_address }},
+                                                    {{ $checkout->billing_city }},
+                                                    {{ $checkout->billing_state }},
+                                                    {{ $checkout->billing_country }}
+                                                    {{ $checkout->billing_pin }}
+                                                    <br><strong>Phone:</strong> {{ $checkout->mobile }}
+                                                @else
+                                                    {{-- Show billing address --}}
+                                                    <strong>Billing:</strong> 
+                                                    {{ $checkout->billing_address }},
+                                                    {{ $checkout->billing_city }},
+                                                    {{ $checkout->billing_state }},
+                                                    {{ $checkout->billing_country }} - {{ $checkout->billing_pin }}
+                                                    <br><strong>Phone:</strong> {{ $checkout->mobile }}
+
+                                                    <br><br>
+                                                    {{-- Show shipping address --}}
+                                                    <strong>Shipping:</strong> 
+                                                    {{ $checkout->shipping_address }},
+                                                    {{ $checkout->shipping_city }},
+                                                    {{ $checkout->shipping_state }},
+                                                    {{ $checkout->shipping_country }} - {{ $checkout->shipping_pin }}
+                                                @endif
+                                            </div>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>

@@ -64,7 +64,7 @@ Route::name('front.')->group(function () {
         Route::view('address/add', 'front.profile.address-add')->name('address.add');
         Route::post('address/add', 'Front\UserController@addressCreate')->name('address.create');
         Route::get('wishlist', 'Front\UserController@wishlist')->name('wishlist');
-    //});
+        //});
 
         // wishlist
         Route::prefix('wishlist')->name('wishlist.')->group(function () {
@@ -93,7 +93,7 @@ Route::name('front.')->group(function () {
             // Route::post('/coupon/check', 'Front\CheckoutController@coupon')->name('coupon.check');
             Route::post('/store', 'Front\CheckoutController@store')->name('store');
             Route::get('/payment/{checkoutId}', 'Front\CheckoutController@payment')->name('payment');
-            Route::post('/payment/store', 'Front\CheckoutController@paymentStore')->name('payment.store');
+            Route::post('/payment/complete', 'Front\CheckoutController@paymentStore')->name('payment.store');
             Route::view('/complete', 'front.checkout.complete')->name('complete');
         });
     });
@@ -109,7 +109,6 @@ Route::name('front.')->group(function () {
         Route::get('/color-wise-size', 'Front\ProductController@colorWiseSize')->name('shop.color.wise.size');
         Route::get('/size', 'Front\ProductController@size')->name('shop.size');
     });
-
 
 
     Route::name('donation.')->group(function () {
@@ -181,10 +180,10 @@ Route::name('front.')->group(function () {
 
 
     // category detail
-Route::name('category.')->group(function () {
-    Route::get('/category/{slug}', 'Front\CategoryController@detail')->name('detail');
-    Route::post('/category/filter', 'Front\CategoryController@filter')->name('filter');
-});
+    Route::name('category.')->group(function () {
+        Route::get('/category/{slug}', 'Front\CategoryController@detail')->name('detail');
+        Route::post('/category/filter', 'Front\CategoryController@filter')->name('filter');
+    });
 
     // sale
     Route::name('sale.')->group(function () {

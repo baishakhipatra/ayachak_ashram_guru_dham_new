@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['ip', 'user_id', 'fname', 'lname', 'email', 'mobile', 
+    protected $fillable = ['order_no','ip', 'user_id', 'fname', 'lname', 'email', 'mobile', 
     'alt_mobile', 'billing_address_id', 'billing_address', 'billing_landmark', 
-    'billing_country', 'billing_state', 'billing_city', 'billing_pin', 
+    'billing_country', 'billing_state', 'billing_city', 'billing_pin', 'shippingSameAsBilling',
     'shipping_address_id', 'shipping_address', 'shipping_landmark', 'shipping_country', 
     'shipping_state', 'shipping_city', 'shipping_pin', 'amount', 'tax_amount', 'discount_amount', 
-    'coupon_code_id','coupon_code_discount_type', 'final_amount', 'gst_no', 'is_paid', 'txn_id'];
+    'coupon_code_id','coupon_code_discount_type', 'final_amount', 'gst_no', 'is_paid', 'txn_id','payment_method'];
 
     public function orderProducts() {
         return $this->hasMany('App\Models\OrderProduct', 'order_id', 'id');

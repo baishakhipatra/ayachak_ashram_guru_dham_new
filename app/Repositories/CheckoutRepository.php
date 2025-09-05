@@ -153,7 +153,7 @@ class CheckoutRepository implements CheckoutInterface
             $finalAmount = max(0, ($subtotal + $taxTotal + $shippingCharges) - $discount);
 
             
-            $orderNo = 'ORD-' . date('YmdHis') . '-' . mt_rand(100, 999);
+            // $orderNo = 'ORD-' . date('YmdHis') . '-' . mt_rand(100, 999);
             $ipAddr  = request()->ip() ?? '0.0.0.0';
 
 
@@ -177,7 +177,7 @@ class CheckoutRepository implements CheckoutInterface
 
             $order = Order::create([
                 'order_sequence_int' => 0,                      
-                'order_no' => $orderNo,
+                'order_no' => null,
                 'ip' => $ipAddr,
                 'user_id' => $userId,
 
@@ -226,6 +226,9 @@ class CheckoutRepository implements CheckoutInterface
                 'orderCancelledReason' => null,
             ]);
             //dd($order);
+
+            $orderNo = 'ORD-' . str_pad($order->id, 6, '0', STR_PAD_LEFT); 
+            $order->update(['order_no' => $orderNo]);
 
             foreach ($cartItems as $item) {
                 $product = $item->productDetails;
